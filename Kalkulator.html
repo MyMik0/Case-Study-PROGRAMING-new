@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Lengkung Bulat Geomatik</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        .result { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 5px; }
+        .result p { margin: 5px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Kalkulator Lengkung Bulat</h2>
+    
+    <div class="input-group">
+        <label>Jejari, R (meter):</label>
+        <input type="number" id="radius" placeholder="Contoh: 150">
+    </div>
+
+    <div class="input-group">
+        <label>Sudut Pesongan, Δ (Darjah):</label>
+        <input type="number" id="delta" placeholder="Contoh: 30.5">
+    </div>
+
+    <button onclick="calculateCurve()">Kira Elemen</button>
+
+    <div id="output" class="result" style="display:none;">
+        <h4>Keputusan:</h4>
+        <p id="resT"></p>
+        <p id="resL"></p>
+        <p id="resC"></p>
+        <p id="resE"></p>
+        <p id="resM"></p>
+    </div>
+</div>
+
+<script>
+    function calculateCurve() {
+        // Ambil nilai input
+        let R = parseFloat(document.getElementById('radius').value);
+        let deltaDeg = parseFloat(document.getElementById('delta').value);
+
+        if (isNaN(R) || isNaN(deltaDeg)) {
+            alert("Sila masukkan nilai yang sah.");
+            return;
+        }
+
+        // Tukar darjah ke radian
+        let deltaRad = (deltaDeg * Math.PI) / 180;
+
+        // Formula Elemen Lengkung
+        let T = R * Math.tan(deltaRad / 2);              // Tangent
+        let L = (Math.PI * R * deltaDeg) / 180;          // Length of Curve
+        let C = 2 * R * Math.sin(deltaRad / 2);          // Long Chord
+        let E = R * ( (1 / Math.cos(deltaRad / 2)) - 1 ); // External Distance
+        let M = R * (1 - Math.cos(deltaRad / 2));        // Mid-ordinate
+
+        // Paparkan hasil
+        document.getElementById('output').style.display = "block";
+        document.getElementById('resT').innerHTML = "<b>Tangen (T):</b> " + T.toFixed(3) + " m";
+        document.getElementById('resL').innerHTML = "<b>Panjang Lengkung (L):</b> " + L.toFixed(3) + " m";
+        document.getElementById('resC').innerHTML = "<b>Perentas Panjang (C):</b> " + C.toFixed(3) + " m";
+        document.getElementById('resE').innerHTML = "<b>Jarak Luar (E):</b> " + E.toFixed(3) + " m";
+        document.getElementById('resM').innerHTML = "<b>Mid-ordinate (M):</b> " + M.toFixed(3) + " m";
+    }
+</script>
+
+</body>
+</html>
