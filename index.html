@@ -4,15 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistem Kalkulator Lengkung Geomatik</title>
-
-<!-- PDF LIBRARY -->
+<title>Sistem Lengkung Geomatik Lengkap</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 body { font-family: Arial; background:#f4f4f9; margin:20px;}
-.container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+.container { max-width:750px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
 h2,h3 { text-align:center;}
 .input-group { margin-bottom:10px;}
 label { font-weight:bold;}
@@ -25,6 +23,7 @@ table { width:100%; margin-top:15px; border-collapse:collapse;}
 th,td { border:1px solid #ccc; padding:5px; text-align:center;}
 #calculator { display:none;}
 .formula { background:#fff3cd; padding:10px; margin-top:10px; border-left:5px solid #ffc107;}
+.inverse { background:#e7f1ff; padding:10px; margin-top:10px; border-left:5px solid #0d6efd;}
 </style>
 
 </head>
@@ -36,26 +35,28 @@ th,td { border:1px solid #ccc; padding:5px; text-align:center;}
 <!-- LOGIN -->
 
 <div id="login">
-<h3>Login Sistem</h3>
+<h3>Login Sistem Geomatik</h3>
 <input type="text" id="user" placeholder="Username">
 <input type="password" id="pass" placeholder="Password">
 <button onclick="login()">Masuk</button>
 </div>
 
-<!-- CALCULATOR -->
+<!-- SYSTEM -->
 
 <div id="calculator">
 
-<h2>Kalkulator Lengkung Bulat</h2>
+<h2>Kalkulator Lengkung Bulat Geomatik</h2>
+
+<!-- INPUT FORWARD -->
 
 <div class="input-group">
 <label>Jejari R (m)</label>
-<input type="number" id="R" placeholder="Contoh: 150">
+<input type="number" id="R">
 </div>
 
 <div class="input-group">
 <label>Sudut Δ (degree)</label>
-<input type="number" id="delta" placeholder="Contoh: 30">
+<input type="number" id="delta">
 </div>
 
 <div class="input-group">
@@ -63,13 +64,13 @@ th,td { border:1px solid #ccc; padding:5px; text-align:center;}
 <input type="number" id="c" value="20">
 </div>
 
-<button onclick="kira()">Kira</button>
+<button onclick="kira()">Kira Lengkung (Forward)</button>
 
-<!-- PAPAR RUMUS -->
+<!-- RUMUS -->
 
 <div class="formula">
-<h4>Rumus Utama Digunakan:</h4>
-<p><b>L = (π × R × Δ) / 180</b></p>
+<h4>Rumus Utama:</h4>
+<p>L = (π × R × Δ) / 180</p>
 </div>
 
 <div class="result" id="result"></div>
@@ -81,6 +82,35 @@ th,td { border:1px solid #ccc; padding:5px; text-align:center;}
 <tr><th>Station (m)</th><th>Deflection (°)</th></tr>
 </table>
 
+<hr>
+
+<!-- INVERSE -->
+
+<div class="inverse">
+<h3>Kiraan Songsang (Inverse Curve)</h3>
+
+<div class="input-group">
+<label>Jejari (R)</label>
+<input type="number" id="invR">
+</div>
+
+<div class="input-group">
+<label>Chord (c)</label>
+<input type="number" id="invC">
+</div>
+
+<div class="input-group">
+<label>Sudut (Δ)</label>
+<input type="number" id="invD">
+</div>
+
+<button onclick="inverseCalc()">Kira Inverse</button>
+
+<div id="invResult"></div>
+</div>
+
+<!-- BUTTON -->
+
 <button onclick="downloadPDF()">Download PDF</button> <button onclick="logout()" style="background:red;">Logout</button>
 
 </div>
@@ -88,103 +118,112 @@ th,td { border:1px solid #ccc; padding:5px; text-align:center;}
 
 <script>
 
-// LOGIN
+/* LOGIN */
 function login(){
-let u = document.getElementById("user").value;
-let p = document.getElementById("pass").value;
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
 
 if(u==="admin1" && p==="123456"){
 document.getElementById("login").style.display="none";
 document.getElementById("calculator").style.display="block";
-}else{
-alert("Login gagal!");
-}
+}else alert("Login gagal");
 }
 
-// LOGOUT
-function logout(){
-location.reload();
-}
+/* LOGOUT */
+function logout(){location.reload();}
 
-// MAIN CALCULATION
+/* FORWARD CALCULATION */
 function kira(){
 
-let R = parseFloat(document.getElementById("R").value);
-let d = parseFloat(document.getElementById("delta").value);
-let c = parseFloat(document.getElementById("c").value);
+let R=parseFloat(document.getElementById("R").value);
+let d=parseFloat(document.getElementById("delta").value);
+let c=parseFloat(document.getElementById("c").value);
 
-if(isNaN(R) || isNaN(d)){
-alert("Masukkan nilai yang betul!");
-return;
-}
+if(isNaN(R)||isNaN(d)){alert("Isi data");return;}
 
-let rad = d * Math.PI / 180;
+let rad=d*Math.PI/180;
 
-// ===============================
-// FORMULA ENGINEERING SURVEY
-// ===============================
-
-// RUMUS UTAMA:
-// L = (π × R × Δ) / 180
-
-let T = R * Math.tan(rad/2);
-let L = Math.PI * R * d / 180; 
-let LC = 2 * R * Math.sin(rad/2);
-let E = R * (1/Math.cos(rad/2)-1);
-let M = R * (1 - Math.cos(rad/2));
-let theta = (180 * c)/(Math.PI * R);
+// FORMULA
+let T=R*Math.tan(rad/2);
+let L=Math.PI*R*d/180;
+let LC=2*R*Math.sin(rad/2);
+let E=R*(1/Math.cos(rad/2)-1);
+let M=R*(1-Math.cos(rad/2));
+let theta=(180*c)/(Math.PI*R);
 
 // OUTPUT
-document.getElementById("result").innerHTML = `
-<b>Rumus:</b> L = (π × R × Δ) / 180 <br><br>
-
-<b>Tangent (T):</b> ${T.toFixed(3)} m<br>
-<b>Length (L):</b> ${L.toFixed(3)} m<br>
-<b>Long Chord (LC):</b> ${LC.toFixed(3)} m<br>
-<b>External (E):</b> ${E.toFixed(3)} m<br>
-<b>Mid-ordinate (M):</b> ${M.toFixed(3)} m<br>
-<b>Deflection (θ):</b> ${theta.toFixed(4)}°
+document.getElementById("result").innerHTML=`
+<b>L = (π × R × Δ) / 180</b><br><br>
+T = ${T.toFixed(3)} m<br>
+L = ${L.toFixed(3)} m<br>
+LC = ${LC.toFixed(3)} m<br>
+E = ${E.toFixed(3)} m<br>
+M = ${M.toFixed(3)} m<br>
+θ = ${theta.toFixed(4)}°
 `;
 
-// DRAW CURVE
-let canvas = document.getElementById("curveCanvas");
-let ctx = canvas.getContext("2d");
-
+/* DRAW */
+let ctx=document.getElementById("curveCanvas").getContext("2d");
 ctx.clearRect(0,0,500,300);
-
-// scale
-let scale = 1;
-if(R > 200) scale = 0.5;
-if(R > 400) scale = 0.3;
+let scale=R>200?0.5:0.3;
 
 ctx.beginPath();
 ctx.arc(250,250,R*scale,Math.PI,Math.PI+rad);
 ctx.stroke();
 
-// TABLE
-let table = document.getElementById("table");
-table.innerHTML = "<tr><th>Station (m)</th><th>Deflection (°)</th></tr>";
+/* TABLE */
+let table=document.getElementById("table");
+table.innerHTML="<tr><th>Station</th><th>Deflection</th></tr>";
 
-let n = Math.floor(L/c);
-
+let n=Math.floor(L/c);
 for(let i=1;i<=n;i++){
-let def = i * theta;
-table.innerHTML += `<tr><td>${(i*c).toFixed(2)}</td><td>${def.toFixed(4)}</td></tr>`;
+let def=i*theta;
+table.innerHTML+=`<tr><td>${(i*c).toFixed(2)}</td><td>${def.toFixed(4)}</td></tr>`;
+}
 }
 
+/* INVERSE CALCULATION */
+function inverseCalc(){
+
+let R=parseFloat(document.getElementById("invR").value);
+let c=parseFloat(document.getElementById("invC").value);
+let d=parseFloat(document.getElementById("invD").value);
+
+let result="";
+
+if(isNaN(R)&&!isNaN(c)&&!isNaN(d)){
+let rad=d*Math.PI/180;
+R=c/(2*Math.sin(rad/2));
+result="R = "+R.toFixed(3)+" m";
 }
 
-// PDF EXPORT
+else if(!isNaN(R)&&isNaN(c)&&!isNaN(d)){
+let rad=d*Math.PI/180;
+c=2*R*Math.sin(rad/2);
+result="c = "+c.toFixed(3)+" m";
+}
+
+else if(!isNaN(R)&&!isNaN(c)&&isNaN(d)){
+d=2*Math.asin(c/(2*R))*180/Math.PI;
+result="Δ = "+d.toFixed(4)+" °";
+}
+
+else{
+result="Isi 2 nilai sahaja!";
+}
+
+document.getElementById("invResult").innerHTML=result;
+}
+
+/* PDF */
 function downloadPDF(){
-const { jsPDF } = window.jspdf;
-let doc = new jsPDF();
+const {jsPDF}=window.jspdf;
+let doc=new jsPDF();
 
-doc.text("LAPORAN LENGKUNG GEOMATIK", 20,20);
+doc.text("SISTEM LENGKUNG GEOMATIK",20,20);
+doc.text(document.getElementById("result").innerText,20,40);
 
-let text = document.getElementById("result").innerText;
-doc.text(text,20,40);
-
-doc.save("lengkung_geomatik.pdf");
+doc.save("geomatik.pdf");
 }
 
 </script>
