@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistem Lengkung Geomatik Pro (DMS)</title>
+<title>Geo-Curve Pro System</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -14,7 +14,7 @@
         --accent: #27ae60;
         --danger: #e74c3c;
         --light: #ecf0f1;
-        --overlay: rgba(255, 255, 255, 0.9);
+        --overlay: rgba(255, 255, 255, 0.92);
     }
 
     body { 
@@ -22,7 +22,9 @@
         margin: 0; 
         padding: 20px; 
         color: var(--primary);
-        background-image: url('209301.jpg'); 
+        /* WALLPAPER BACKGROUND */
+        background-image: url('
+209301.jpg'); 
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -36,11 +38,12 @@
         padding: 30px; 
         border-radius: 15px; 
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        backdrop-filter: blur(5px);
+        backdrop-filter: blur(8px);
     }
     
     h2, h3 { color: var(--primary); text-align: center; margin-top: 0; }
     
+    /* Login Section */
     #login { 
         max-width: 400px; 
         margin: 100px auto; 
@@ -52,6 +55,7 @@
     }
     #login input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
 
+    /* Tabs Navigation */
     .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
     .tab-btn { 
         padding: 12px 30px; 
@@ -70,6 +74,7 @@
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* Grid Layout */
     .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
 
@@ -78,9 +83,9 @@
     .input-group { margin-bottom: 15px; }
     label { display: block; font-size: 0.9em; margin-bottom: 5px; font-weight: 600; color: var(--secondary); }
     
-    /* Style untuk input DMS */
+    /* DMS Input Style */
     .dms-inputs { display: flex; gap: 5px; align-items: center; }
-    .dms-inputs input { width: 30%; text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    .dms-inputs input { width: 33%; text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
     
     input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     
@@ -107,9 +112,11 @@
     th { background: var(--primary); color: white; padding: 12px; }
     td { border-bottom: 1px solid #eee; padding: 10px; text-align: center; background: white; }
 
-    .footer-btns { display: flex; gap: 10px; margin-top: 30px; }
-    .btn-pdf { background: #3498db; }
-    .btn-logout { background: var(--danger); }
+    /* Footer Buttons */
+    .footer-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .btn-pdf { background: #3498db; flex: 1; min-width: 200px; }
+    .btn-apk { background: #f39c12; flex: 1; min-width: 200px; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; }
+    .btn-logout { background: var(--danger); width: 100%; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -153,7 +160,7 @@
                         <label>Sub-Chord c (m)</label>
                         <input type="number" id="c" value="20">
                     </div>
-                    <button onclick="kira()">Kira Sekarang</button>
+                    <button onclick="kira()">Mula Kiraan</button>
                 </div>
 
                 <div class="card">
@@ -164,9 +171,7 @@
 
             <div class="card">
                 <h3>Keputusan & Jalan Pengiraan</h3>
-                <div id="result" class="result-box">
-                    Masukkan nilai dan tekan butang kiraan.
-                </div>
+                <div id="result" class="result-box">Masukkan nilai dan tekan butang kiraan.</div>
             </div>
 
             <div class="card">
@@ -186,15 +191,15 @@
             <div class="card" style="max-width: 600px; margin: auto;">
                 <h3>Mencari Parameter Hilang</h3>
                 <p style="text-align: center; color: #777; font-size: 0.9em;">Isi 2 kotak sahaja, biarkan kotak yang ingin dicari kosong.</p>
-                <hr style="opacity: 0.2; margin: 20px 0;">
+                <hr style="opacity: 0.1; margin: 20px 0;">
                 
                 <div class="input-group">
                     <label>Jejari (R)</label>
-                    <input type="number" id="invR" placeholder="Contoh: 150">
+                    <input type="number" id="invR" placeholder="Cari R? Biarkan kosong">
                 </div>
                 <div class="input-group">
                     <label>Panjang Chord (c)</label>
-                    <input type="number" id="invC" placeholder="Contoh: 20">
+                    <input type="number" id="invC" placeholder="Cari c? Biarkan kosong">
                 </div>
                 <div class="input-group">
                     <label>Sudut Δ (D M S)</label>
@@ -205,21 +210,26 @@
                     </div>
                 </div>
                 
-                <button onclick="inverseCalc()" style="background: var(--primary);">Kira Songsang</button>
+                <button onclick="inverseCalc()" style="background: var(--primary);">Kira Nilai Songsang</button>
                 
-                <div id="invResult" class="result-box" style="margin-top: 20px; display: none; text-align: center; font-size: 1.1em; font-weight: bold; border-left: 6px solid var(--primary);"></div>
+                <div id="invResult" class="result-box" style="margin-top: 20px; display: none; text-align: center; font-size: 1.2em; font-weight: bold;"></div>
             </div>
         </div>
 
         <div class="footer-btns">
-            <button class="btn-pdf" onclick="downloadPDF()">Simpan Sebagai PDF</button>
-            <button class="btn-logout" onclick="logout()">Log Keluar</button>
+            <button class="btn-pdf" onclick="downloadPDF()">💾 Simpan Laporan PDF</button>
+            
+            <a href="app-geomatik.apk" class="tab-btn btn-apk" download>
+                📲 Muat Turun APK App
+            </a>
+            
+            <button class="btn-logout" onclick="logout()">Log Keluar Sistem</button>
         </div>
     </div>
 </div>
 
 <script>
-/* PENUKARAN UNIT */
+/* PENUKARAN DMS KE PERPULUHAN */
 function dmsToDecimal(d, m, s) {
     d = isNaN(d) ? 0 : d;
     m = isNaN(m) ? 0 : m;
@@ -227,6 +237,7 @@ function dmsToDecimal(d, m, s) {
     return d + (m / 60) + (s / 3600);
 }
 
+/* PENUKARAN PERPULUHAN KE DMS */
 function decimalToDMS(dd) {
     let d = Math.floor(dd);
     let m = Math.floor((dd - d) * 60);
@@ -234,7 +245,7 @@ function decimalToDMS(dd) {
     return `${d}° ${m}' ${s.toFixed(2)}"`;
 }
 
-/* FUNGSI INTERFACE */
+/* FUNGSI TABS */
 function openTab(evt, tabName) {
     let i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tab-content");
@@ -245,6 +256,7 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");
 }
 
+/* LOGIN LOGIC */
 function login(){
     let u = document.getElementById("user").value;
     let p = document.getElementById("pass").value;
@@ -252,24 +264,23 @@ function login(){
         document.getElementById("login").style.display = "none";
         document.getElementById("calculator").style.display = "block";
     } else {
-        alert("Akses Ditolak!");
+        alert("Akses Ditolak! Sila semak semula.");
     }
 }
 
 function logout(){ location.reload(); }
 
-/* FUNGSI PENGIRAAN LENGKUNG */
+/* KIRAAN UTAMA */
 function kira(){
     let R = parseFloat(document.getElementById("R").value);
     let c = parseFloat(document.getElementById("c").value);
-    
-    // Ambil DMS dan tukar ke Decimal
-    let deg = parseFloat(document.getElementById("d_deg").value);
-    let min = parseFloat(document.getElementById("d_min").value);
-    let sec = parseFloat(document.getElementById("d_sec").value);
-    let d = dmsToDecimal(deg, min, sec);
+    let d = dmsToDecimal(
+        parseFloat(document.getElementById("d_deg").value),
+        parseFloat(document.getElementById("d_min").value),
+        parseFloat(document.getElementById("d_sec").value)
+    );
 
-    if(isNaN(R) || d <= 0){ alert("Sila masukkan nilai R dan Δ!"); return; }
+    if(isNaN(R) || d <= 0){ alert("Sila masukkan nilai yang sah!"); return; }
 
     let rad = d * Math.PI / 180;
     let T = R * Math.tan(rad / 2);
@@ -277,17 +288,20 @@ function kira(){
     let LC = 2 * R * Math.sin(rad / 2);
     let E = R * ( (1 / Math.cos(rad / 2)) - 1 );
     let M = R * ( 1 - Math.cos(rad / 2) );
-    let theta = (180 * c) / (Math.PI * R); // Defleksi dalam decimal degree
+    let theta = (180 * c) / (Math.PI * R); 
 
     document.getElementById("result").innerHTML = 
-        `Input Δ  = ${deg}° ${min || 0}' ${sec || 0}" (${d.toFixed(4)}°)\n` +
-        `L  = (π × R × Δ) / 180 = ${L.toFixed(3)} m\n` +
-        `T  = R × tan(Δ/2) = ${T.toFixed(3)} m\n` +
-        `LC = 2 × R × sin(Δ/2) = ${LC.toFixed(3)} m\n` +
-        `E  = R × [sec(Δ/2) - 1] = ${E.toFixed(3)} m\n` +
-        `M  = R × [1 - cos(Δ/2)] = ${M.toFixed(3)} m\n` +
-        `θ (Unit Sub-Chord) = ${decimalToDMS(theta)}`;
+        `Jejari (R) = ${R} m\n` +
+        `Sudut (Δ)  = ${decimalToDMS(d)}\n` +
+        `----------------------------------\n` +
+        `L (Length)      = ${L.toFixed(3)} m\n` +
+        `T (Tangent)     = ${T.toFixed(3)} m\n` +
+        `LC (Long Chord) = ${LC.toFixed(3)} m\n` +
+        `E (External)    = ${E.toFixed(3)} m\n` +
+        `M (Mid-Ord)     = ${M.toFixed(3)} m\n` +
+        `θ (Defleksi)    = ${decimalToDMS(theta)}`;
 
+    // Draw Curve
     let canvas = document.getElementById("curveCanvas");
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0,0,400,250);
@@ -297,6 +311,7 @@ function kira(){
     ctx.arc(200, 220, 120, Math.PI + 0.3, Math.PI + 0.3 + (rad * 0.8));
     ctx.stroke();
 
+    // Table Update
     let tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
     let n = Math.floor(L/c);
@@ -305,44 +320,39 @@ function kira(){
     }
 }
 
-/* FUNGSI KIRAAN SONGSANG */
+/* KIRAAN SONGSANG */
 function inverseCalc(){
     let R = parseFloat(document.getElementById("invR").value);
     let c = parseFloat(document.getElementById("invC").value);
-    
-    let deg = parseFloat(document.getElementById("inv_d_deg").value);
-    let min = parseFloat(document.getElementById("inv_d_min").value);
-    let sec = parseFloat(document.getElementById("inv_d_sec").value);
-    let d = dmsToDecimal(deg, min, sec);
+    let d = dmsToDecimal(
+        parseFloat(document.getElementById("inv_d_deg").value),
+        parseFloat(document.getElementById("inv_d_min").value),
+        parseFloat(document.getElementById("inv_d_sec").value)
+    );
 
     let resDiv = document.getElementById("invResult");
     resDiv.style.display = "block";
-    resDiv.style.color = "inherit";
 
-    // Cari R (Input c dan d)
     if(isNaN(R) && !isNaN(c) && d > 0){
         R = c / (2 * Math.sin((d * Math.PI / 180) / 2));
-        resDiv.innerHTML = `Jejari (R) = ${R.toFixed(3)} m`;
-    } 
-    // Cari c (Input R dan d)
-    else if(!isNaN(R) && isNaN(c) && d > 0){
+        resDiv.innerHTML = `Hasil Jejari (R) = ${R.toFixed(3)} m`;
+    } else if(!isNaN(R) && isNaN(c) && d > 0){
         c = 2 * R * Math.sin((d * Math.PI / 180) / 2);
-        resDiv.innerHTML = `Chord (c) = ${c.toFixed(3)} m`;
-    } 
-    // Cari d (Input R dan c)
-    else if(!isNaN(R) && !isNaN(c) && (deg === 0 || isNaN(deg))){
-        d = 2 * Math.asin(c / (2 * R)) * 180 / Math.PI;
-        resDiv.innerHTML = `Sudut (Δ) = ${decimalToDMS(d)}`;
+        resDiv.innerHTML = `Hasil Chord (c) = ${c.toFixed(3)} m`;
+    } else if(!isNaN(R) && !isNaN(c) && d === 0){
+        let dd = 2 * Math.asin(c / (2 * R)) * 180 / Math.PI;
+        resDiv.innerHTML = `Hasil Sudut (Δ) = ${decimalToDMS(dd)}`;
     } else {
-        resDiv.innerHTML = "Sila isi 2 parameter sahaja!";
+        resDiv.innerHTML = "Sila isi 2 nilai sahaja!";
         resDiv.style.color = "red";
     }
 }
 
+/* PDF EXPORT */
 function downloadPDF(){
     const { jsPDF } = window.jspdf;
     let doc = new jsPDF();
-    doc.text("LAPORAN PENGIRAAN LENGKUNG GEOMATIK", 20, 20);
+    doc.text("LAPORAN GEOMATIK - GEO-CURVE PRO", 20, 20);
     let content = document.getElementById("result").innerText;
     doc.text(content, 20, 40);
     doc.save("Laporan_Geomatik.pdf");
