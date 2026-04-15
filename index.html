@@ -24,6 +24,7 @@ canvas { margin-top:20px; border:1px solid #ccc;}
 table { width:100%; margin-top:15px; border-collapse:collapse;}
 th,td { border:1px solid #ccc; padding:5px; text-align:center;}
 #calculator { display:none;}
+.formula { background:#fff3cd; padding:10px; margin-top:10px; border-left:5px solid #ffc107;}
 </style>
 
 </head>
@@ -63,6 +64,13 @@ th,td { border:1px solid #ccc; padding:5px; text-align:center;}
 </div>
 
 <button onclick="kira()">Kira</button>
+
+<!-- PAPAR RUMUS -->
+
+<div class="formula">
+<h4>Rumus Utama Digunakan:</h4>
+<p><b>L = (π × R × Δ) / 180</b></p>
+</div>
 
 <div class="result" id="result"></div>
 
@@ -112,9 +120,15 @@ return;
 
 let rad = d * Math.PI / 180;
 
+// ===============================
 // FORMULA ENGINEERING SURVEY
+// ===============================
+
+// RUMUS UTAMA:
+// L = (π × R × Δ) / 180
+
 let T = R * Math.tan(rad/2);
-let L = Math.PI * R * d / 180;
+let L = Math.PI * R * d / 180; 
 let LC = 2 * R * Math.sin(rad/2);
 let E = R * (1/Math.cos(rad/2)-1);
 let M = R * (1 - Math.cos(rad/2));
@@ -122,6 +136,8 @@ let theta = (180 * c)/(Math.PI * R);
 
 // OUTPUT
 document.getElementById("result").innerHTML = `
+<b>Rumus:</b> L = (π × R × Δ) / 180 <br><br>
+
 <b>Tangent (T):</b> ${T.toFixed(3)} m<br>
 <b>Length (L):</b> ${L.toFixed(3)} m<br>
 <b>Long Chord (LC):</b> ${LC.toFixed(3)} m<br>
@@ -136,7 +152,7 @@ let ctx = canvas.getContext("2d");
 
 ctx.clearRect(0,0,500,300);
 
-// scale supaya muat
+// scale
 let scale = 1;
 if(R > 200) scale = 0.5;
 if(R > 400) scale = 0.3;
@@ -175,4 +191,3 @@ doc.save("lengkung_geomatik.pdf");
 
 </body>
 </html>
-
