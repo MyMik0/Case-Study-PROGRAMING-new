@@ -3,225 +3,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistem Lengkung Geomatik Lengkap</title>
+<title>Sistem Lengkung Geomatik Pro</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body { font-family: Arial; background:#f4f4f9; margin:20px;}
-.container { max-width:750px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
-h2,h3 { text-align:center;}
-.input-group { margin-bottom:10px;}
-label { font-weight:bold;}
-input { width:100%; padding:8px; margin-top:5px;}
-button { width:100%; padding:10px; margin-top:10px; border:none; color:white; background:#28a745; cursor:pointer;}
-button:hover { background:#218838;}
-.result { background:#e9ecef; padding:15px; margin-top:15px; border-radius: 5px;}
-canvas { margin-top:20px; border:1px solid #ccc; width: 100%;}
-table { width:100%; margin-top:15px; border-collapse:collapse;}
-th,td { border:1px solid #ccc; padding:5px; text-align:center;}
-#calculator { display:none;}
-.formula { background:#fff3cd; padding:10px; margin-top:10px; border-left:5px solid #ffc107;}
-.inverse { background:#e7f1ff; padding:10px; margin-top:10px; border-left:5px solid #0d6efd;}
-.calc-step { margin-bottom: 10px; }
+    :root {
+        --primary: #2c3e50;
+        --secondary: #34495e;
+        --accent: #27ae60;
+        --danger: #e74c3c;
+        --light: #ecf0f1;
+    }
+
+    body { font-family: 'Segoe UI', Arial, sans-serif; background:#f0f2f5; margin:0; padding:20px; color: var(--primary);}
+    .container { max-width: 900px; margin: auto; background:#fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);}
+    
+    h2, h3 { color: var(--primary); margin-top: 0; }
+    
+    /* Login Styling */
+    #login { max-width: 400px; margin: 100px auto; text-align: center; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    #login input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
+
+    /* Tab Styling */
+    .tabs { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid var(--light); }
+    .tab-btn { padding: 12px 25px; border: none; background: none; cursor: pointer; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
+    .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); }
+
+    .tab-content { display: none; animation: fadeIn 0.5s; }
+    .tab-content.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Grid Layout */
+    .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-size: 0.9em; margin-bottom: 5px; color: var(--secondary); font-weight: 600; }
+    input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 1em; }
+    
+    button { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; background: var(--accent); cursor: pointer; font-weight: bold; font-size: 1em; transition: 0.3s; }
+    button:hover { background: #219150; transform: translateY(-1px); }
+
+    .result-box { background: #f8f9fa; border-left: 5px solid var(--accent); padding: 15px; margin-top: 15px; font-family: 'Courier New', Courier, monospace; line-height: 1.6; }
+    .calc-line { border-bottom: 1px dashed #ddd; padding: 5px 0; }
+
+    canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; width: 100%; height: auto; margin-top: 15px; }
+    
+    table { width: 100%; margin-top: 15px; border-collapse: collapse; border-radius: 8px; overflow: hidden; }
+    th { background: var(--primary); color: white; padding: 12px; }
+    td { border-bottom: 1px solid #eee; padding: 10px; text-align: center; }
+    tr:nth-child(even) { background: #f9f9f9; }
+
+    .footer-btns { display: flex; gap: 10px; margin-top: 30px; }
+    .btn-pdf { background: #3498db; }
+    .btn-logout { background: var(--danger); }
 </style>
 
 </head>
-
 <body>
 
-<div class="container">
-
 <div id="login">
-<h3>Login Sistem Geomatik</h3>
-<input type="text" id="user" placeholder="Username">
-<input type="password" id="pass" placeholder="Password">
-<button onclick="login()">Masuk</button>
+    <h2>Sistem Geomatik</h2>
+    <p>Sila log masuk untuk akses kalkulator</p>
+    <input type="text" id="user" placeholder="Username">
+    <input type="password" id="pass" placeholder="Password">
+    <button onclick="login()">Log Masuk</button>
 </div>
 
-<div id="calculator">
+<div id="calculator" style="display: none;">
+    <div class="container">
+        <h2>Panel Kawalan Geomatik</h2>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Kalkulator Lengkung</button>
+            <button class="tab-btn" onclick="openTab(event, 'inverseTab')">Kiraan Songsang</button>
+        </div>
 
-<h2>Kalkulator Lengkung Bulat Geomatik</h2>
+        <div id="forwardTab" class="tab-content active">
+            <div class="grid-container">
+                <div class="card">
+                    <h3>Input Data</h3>
+                    <div class="input-group">
+                        <label>Jejari R (meter)</label>
+                        <input type="number" id="R" placeholder="Contoh: 150">
+                    </div>
+                    <div class="input-group">
+                        <label>Sudut Pesongan Δ (darjah)</label>
+                        <input type="number" id="delta" placeholder="Contoh: 45">
+                    </div>
+                    <div class="input-group">
+                        <label>Panjang Chord c (meter)</label>
+                        <input type="number" id="c" value="20">
+                    </div>
+                    <button onclick="kira()">Mula Kiraan</button>
+                </div>
 
-<div class="input-group">
-<label>Jejari R (m)</label>
-<input type="number" id="R">
-</div>
+                <div class="card">
+                    <h3>Visual Lengkung</h3>
+                    <canvas id="curveCanvas" width="400" height="250"></canvas>
+                </div>
+            </div>
 
-<div class="input-group">
-<label>Sudut Δ (degree)</label>
-<input type="number" id="delta">
-</div>
+            <div class="card">
+                <h3>Hasil & Jalan Kerja</h3>
+                <div id="result" class="result-box">
+                    Sila masukkan data dan tekan "Mula Kiraan" untuk melihat keputusan.
+                </div>
+            </div>
 
-<div class="input-group">
-<label>Chord c (m)</label>
-<input type="number" id="c" value="20">
-</div>
+            <div class="card">
+                <h3>Jadual Setting Out</h3>
+                <table id="table">
+                    <thead>
+                        <tr><th>Stesen (m)</th><th>Defleksi (°)</th></tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="2">Tiada data</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<button onclick="kira()">Kira Lengkung (Forward)</button>
+        <div id="inverseTab" class="tab-content">
+            <div class="card" style="max-width: 500px; margin: auto;">
+                <h3>Kiraan Songsang (Inverse)</h3>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 20px;">Nota: Sila isi dua (2) nilai sahaja untuk mencari nilai ketiga.</p>
+                
+                <div class="input-group">
+                    <label>Jejari (R)</label>
+                    <input type="number" id="invR" placeholder="Cari R? Biarkan kosong">
+                </div>
+                <div class="input-group">
+                    <label>Chord (c)</label>
+                    <input type="number" id="invC" placeholder="Cari c? Biarkan kosong">
+                </div>
+                <div class="input-group">
+                    <label>Sudut Δ (darjah)</label>
+                    <input type="number" id="invD" placeholder="Cari Δ? Biarkan kosong">
+                </div>
+                
+                <button onclick="inverseCalc()" style="background: var(--primary);">Kira Nilai Songsang</button>
+                
+                <div id="invResult" class="result-box" style="margin-top: 20px; text-align: center; font-size: 1.2em; font-weight: bold; display: none;"></div>
+            </div>
+        </div>
 
-<div class="formula">
-<h4>Rumus Asas:</h4>
-<p>L = (π × R × Δ) / 180</p>
-</div>
-
-<div class="result" id="result">
-<i>Keputusan kiraan akan dipaparkan di sini.</i>
-</div>
-
-<canvas id="curveCanvas" width="500" height="300"></canvas>
-
-<h3>Setting Out Table</h3>
-<table id="table">
-<tr><th>Station (m)</th><th>Deflection (°)</th></tr>
-</table>
-
-<hr>
-
-<div class="inverse">
-<h3>Kiraan Songsang (Inverse Curve)</h3>
-
-<div class="input-group">
-<label>Jejari (R)</label>
-<input type="number" id="invR">
-</div>
-
-<div class="input-group">
-<label>Chord (c)</label>
-<input type="number" id="invC">
-</div>
-
-<div class="input-group">
-<label>Sudut (Δ)</label>
-<input type="number" id="invD">
-</div>
-
-<button onclick="inverseCalc()">Kira Inverse</button>
-
-<div id="invResult" style="margin-top: 10px; font-weight: bold;"></div>
-</div>
-
-<button onclick="downloadPDF()">Download PDF</button> 
-<button onclick="logout()" style="background:red;">Logout</button>
-
-</div>
+        <div class="footer-btns">
+            <button class="btn-pdf" onclick="downloadPDF()">Muat Turun PDF Report</button>
+            <button class="btn-logout" onclick="logout()">Log Keluar</button>
+        </div>
+    </div>
 </div>
 
 <script>
+/* UI FUNCTIONS */
+function openTab(evt, tabName) {
+    let i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) tabcontent[i].classList.remove("active");
+    tablinks = document.getElementsByClassName("tab-btn");
+    for (i = 0; i < tablinks.length; i++) tablinks[i].classList.remove("active");
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
 
-/* LOGIN */
+/* LOGIN LOGIC */
 function login(){
     let u=document.getElementById("user").value;
     let p=document.getElementById("pass").value;
-
     if(u==="admin1" && p==="123456"){
         document.getElementById("login").style.display="none";
         document.getElementById("calculator").style.display="block";
-    }else {
-        alert("Login gagal");
+    } else {
+        alert("Username atau Password salah!");
     }
 }
 
-/* LOGOUT */
-function logout(){
-    location.reload();
-}
+function logout(){ location.reload(); }
 
-/* FORWARD CALCULATION */
+/* MATH LOGIC */
 function kira(){
-
     let R=parseFloat(document.getElementById("R").value);
     let d=parseFloat(document.getElementById("delta").value);
     let c=parseFloat(document.getElementById("c").value);
 
-    if(isNaN(R)||isNaN(d)){alert("Sila isi data yang lengkap.");return;}
+    if(isNaN(R)||isNaN(d)){ alert("Sila masukkan nilai R dan Delta!"); return; }
 
-    let rad=d*Math.PI/180;
+    let rad = d * Math.PI / 180;
+    let T = R * Math.tan(rad / 2);
+    let L = (Math.PI * R * d) / 180;
+    let LC = 2 * R * Math.sin(rad / 2);
+    let E = R * ( (1 / Math.cos(rad / 2)) - 1 );
+    let M = R * ( 1 - Math.cos(rad / 2) );
+    let theta = (180 * c) / (Math.PI * R);
 
-    // FORMULA & PENGIRAAN
-    let T=R*Math.tan(rad/2);
-    let L=Math.PI*R*d/180;
-    let LC=2*R*Math.sin(rad/2);
-    let E=R*(1/Math.cos(rad/2)-1);
-    let M=R*(1-Math.cos(rad/2));
-    let theta=(180*c)/(Math.PI*R);
-
-    // OUTPUT BESERTA JALAN KIRAAN (SEPERTI GAMBAR)
-    document.getElementById("result").innerHTML=`
-        <h4 style="margin-top:0;">Jalan Pengiraan:</h4>
-        <div class="calc-step"><b>L</b> = (π × R × Δ) / 180 <br> &nbsp;&nbsp;&nbsp;= (π × ${R} × ${d}) / 180 = <b>${L.toFixed(3)} m</b></div>
-        <div class="calc-step"><b>T</b> = R × tan(Δ/2) <br> &nbsp;&nbsp;&nbsp;= ${R} × tan(${d}/2) = <b>${T.toFixed(3)} m</b></div>
-        <div class="calc-step"><b>LC</b> = 2 × R × sin(Δ/2) <br> &nbsp;&nbsp;&nbsp;= 2 × ${R} × sin(${d}/2) = <b>${LC.toFixed(3)} m</b></div>
-        <div class="calc-step"><b>E</b> = R × [(1/cos(Δ/2)) - 1] <br> &nbsp;&nbsp;&nbsp;= ${R} × [(1/cos(${d}/2)) - 1] = <b>${E.toFixed(3)} m</b></div>
-        <div class="calc-step"><b>M</b> = R × [1 - cos(Δ/2)] <br> &nbsp;&nbsp;&nbsp;= ${R} × [1 - cos(${d}/2)] = <b>${M.toFixed(3)} m</b></div>
-        <div class="calc-step"><b>θ</b> = (180 × c) / (π × R) <br> &nbsp;&nbsp;&nbsp;= (180 × ${c}) / (π × ${R}) = <b>${theta.toFixed(4)}°</b></div>
+    // Update Result Box with clean styling
+    document.getElementById("result").innerHTML = `
+        <div class="calc-line"><strong>T (Tangent):</strong> ${R} × tan(${d}/2) = <b>${T.toFixed(3)} m</b></div>
+        <div class="calc-line"><strong>L (Length):</strong> (π × ${R} × ${d}) / 180 = <b>${L.toFixed(3)} m</b></div>
+        <div class="calc-line"><strong>LC (Long Chord):</strong> 2 × ${R} × sin(${d}/2) = <b>${LC.toFixed(3)} m</b></div>
+        <div class="calc-line"><strong>E (External):</strong> R × [sec(Δ/2)-1] = <b>${E.toFixed(3)} m</b></div>
+        <div class="calc-line"><strong>M (Mid-Ord):</strong> R × [1-cos(Δ/2)] = <b>${M.toFixed(3)} m</b></div>
+        <div class="calc-line"><strong>θ (Deflection):</strong> (180 × ${c}) / (π × ${R}) = <b>${theta.toFixed(4)}°</b></div>
     `;
 
-    /* DRAW */
-    let ctx=document.getElementById("curveCanvas").getContext("2d");
-    ctx.clearRect(0,0,500,300);
-    let scale=R>200?0.5:0.3;
-
+    // Draw Curve
+    let canvas = document.getElementById("curveCanvas");
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0,400,250);
+    ctx.strokeStyle = "#27ae60";
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    // Center at (250, 150) for better visibility
-    ctx.arc(250, 200, R*scale, Math.PI, Math.PI+rad);
+    ctx.arc(200, 200, 100, Math.PI + 0.5, Math.PI + 0.5 + (rad > 2 ? 2 : rad)); // Scaled for visual
     ctx.stroke();
 
-    /* TABLE */
-    let table=document.getElementById("table");
-    table.innerHTML="<tr><th>Station (m)</th><th>Deflection (°)</th></tr>";
-
-    let n=Math.floor(L/c);
-    for(let i=1;i<=n;i++){
-        let def=i*theta;
-        table.innerHTML+=`<tr><td>${(i*c).toFixed(2)}</td><td>${def.toFixed(4)}</td></tr>`;
+    // Update Table
+    let tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+    let n = Math.floor(L/c);
+    for(let i=1; i<=n; i++){
+        tableBody.innerHTML += `<tr><td>${(i*c).toFixed(2)}</td><td>${(i*theta).toFixed(4)}</td></tr>`;
     }
 }
 
-/* INVERSE CALCULATION */
 function inverseCalc(){
-
     let R=parseFloat(document.getElementById("invR").value);
     let c=parseFloat(document.getElementById("invC").value);
     let d=parseFloat(document.getElementById("invD").value);
+    let resDiv = document.getElementById("invResult");
+    resDiv.style.display = "block";
 
-    let result="";
-
-    if(isNaN(R)&&!isNaN(c)&&!isNaN(d)){
-        let rad=d*Math.PI/180;
-        R=c/(2*Math.sin(rad/2));
-        result="R = "+R.toFixed(3)+" m";
+    if(isNaN(R) && !isNaN(c) && !isNaN(d)){
+        R = c / (2 * Math.sin((d * Math.PI / 180) / 2));
+        resDiv.innerHTML = "Jejari (R) = " + R.toFixed(3) + " m";
+    } else if(!isNaN(R) && isNaN(c) && !isNaN(d)){
+        c = 2 * R * Math.sin((d * Math.PI / 180) / 2);
+        resDiv.innerHTML = "Chord (c) = " + c.toFixed(3) + " m";
+    } else if(!isNaN(R) && !isNaN(c) && isNaN(d)){
+        d = 2 * Math.asin(c / (2 * R)) * 180 / Math.PI;
+        resDiv.innerHTML = "Sudut (Δ) = " + d.toFixed(4) + "°";
+    } else {
+        resDiv.innerHTML = "<span style='color:red;'>Input tidak sah!</span>";
     }
-    else if(!isNaN(R)&&isNaN(c)&&!isNaN(d)){
-        let rad=d*Math.PI/180;
-        c=2*R*Math.sin(rad/2);
-        result="c = "+c.toFixed(3)+" m";
-    }
-    else if(!isNaN(R)&&!isNaN(c)&&isNaN(d)){
-        d=2*Math.asin(c/(2*R))*180/Math.PI;
-        result="Δ = "+d.toFixed(4)+" °";
-    }
-    else{
-        result="<span style='color:red;'>Sila isi 2 nilai sahaja!</span>";
-    }
-
-    document.getElementById("invResult").innerHTML=result;
 }
 
-/* PDF */
 function downloadPDF(){
-    const {jsPDF}=window.jspdf;
-    let doc=new jsPDF();
-
-    doc.text("SISTEM LENGKUNG GEOMATIK",20,20);
-    
-    // Ambil hasil kiraan dari result div (buang tags HTML untuk plain text pdf)
-    let resultText = document.getElementById("result").innerText;
-    doc.text(resultText, 20, 40);
-
-    doc.save("geomatik.pdf");
+    const { jsPDF } = window.jspdf;
+    let doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("LAPORAN PENGIRAAN GEOMATIK", 20, 20);
+    doc.setFontSize(12);
+    let content = document.getElementById("result").innerText;
+    doc.text(content, 20, 40);
+    doc.save("Laporan_Geomatik.pdf");
 }
-
 </script>
 
 </body>
