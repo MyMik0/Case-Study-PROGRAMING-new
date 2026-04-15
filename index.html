@@ -1,110 +1,178 @@
 <!DOCTYPE html>
+
 <html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Lengkung Bulat Geomatik</title>
-    <style>
-        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f9; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 5px; }
-        button:hover { background-color: #218838; }
-        .result { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 5px; }
-        .result p { margin: 5px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 5px; }
-        
-        /* Gaya untuk bahagian Login */
-        #login-section { border: 2px solid #007bff; padding: 20px; border-radius: 10px; }
-        #login-section h3 { text-align: center; color: #007bff; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Kalkulator Lengkung Geomatik</title>
+
+<!-- PDF LIBRARY -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+body { font-family: Arial; background:#f4f4f9; margin:20px;}
+.container { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+h2,h3 { text-align:center;}
+.input-group { margin-bottom:10px;}
+label { font-weight:bold;}
+input { width:100%; padding:8px; margin-top:5px;}
+button { width:100%; padding:10px; margin-top:10px; border:none; color:white; background:#28a745; cursor:pointer;}
+button:hover { background:#218838;}
+.result { background:#e9ecef; padding:10px; margin-top:15px;}
+canvas { margin-top:20px; border:1px solid #ccc;}
+table { width:100%; margin-top:15px; border-collapse:collapse;}
+th,td { border:1px solid #ccc; padding:5px; text-align:center;}
+#calculator { display:none;}
+</style>
+
 </head>
+
 <body>
 
 <div class="container">
-    <div id="login-section">
-        <h3>Log Masuk Sistem</h3>
-        <div class="input-group">
-            <label>Nama Pengguna:</label>
-            <input type="text" id="username" placeholder="Masukkan nama">
-        </div>
-        <div class="input-group">
-            <label>Kata Laluan:</label>
-            <input type="password" id="password" placeholder="Masukkan password">
-        </div>
-        <button onclick="checkLogin()" style="background-color: #007bff;">Masuk</button>
-    </div>
 
-    <div id="calculator-section" style="display: none;">
-        <h2>Kalkulator Lengkung Bulat</h2>
-        
-        <div class="input-group">
-            <label>Jejari, R (meter):</label>
-            <input type="number" id="radius" placeholder="Contoh: 150">
-        </div>
+<!-- LOGIN -->
 
-        <div class="input-group">
-            <label>Sudut Pesongan, Δ (Darjah):</label>
-            <input type="number" id="delta" placeholder="Contoh: 30.5">
-        </div>
+<div id="login">
+<h3>Login Sistem</h3>
+<input type="text" id="user" placeholder="Username">
+<input type="password" id="pass" placeholder="Password">
+<button onclick="login()">Masuk</button>
+</div>
 
-        <button onclick="calculateCurve()">Kira Elemen</button>
+<!-- CALCULATOR -->
 
-        <div id="output" class="result" style="display:none;">
-            <h4>Keputusan:</h4>
-            <p id="resT"></p>
-            <p id="resL"></p>
-            <p id="resC"></p>
-            <p id="resE"></p>
-            <p id="resM"></p>
-        </div>
-        <br>
-        <button onclick="location.reload()" style="background-color: #dc3545; font-size: 12px; padding: 5px;">Log Keluar</button>
-    </div>
+<div id="calculator">
+
+<h2>Kalkulator Lengkung Bulat</h2>
+
+<div class="input-group">
+<label>Jejari R (m)</label>
+<input type="number" id="R" placeholder="Contoh: 150">
+</div>
+
+<div class="input-group">
+<label>Sudut Δ (degree)</label>
+<input type="number" id="delta" placeholder="Contoh: 30">
+</div>
+
+<div class="input-group">
+<label>Chord c (m)</label>
+<input type="number" id="c" value="20">
+</div>
+
+<button onclick="kira()">Kira</button>
+
+<div class="result" id="result"></div>
+
+<canvas id="curveCanvas" width="500" height="300"></canvas>
+
+<h3>Setting Out Table</h3>
+<table id="table">
+<tr><th>Station (m)</th><th>Deflection (°)</th></tr>
+</table>
+
+<button onclick="downloadPDF()">Download PDF</button> <button onclick="logout()" style="background:red;">Logout</button>
+
+</div>
 </div>
 
 <script>
-    // FUNGSI UNTUK SEMAK LOGIN
-    function checkLogin() {
-        let user = document.getElementById('username').value;
-        let pass = document.getElementById('password').value;
 
-        if (user === "admin1" && pass === "123456") {
-            document.getElementById('login-section').style.display = "none";
-            document.getElementById('calculator-section').style.display = "block";
-        } else {
-            alert("Nama atau Password salah! Sila cuba lagi.");
-        }
-    }
+// LOGIN
+function login(){
+let u = document.getElementById("user").value;
+let p = document.getElementById("pass").value;
 
-    // FUNGSI PENGIRAAN GEOMATIK
-    function calculateCurve() {
-        let R = parseFloat(document.getElementById('radius').value);
-        let deltaDeg = parseFloat(document.getElementById('delta').value);
+if(u==="admin1" && p==="123456"){
+document.getElementById("login").style.display="none";
+document.getElementById("calculator").style.display="block";
+}else{
+alert("Login gagal!");
+}
+}
 
-        if (isNaN(R) || isNaN(deltaDeg)) {
-            alert("Sila masukkan nilai yang sah.");
-            return;
-        }
+// LOGOUT
+function logout(){
+location.reload();
+}
 
-        let deltaRad = (deltaDeg * Math.PI) / 180;
+// MAIN CALCULATION
+function kira(){
 
-        let T = R * Math.tan(deltaRad / 2);
-        let L = (Math.PI * R * deltaDeg) / 180;
-        let C = 2 * R * Math.sin(deltaRad / 2);
-        let E = R * ( (1 / Math.cos(deltaRad / 2)) - 1 );
-        let M = R * (1 - Math.cos(deltaRad / 2));
+let R = parseFloat(document.getElementById("R").value);
+let d = parseFloat(document.getElementById("delta").value);
+let c = parseFloat(document.getElementById("c").value);
 
-        document.getElementById('output').style.display = "block";
-        document.getElementById('resT').innerHTML = "<b>Tangen (T):</b> " + T.toFixed(3) + " m";
-        document.getElementById('resL').innerHTML = "<b>Panjang Lengkung (L):</b> " + L.toFixed(3) + " m";
-        document.getElementById('resC').innerHTML = "<b>Perentas Panjang (C):</b> " + C.toFixed(3) + " m";
-        document.getElementById('resE').innerHTML = "<b>Jarak Luar (E):</b> " + E.toFixed(3) + " m";
-        document.getElementById('resM').innerHTML = "<b>Mid-ordinate (M):</b> " + M.toFixed(3) + " m";
-    }
+if(isNaN(R) || isNaN(d)){
+alert("Masukkan nilai yang betul!");
+return;
+}
+
+let rad = d * Math.PI / 180;
+
+// FORMULA ENGINEERING SURVEY
+let T = R * Math.tan(rad/2);
+let L = Math.PI * R * d / 180;
+let LC = 2 * R * Math.sin(rad/2);
+let E = R * (1/Math.cos(rad/2)-1);
+let M = R * (1 - Math.cos(rad/2));
+let theta = (180 * c)/(Math.PI * R);
+
+// OUTPUT
+document.getElementById("result").innerHTML = `
+<b>Tangent (T):</b> ${T.toFixed(3)} m<br>
+<b>Length (L):</b> ${L.toFixed(3)} m<br>
+<b>Long Chord (LC):</b> ${LC.toFixed(3)} m<br>
+<b>External (E):</b> ${E.toFixed(3)} m<br>
+<b>Mid-ordinate (M):</b> ${M.toFixed(3)} m<br>
+<b>Deflection (θ):</b> ${theta.toFixed(4)}°
+`;
+
+// DRAW CURVE
+let canvas = document.getElementById("curveCanvas");
+let ctx = canvas.getContext("2d");
+
+ctx.clearRect(0,0,500,300);
+
+// scale supaya muat
+let scale = 1;
+if(R > 200) scale = 0.5;
+if(R > 400) scale = 0.3;
+
+ctx.beginPath();
+ctx.arc(250,250,R*scale,Math.PI,Math.PI+rad);
+ctx.stroke();
+
+// TABLE
+let table = document.getElementById("table");
+table.innerHTML = "<tr><th>Station (m)</th><th>Deflection (°)</th></tr>";
+
+let n = Math.floor(L/c);
+
+for(let i=1;i<=n;i++){
+let def = i * theta;
+table.innerHTML += `<tr><td>${(i*c).toFixed(2)}</td><td>${def.toFixed(4)}</td></tr>`;
+}
+
+}
+
+// PDF EXPORT
+function downloadPDF(){
+const { jsPDF } = window.jspdf;
+let doc = new jsPDF();
+
+doc.text("LAPORAN LENGKUNG GEOMATIK", 20,20);
+
+let text = document.getElementById("result").innerText;
+doc.text(text,20,40);
+
+doc.save("lengkung_geomatik.pdf");
+}
+
 </script>
 
 </body>
 </html>
+
