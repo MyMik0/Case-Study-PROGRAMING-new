@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro System - Advanced Report</title>
+<title>Geo-Curve Pro v2 - Professional Setting Out</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -11,41 +11,64 @@
 <style>
     :root {
         --primary: #2c3e50;
-        --secondary: #34495e;
         --accent: #27ae60;
-        --danger: #e74c3c;
         --warning: #f39c12;
-        --overlay: rgba(255, 255, 255, 0.94);
+        --overlay: rgba(255, 255, 255, 0.95);
     }
 
     body { 
         font-family: 'Segoe UI', sans-serif; 
         margin: 0; padding: 20px; 
-        background-image: url('209301.jpg'); 
+        background-image: url('<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geo-Curve Pro v2 - Professional Setting Out</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+    :root {
+        --primary: #2c3e50;
+        --accent: #27ae60;
+        --warning: #f39c12;
+        --overlay: rgba(255, 255, 255, 0.95);
+    }
+
+    body { 
+        font-family: 'Segoe UI', sans-serif; 
+        margin: 0; padding: 20px; 
+        background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=2070'); 
         background-size: cover; background-attachment: fixed;
     }
 
-    .container { max-width: 1000px; margin: auto; background: var(--overlay); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); backdrop-filter: blur(10px); }
+    .container { max-width: 1100px; margin: auto; background: var(--overlay); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
     .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
-    h2, h3 { color: var(--primary); text-align: center; }
+    h2, h3 { color: var(--primary); text-align: center; margin-top: 0; }
     
     .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
 
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; font-size: 0.9em; margin-bottom: 5px; }
+    
     .dms-inputs { display: flex; gap: 5px; }
     .dms-inputs input { width: 33%; text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    
     input[type="number"], input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     
     button { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; }
-    button:hover { opacity: 0.9; transform: translateY(-2px); }
+    button:hover { background: #219150; transform: translateY(-2px); }
 
-    .result-box { background: #f9f9f9; border-left: 6px solid var(--accent); padding: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.95em; }
-    canvas { background: #fff; border: 1px solid #eee; border-radius: 8px; width: 100%; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th { background: var(--primary); color: white; padding: 12px; }
-    td { border-bottom: 1px solid #eee; padding: 10px; text-align: center; }
+    .result-box { background: #f9f9f9; border-left: 6px solid var(--accent); padding: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; }
+    th { background: #34495e; color: white; padding: 10px; border: 1px solid #ddd; }
+    td { border: 1px solid #ddd; padding: 8px; text-align: center; background: white; }
 
-    .footer-btns { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
     .btn-pdf { background: #3498db; }
     .btn-apk { background: var(--warning); color: white; text-decoration: none; text-align: center; padding: 12px; border-radius: 6px; font-weight: bold; }
     
@@ -56,64 +79,75 @@
 
 <div id="login">
     <h2>GEO-CURVE LOGIN</h2>
-    <input type="text" id="user" placeholder="Nama Pengguna" style="margin-bottom:10px;">
-    <input type="password" id="pass" placeholder="Kata Laluan" style="margin-bottom:10px;">
+    <input type="text" id="user" placeholder="Admin Name" style="margin-bottom:10px;">
+    <input type="password" id="pass" placeholder="Password" style="margin-bottom:10px;">
     <button onclick="login()">Log Masuk</button>
 </div>
 
 <div id="calculator" style="display: none;">
     <div class="container">
-        <h2>Sistem Laporan Geomatik</h2>
+        <h2>Professional Curve Setting Out System</h2>
         
         <div class="grid-container">
             <div class="card">
-                <h3>Input Data</h3>
-                <label>Jejari R (m)</label>
-                <input type="number" id="R" placeholder="Cth: 600" style="margin-bottom:15px;">
-                
-                <label>Sudut Pesongan Δ (D M S)</label>
-                <div class="dms-inputs" style="margin-bottom:15px;">
-                    <input type="number" id="d_deg" placeholder="°">
-                    <input type="number" id="d_min" placeholder="'">
-                    <input type="number" id="d_sec" placeholder='"'>
+                <h3>Input Parameter</h3>
+                <div class="input-group">
+                    <label>Chainage T1 (Mula Lengkung)</label>
+                    <input type="number" id="T1_chain" placeholder="Cth: 2042.821">
                 </div>
-
-                <label>Sub-Chord c (m)</label>
-                <input type="number" id="c" value="20" style="margin-bottom:15px;">
-                
-                <button onclick="kira()">KIRA & JANA VISUAL</button>
+                <div class="input-group">
+                    <label>Jejari R (m)</label>
+                    <input type="number" id="R" placeholder="Cth: 600">
+                </div>
+                <div class="input-group">
+                    <label>Sudut Pesongan Δ (D M S)</label>
+                    <div class="dms-inputs">
+                        <input type="number" id="d_deg" placeholder="°">
+                        <input type="number" id="d_min" placeholder="'">
+                        <input type="number" id="d_sec" placeholder='"'>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Interval Chord (m)</label>
+                    <input type="number" id="interval" value="20">
+                </div>
+                <button onclick="kiraSemua()">KIRA JADUAL SETTING OUT</button>
             </div>
 
             <div class="card">
-                <h3>Lakaran Grafik</h3>
-                <canvas id="curveCanvas" width="400" height="300"></canvas>
+                <h3>Grafik Visual</h3>
+                <canvas id="curveCanvas" width="400" height="300" style="background:white; border:1px solid #ccc; width:100%; border-radius:8px;"></canvas>
             </div>
         </div>
 
         <div class="card">
-            <h3>Hasil Pengiraan</h3>
-            <div id="result" class="result-box">Data belum dikira.</div>
+            <h3>Rumusan Pengiraan</h3>
+            <div id="result" class="result-box">Sila masukkan data.</div>
         </div>
 
-        <div class="card">
-            <h3>Jadual Setting Out</h3>
+        <div class="card" style="overflow-x: auto;">
+            <h3>Jadual Setting Out (Format Gambar)</h3>
             <table id="settingOutTable">
                 <thead>
                     <tr>
-                        <th>Stesen (m)</th>
-                        <th>Sudut Defleksi (DMS)</th>
+                        <th>Point</th>
+                        <th>Chainage (m)</th>
+                        <th>Chord (m)</th>
+                        <th>Tangential Angle (α)</th>
+                        <th>Cumulative Angle (δ)</th>
+                        <th>Length of Chord (2R Sin δ)</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <tr><td colspan="2">Tiada data</td></tr>
+                    <tr><td colspan="6">Tiada data</td></tr>
                 </tbody>
             </table>
         </div>
 
         <div class="footer-btns">
-            <button class="btn-pdf" onclick="downloadPDF()">📑 EXPORT LAPORAN LENGKAP (PDF)</button>
+            <button class="btn-pdf" onclick="downloadPDF()">📑 EXPORT FULL REPORT (PDF)</button>
             <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APP APK</a>
-            <button style="background:var(--danger)" onclick="location.reload()">LOG KELUAR</button>
+            <button style="background:#e74c3c" onclick="location.reload()">LOG KELUAR</button>
         </div>
     </div>
 </div>
@@ -123,105 +157,668 @@ function login(){
     if(document.getElementById("user").value === "admin1" && document.getElementById("pass").value === "123456"){
         document.getElementById("login").style.display = "none";
         document.getElementById("calculator").style.display = "block";
-    } else { alert("Salah!"); }
+    } else { alert("Akses Ditolak!"); }
 }
 
 function dmsToDecimal(d, m, s) { return (d || 0) + ((m || 0)/60) + ((s || 0)/3600); }
 function decimalToDMS(dd) {
+    if(dd < 0) dd = 0;
     let d = Math.floor(dd);
     let m = Math.floor((dd - d) * 60);
-    let s = ((dd - d) * 60 - m) * 60;
-    return `${d}° ${m}' ${s.toFixed(2)}"`;
+    let s = Math.round(((dd - d) * 60 - m) * 60);
+    if(s === 60) { m++; s = 0; }
+    if(m === 60) { d++; m = 0; }
+    return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
 }
 
-function kira(){
+function kiraSemua(){
+    let chainT1 = parseFloat(document.getElementById("T1_chain").value);
     let R = parseFloat(document.getElementById("R").value);
-    let c = parseFloat(document.getElementById("c").value);
-    let d = dmsToDecimal(
+    let interval = parseFloat(document.getElementById("interval").value);
+    let delta = dmsToDecimal(
         parseFloat(document.getElementById("d_deg").value),
         parseFloat(document.getElementById("d_min").value),
         parseFloat(document.getElementById("d_sec").value)
     );
 
-    if(!R || d <= 0) return;
+    if(isNaN(chainT1) || isNaN(R) || delta <= 0) { alert("Sila isi semua maklumat!"); return; }
 
-    let rad = d * Math.PI / 180;
-    let T = R * Math.tan(rad / 2);
-    let L = (Math.PI * R * d) / 180;
-    let LC = 2 * R * Math.sin(rad / 2);
-    let E = R * ( (1 / Math.cos(rad / 2)) - 1 );
-    let M = R * ( 1 - Math.cos(rad / 2) );
-    let theta = (180 * c) / (Math.PI * R); 
+    let L = (Math.PI * R * delta) / 180;
+    let chainT2 = chainT1 + L;
+    let radDelta = delta * Math.PI / 180;
+    let LC_full = 2 * R * Math.sin(radDelta / 2);
 
     document.getElementById("result").innerHTML = 
-        `Input Δ = ${decimalToDMS(d)}\n` +
-        `L = (π × R × Δ) / 180 = ${L.toFixed(3)} m\n` +
-        `T = R × tan(Δ/2) = ${T.toFixed(3)} m\n` +
-        `LC = 2 × R × sin(Δ/2) = ${LC.toFixed(3)} m\n` +
-        `E = R × [sec(Δ/2) - 1] = ${E.toFixed(3)} m\n` +
-        `M = R × [1 - cos(Δ/2)] = ${M.toFixed(3)} m\n` +
-        `θ (Unit Sub-Chord) = ${decimalToDMS(theta)}`;
+        `Jejari (R) = ${R} m | Δ = ${decimalToDMS(delta)}\n` +
+        `Panjang Lengkung (L) = ${L.toFixed(3)} m\n` +
+        `Chainage T1 = ${chainT1.toFixed(3)} | Chainage T2 = ${chainT2.toFixed(3)}\n` +
+        `Long Chord = ${LC_full.toFixed(3)} m`;
 
-    // Draw
+    // Penjanaan Jadual
+    let tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+    
+    let currentChain = chainT1;
+    let cumulativeAngle = 0;
+    let points = [];
+
+    // Point T1
+    points.push({p: "T1", ch: chainT1, chord: 0, alpha: 0, delta: 0, len: 0});
+
+    // Point A (First Sub-Chord)
+    let firstNext = Math.ceil(chainT1 / interval) * interval;
+    if(firstNext <= chainT1) firstNext += interval;
+    
+    let nextPointLabel = 65; // Huruf 'A'
+    
+    while(firstNext < chainT2) {
+        let chord = firstNext - currentChain;
+        let alpha = (1718.9 * chord / R) / 60; // In decimal degrees
+        cumulativeAngle += alpha;
+        let lenChord = 2 * R * Math.sin((cumulativeAngle * Math.PI / 180));
+
+        points.push({
+            p: String.fromCharCode(nextPointLabel++),
+            ch: firstNext,
+            chord: chord,
+            alpha: alpha,
+            delta: cumulativeAngle,
+            len: lenChord
+        });
+
+        currentChain = firstNext;
+        firstNext += interval;
+    }
+
+    // Point T2 (Final Sub-Chord)
+    let finalChord = chainT2 - currentChain;
+    let finalAlpha = (1718.9 * finalChord / R) / 60;
+    cumulativeAngle += finalAlpha;
+    
+    points.push({
+        p: "T2",
+        ch: chainT2,
+        chord: finalChord,
+        alpha: finalAlpha,
+        delta: cumulativeAngle,
+        len: 2 * R * Math.sin((cumulativeAngle * Math.PI / 180))
+    });
+
+    points.forEach(pt => {
+        tableBody.innerHTML += `
+            <tr>
+                <td>${pt.p}</td>
+                <td>${pt.ch.toFixed(3)}</td>
+                <td>${pt.chord.toFixed(3)}</td>
+                <td>${decimalToDMS(pt.alpha)}</td>
+                <td>${decimalToDMS(pt.delta)}</td>
+                <td>${pt.len.toFixed(3)}</td>
+            </tr>`;
+    });
+
+    // Lukis Grafik Simple
     let canvas = document.getElementById("curveCanvas");
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0,0,400,300);
-    ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 4;
+    ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.arc(200, 250, 150, Math.PI + 0.5, Math.PI + 0.5 + (rad * 0.6));
+    ctx.arc(200, 260, 180, Math.PI + 0.4, Math.PI + 0.4 + (radDelta * 0.5));
     ctx.stroke();
-    // Label
-    ctx.fillStyle = "#2c3e50"; ctx.font = "14px Arial";
-    ctx.fillText("Lakaran Lengkung R=" + R + "m", 120, 50);
-
-    // Table
-    let tableBody = document.getElementById("tableBody");
-    tableBody.innerHTML = "";
-    let n = Math.floor(L/c);
-    for(let i=1; i<=n; i++){
-        tableBody.innerHTML += `<tr><td>${(i*c).toFixed(2)}</td><td>${decimalToDMS(i*theta)}</td></tr>`;
-    }
+    ctx.fillStyle = "#2c3e50"; ctx.fillText("Visual Lengkung R=" + R, 150, 40);
 }
 
-async function downloadPDF() {
+function downloadPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    // 1. Tajuk
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("LAPORAN PENGIRAAN LENGKUNG GEOMATIK", pageWidth/2, 20, { align: "center" });
-
-    // 2. Data Parameter (Text Box)
-    doc.setFontSize(12);
-    doc.setFont("courier", "normal");
-    const resultText = document.getElementById("result").innerText;
-    doc.text(resultText, 20, 40);
-
-    // 3. Masukkan Lakaran Grafik (Canvas to Image)
-    const canvas = document.getElementById("curveCanvas");
-    const imgData = canvas.toDataURL("image/png");
-    doc.addImage(imgData, 'PNG', 20, 100, 100, 75); // Posisi X, Y, Lebar, Tinggi
-    doc.setFont("helvetica", "italic");
-    doc.setFontSize(10);
-    doc.text("*Lakaran Grafik Lengkung", 20, 180);
-
-    // 4. Jadual Setting Out (Menggunakan AutoTable)
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text("Jadual Setting Out (Defleksi)", 20, 200);
+    const doc = new jsPDF('l', 'mm', 'a4'); // 'l' untuk Landscape supaya jadual muat
     
+    doc.setFontSize(16);
+    doc.text("LAPORAN SETTING OUT LENGKUNG BULAT", 148, 15, { align: "center" });
+    
+    doc.setFontSize(10);
+    doc.setFont("courier", "normal");
+    doc.text(document.getElementById("result").innerText, 15, 25);
+
     doc.autoTable({
         html: '#settingOutTable',
-        startY: 205,
+        startY: 45,
         theme: 'grid',
         headStyles: { fillColor: [44, 62, 80] },
-        styles: { font: 'courier', fontSize: 10 }
+        styles: { fontSize: 8, cellPadding: 2 }
     });
 
-    // 5. Simpan
-    doc.save("Laporan_Lengkap_Geomatik.pdf");
+    const canvas = document.getElementById("curveCanvas");
+    doc.addImage(canvas.toDataURL("image/png"), 'PNG', 200, 25, 70, 50);
+
+    doc.save("Jadual_Setting_Out.pdf");
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geo-Curve Pro v2 - Professional Setting Out</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+    :root {
+        --primary: #2c3e50;
+        --accent: #27ae60;
+        --warning: #f39c12;
+        --overlay: rgba(255, 255, 255, 0.95);
+    }
+
+    body { 
+        font-family: 'Segoe UI', sans-serif; 
+        margin: 0; padding: 20px; 
+        background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=2070'); 
+        background-size: cover; background-attachment: fixed;
+    }
+
+    .container { max-width: 1100px; margin: auto; background: var(--overlay); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+    .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    h2, h3 { color: var(--primary); text-align: center; margin-top: 0; }
+    
+    .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
+
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; font-size: 0.9em; margin-bottom: 5px; }
+    
+    .dms-inputs { display: flex; gap: 5px; }
+    .dms-inputs input { width: 33%; text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    
+    input[type="number"], input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    
+    button { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; }
+    button:hover { background: #219150; transform: translateY(-2px); }
+
+    .result-box { background: #f9f9f9; border-left: 6px solid var(--accent); padding: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; }
+    th { background: #34495e; color: white; padding: 10px; border: 1px solid #ddd; }
+    td { border: 1px solid #ddd; padding: 8px; text-align: center; background: white; }
+
+    .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .btn-pdf { background: #3498db; }
+    .btn-apk { background: var(--warning); color: white; text-decoration: none; text-align: center; padding: 12px; border-radius: 6px; font-weight: bold; }
+    
+    #login { max-width: 400px; margin: 100px auto; background: var(--overlay); padding: 40px; border-radius: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div id="login">
+    <h2>GEO-CURVE LOGIN</h2>
+    <input type="text" id="user" placeholder="Admin Name" style="margin-bottom:10px;">
+    <input type="password" id="pass" placeholder="Password" style="margin-bottom:10px;">
+    <button onclick="login()">Log Masuk</button>
+</div>
+
+<div id="calculator" style="display: none;">
+    <div class="container">
+        <h2>Professional Curve Setting Out System</h2>
+        
+        <div class="grid-container">
+            <div class="card">
+                <h3>Input Parameter</h3>
+                <div class="input-group">
+                    <label>Chainage T1 (Mula Lengkung)</label>
+                    <input type="number" id="T1_chain" placeholder="Cth: 2042.821">
+                </div>
+                <div class="input-group">
+                    <label>Jejari R (m)</label>
+                    <input type="number" id="R" placeholder="Cth: 600">
+                </div>
+                <div class="input-group">
+                    <label>Sudut Pesongan Δ (D M S)</label>
+                    <div class="dms-inputs">
+                        <input type="number" id="d_deg" placeholder="°">
+                        <input type="number" id="d_min" placeholder="'">
+                        <input type="number" id="d_sec" placeholder='"'>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Interval Chord (m)</label>
+                    <input type="number" id="interval" value="20">
+                </div>
+                <button onclick="kiraSemua()">KIRA JADUAL SETTING OUT</button>
+            </div>
+
+            <div class="card">
+                <h3>Grafik Visual</h3>
+                <canvas id="curveCanvas" width="400" height="300" style="background:white; border:1px solid #ccc; width:100%; border-radius:8px;"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Rumusan Pengiraan</h3>
+            <div id="result" class="result-box">Sila masukkan data.</div>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+            <h3>Jadual Setting Out (Format Gambar)</h3>
+            <table id="settingOutTable">
+                <thead>
+                    <tr>
+                        <th>Point</th>
+                        <th>Chainage (m)</th>
+                        <th>Chord (m)</th>
+                        <th>Tangential Angle (α)</th>
+                        <th>Cumulative Angle (δ)</th>
+                        <th>Length of Chord (2R Sin δ)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="6">Tiada data</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-btns">
+            <button class="btn-pdf" onclick="downloadPDF()">📑 EXPORT FULL REPORT (PDF)</button>
+            <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APP APK</a>
+            <button style="background:#e74c3c" onclick="location.reload()">LOG KELUAR</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function login(){
+    if(document.getElementById("user").value === "admin1" && document.getElementById("pass").value === "123456"){
+        document.getElementById("login").style.display = "none";
+        document.getElementById("calculator").style.display = "block";
+    } else { alert("Akses Ditolak!"); }
+}
+
+function dmsToDecimal(d, m, s) { return (d || 0) + ((m || 0)/60) + ((s || 0)/3600); }
+function decimalToDMS(dd) {
+    if(dd < 0) dd = 0;
+    let d = Math.floor(dd);
+    let m = Math.floor((dd - d) * 60);
+    let s = Math.round(((dd - d) * 60 - m) * 60);
+    if(s === 60) { m++; s = 0; }
+    if(m === 60) { d++; m = 0; }
+    return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
+}
+
+function kiraSemua(){
+    let chainT1 = parseFloat(document.getElementById("T1_chain").value);
+    let R = parseFloat(document.getElementById("R").value);
+    let interval = parseFloat(document.getElementById("interval").value);
+    let delta = dmsToDecimal(
+        parseFloat(document.getElementById("d_deg").value),
+        parseFloat(document.getElementById("d_min").value),
+        parseFloat(document.getElementById("d_sec").value)
+    );
+
+    if(isNaN(chainT1) || isNaN(R) || delta <= 0) { alert("Sila isi semua maklumat!"); return; }
+
+    let L = (Math.PI * R * delta) / 180;
+    let chainT2 = chainT1 + L;
+    let radDelta = delta * Math.PI / 180;
+    let LC_full = 2 * R * Math.sin(radDelta / 2);
+
+    document.getElementById("result").innerHTML = 
+        `Jejari (R) = ${R} m | Δ = ${decimalToDMS(delta)}\n` +
+        `Panjang Lengkung (L) = ${L.toFixed(3)} m\n` +
+        `Chainage T1 = ${chainT1.toFixed(3)} | Chainage T2 = ${chainT2.toFixed(3)}\n` +
+        `Long Chord = ${LC_full.toFixed(3)} m`;
+
+    // Penjanaan Jadual
+    let tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+    
+    let currentChain = chainT1;
+    let cumulativeAngle = 0;
+    let points = [];
+
+    // Point T1
+    points.push({p: "T1", ch: chainT1, chord: 0, alpha: 0, delta: 0, len: 0});
+
+    // Point A (First Sub-Chord)
+    let firstNext = Math.ceil(chainT1 / interval) * interval;
+    if(firstNext <= chainT1) firstNext += interval;
+    
+    let nextPointLabel = 65; // Huruf 'A'
+    
+    while(firstNext < chainT2) {
+        let chord = firstNext - currentChain;
+        let alpha = (1718.9 * chord / R) / 60; // In decimal degrees
+        cumulativeAngle += alpha;
+        let lenChord = 2 * R * Math.sin((cumulativeAngle * Math.PI / 180));
+
+        points.push({
+            p: String.fromCharCode(nextPointLabel++),
+            ch: firstNext,
+            chord: chord,
+            alpha: alpha,
+            delta: cumulativeAngle,
+            len: lenChord
+        });
+
+        currentChain = firstNext;
+        firstNext += interval;
+    }
+
+    // Point T2 (Final Sub-Chord)
+    let finalChord = chainT2 - currentChain;
+    let finalAlpha = (1718.9 * finalChord / R) / 60;
+    cumulativeAngle += finalAlpha;
+    
+    points.push({
+        p: "T2",
+        ch: chainT2,
+        chord: finalChord,
+        alpha: finalAlpha,
+        delta: cumulativeAngle,
+        len: 2 * R * Math.sin((cumulativeAngle * Math.PI / 180))
+    });
+
+    points.forEach(pt => {
+        tableBody.innerHTML += `
+            <tr>
+                <td>${pt.p}</td>
+                <td>${pt.ch.toFixed(3)}</td>
+                <td>${pt.chord.toFixed(3)}</td>
+                <td>${decimalToDMS(pt.alpha)}</td>
+                <td>${decimalToDMS(pt.delta)}</td>
+                <td>${pt.len.toFixed(3)}</td>
+            </tr>`;
+    });
+
+    // Lukis Grafik Simple
+    let canvas = document.getElementById("curveCanvas");
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0,400,300);
+    ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.arc(200, 260, 180, Math.PI + 0.4, Math.PI + 0.4 + (radDelta * 0.5));
+    ctx.stroke();
+    ctx.fillStyle = "#2c3e50"; ctx.fillText("Visual Lengkung R=" + R, 150, 40);
+}
+
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('l', 'mm', 'a4'); // 'l' untuk Landscape supaya jadual muat
+    
+    doc.setFontSize(16);
+    doc.text("LAPORAN SETTING OUT LENGKUNG BULAT", 148, 15, { align: "center" });
+    
+    doc.setFontSize(10);
+    doc.setFont("courier", "normal");
+    doc.text(document.getElementById("result").innerText, 15, 25);
+
+    doc.autoTable({
+        html: '#settingOutTable',
+        startY: 45,
+        theme: 'grid',
+        headStyles: { fillColor: [44, 62, 80] },
+        styles: { fontSize: 8, cellPadding: 2 }
+    });
+
+    const canvas = document.getElementById("curveCanvas");
+    doc.addImage(canvas.toDataURL("image/png"), 'PNG', 200, 25, 70, 50);
+
+    doc.save("Jadual_Setting_Out.pdf");
+}
+</script>
+
+</body>
+</html>'209301.jpg'); 
+        background-size: cover; background-attachment: fixed;
+    }
+
+    .container { max-width: 1100px; margin: auto; background: var(--overlay); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+    .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    h2, h3 { color: var(--primary); text-align: center; margin-top: 0; }
+    
+    .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
+
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; font-size: 0.9em; margin-bottom: 5px; }
+    
+    .dms-inputs { display: flex; gap: 5px; }
+    .dms-inputs input { width: 33%; text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    
+    input[type="number"], input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    
+    button { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; }
+    button:hover { background: #219150; transform: translateY(-2px); }
+
+    .result-box { background: #f9f9f9; border-left: 6px solid var(--accent); padding: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; }
+    th { background: #34495e; color: white; padding: 10px; border: 1px solid #ddd; }
+    td { border: 1px solid #ddd; padding: 8px; text-align: center; background: white; }
+
+    .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .btn-pdf { background: #3498db; }
+    .btn-apk { background: var(--warning); color: white; text-decoration: none; text-align: center; padding: 12px; border-radius: 6px; font-weight: bold; }
+    
+    #login { max-width: 400px; margin: 100px auto; background: var(--overlay); padding: 40px; border-radius: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div id="login">
+    <h2>GEO-CURVE LOGIN</h2>
+    <input type="text" id="user" placeholder="Admin Name" style="margin-bottom:10px;">
+    <input type="password" id="pass" placeholder="Password" style="margin-bottom:10px;">
+    <button onclick="login()">Log Masuk</button>
+</div>
+
+<div id="calculator" style="display: none;">
+    <div class="container">
+        <h2>Professional Curve Setting Out System</h2>
+        
+        <div class="grid-container">
+            <div class="card">
+                <h3>Input Parameter</h3>
+                <div class="input-group">
+                    <label>Chainage T1 (Mula Lengkung)</label>
+                    <input type="number" id="T1_chain" placeholder="Cth: 2042.821">
+                </div>
+                <div class="input-group">
+                    <label>Jejari R (m)</label>
+                    <input type="number" id="R" placeholder="Cth: 600">
+                </div>
+                <div class="input-group">
+                    <label>Sudut Pesongan Δ (D M S)</label>
+                    <div class="dms-inputs">
+                        <input type="number" id="d_deg" placeholder="°">
+                        <input type="number" id="d_min" placeholder="'">
+                        <input type="number" id="d_sec" placeholder='"'>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Interval Chord (m)</label>
+                    <input type="number" id="interval" value="20">
+                </div>
+                <button onclick="kiraSemua()">KIRA JADUAL SETTING OUT</button>
+            </div>
+
+            <div class="card">
+                <h3>Grafik Visual</h3>
+                <canvas id="curveCanvas" width="400" height="300" style="background:white; border:1px solid #ccc; width:100%; border-radius:8px;"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Rumusan Pengiraan</h3>
+            <div id="result" class="result-box">Sila masukkan data.</div>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+            <h3>Jadual Setting Out (Format Gambar)</h3>
+            <table id="settingOutTable">
+                <thead>
+                    <tr>
+                        <th>Point</th>
+                        <th>Chainage (m)</th>
+                        <th>Chord (m)</th>
+                        <th>Tangential Angle (α)</th>
+                        <th>Cumulative Angle (δ)</th>
+                        <th>Length of Chord (2R Sin δ)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="6">Tiada data</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-btns">
+            <button class="btn-pdf" onclick="downloadPDF()">📑 EXPORT FULL REPORT (PDF)</button>
+            <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APP APK</a>
+            <button style="background:#e74c3c" onclick="location.reload()">LOG KELUAR</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function login(){
+    if(document.getElementById("user").value === "admin1" && document.getElementById("pass").value === "123456"){
+        document.getElementById("login").style.display = "none";
+        document.getElementById("calculator").style.display = "block";
+    } else { alert("Akses Ditolak!"); }
+}
+
+function dmsToDecimal(d, m, s) { return (d || 0) + ((m || 0)/60) + ((s || 0)/3600); }
+function decimalToDMS(dd) {
+    if(dd < 0) dd = 0;
+    let d = Math.floor(dd);
+    let m = Math.floor((dd - d) * 60);
+    let s = Math.round(((dd - d) * 60 - m) * 60);
+    if(s === 60) { m++; s = 0; }
+    if(m === 60) { d++; m = 0; }
+    return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
+}
+
+function kiraSemua(){
+    let chainT1 = parseFloat(document.getElementById("T1_chain").value);
+    let R = parseFloat(document.getElementById("R").value);
+    let interval = parseFloat(document.getElementById("interval").value);
+    let delta = dmsToDecimal(
+        parseFloat(document.getElementById("d_deg").value),
+        parseFloat(document.getElementById("d_min").value),
+        parseFloat(document.getElementById("d_sec").value)
+    );
+
+    if(isNaN(chainT1) || isNaN(R) || delta <= 0) { alert("Sila isi semua maklumat!"); return; }
+
+    let L = (Math.PI * R * delta) / 180;
+    let chainT2 = chainT1 + L;
+    let radDelta = delta * Math.PI / 180;
+    let LC_full = 2 * R * Math.sin(radDelta / 2);
+
+    document.getElementById("result").innerHTML = 
+        `Jejari (R) = ${R} m | Δ = ${decimalToDMS(delta)}\n` +
+        `Panjang Lengkung (L) = ${L.toFixed(3)} m\n` +
+        `Chainage T1 = ${chainT1.toFixed(3)} | Chainage T2 = ${chainT2.toFixed(3)}\n` +
+        `Long Chord = ${LC_full.toFixed(3)} m`;
+
+    // Penjanaan Jadual
+    let tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+    
+    let currentChain = chainT1;
+    let cumulativeAngle = 0;
+    let points = [];
+
+    // Point T1
+    points.push({p: "T1", ch: chainT1, chord: 0, alpha: 0, delta: 0, len: 0});
+
+    // Point A (First Sub-Chord)
+    let firstNext = Math.ceil(chainT1 / interval) * interval;
+    if(firstNext <= chainT1) firstNext += interval;
+    
+    let nextPointLabel = 65; // Huruf 'A'
+    
+    while(firstNext < chainT2) {
+        let chord = firstNext - currentChain;
+        let alpha = (1718.9 * chord / R) / 60; // In decimal degrees
+        cumulativeAngle += alpha;
+        let lenChord = 2 * R * Math.sin((cumulativeAngle * Math.PI / 180));
+
+        points.push({
+            p: String.fromCharCode(nextPointLabel++),
+            ch: firstNext,
+            chord: chord,
+            alpha: alpha,
+            delta: cumulativeAngle,
+            len: lenChord
+        });
+
+        currentChain = firstNext;
+        firstNext += interval;
+    }
+
+    // Point T2 (Final Sub-Chord)
+    let finalChord = chainT2 - currentChain;
+    let finalAlpha = (1718.9 * finalChord / R) / 60;
+    cumulativeAngle += finalAlpha;
+    
+    points.push({
+        p: "T2",
+        ch: chainT2,
+        chord: finalChord,
+        alpha: finalAlpha,
+        delta: cumulativeAngle,
+        len: 2 * R * Math.sin((cumulativeAngle * Math.PI / 180))
+    });
+
+    points.forEach(pt => {
+        tableBody.innerHTML += `
+            <tr>
+                <td>${pt.p}</td>
+                <td>${pt.ch.toFixed(3)}</td>
+                <td>${pt.chord.toFixed(3)}</td>
+                <td>${decimalToDMS(pt.alpha)}</td>
+                <td>${decimalToDMS(pt.delta)}</td>
+                <td>${pt.len.toFixed(3)}</td>
+            </tr>`;
+    });
+
+    // Lukis Grafik Simple
+    let canvas = document.getElementById("curveCanvas");
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0,400,300);
+    ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.arc(200, 260, 180, Math.PI + 0.4, Math.PI + 0.4 + (radDelta * 0.5));
+    ctx.stroke();
+    ctx.fillStyle = "#2c3e50"; ctx.fillText("Visual Lengkung R=" + R, 150, 40);
+}
+
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('l', 'mm', 'a4'); // 'l' untuk Landscape supaya jadual muat
+    
+    doc.setFontSize(16);
+    doc.text("LAPORAN SETTING OUT LENGKUNG BULAT", 148, 15, { align: "center" });
+    
+    doc.setFontSize(10);
+    doc.setFont("courier", "normal");
+    doc.text(document.getElementById("result").innerText, 15, 25);
+
+    doc.autoTable({
+        html: '#settingOutTable',
+        startY: 45,
+        theme: 'grid',
+        headStyles: { fillColor: [44, 62, 80] },
+        styles: { fontSize: 8, cellPadding: 2 }
+    });
+
+    const canvas = document.getElementById("curveCanvas");
+    doc.addImage(canvas.toDataURL("image/png"), 'PNG', 200, 25, 70, 50);
+
+    doc.save("Jadual_Setting_Out.pdf");
 }
 </script>
 
