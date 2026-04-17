@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v9.5 - Original Interface & Sidebar</title>
+<title>Geo-Curve Pro v9.6 - Full Features</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -17,20 +17,34 @@
         --warning: #f39c12;
         --light: #ecf0f1;
         --overlay: rgba(255, 255, 255, 0.96);
+        --text-color: #2c3e50;
+        --card-bg: white;
+    }
+
+    /* DARK MODE STYLES */
+    body.dark-mode {
+        --primary: #ecf0f1;
+        --secondary: #bdc3c7;
+        --accent: #2ecc71;
+        --overlay: rgba(30, 39, 46, 0.96);
+        --text-color: #ecf0f1;
+        --card-bg: #2c3e50;
     }
 
     body { 
         font-family: 'Segoe UI', Arial, sans-serif; 
         margin: 0; padding: 20px; 
-        color: var(--primary);
+        color: var(--text-color);
         background: url('209301.jpg') no-repeat center center fixed;
         background-size: cover;
+        transition: 0.3s;
     }
 
     /* SIDEBAR CSS */
     .sidebar {
         position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
-        background: white; box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+        background: var(--card-bg); color: var(--text-color);
+        box-shadow: 5px 0 15px rgba(0,0,0,0.3);
         transition: 0.3s; z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto;
     }
     .sidebar.active { left: 0; }
@@ -41,7 +55,7 @@
     .sidebar-overlay.active { display: block; }
     
     .history-item {
-        background: #f9f9f9; padding: 10px; border-radius: 5px; margin-bottom: 8px;
+        background: rgba(0,0,0,0.05); padding: 10px; border-radius: 5px; margin-bottom: 8px;
         border: 1px solid #ddd; font-size: 0.85em;
     }
 
@@ -58,7 +72,6 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px;
     }
     .auth-card input { margin-bottom: 10px; width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-    .auth-toggle { margin-top: 15px; font-size: 0.85em; cursor: pointer; color: var(--secondary); text-decoration: underline; }
 
     .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
     .tab-btn { padding: 12px 25px; border: none; background: none; cursor: pointer; font-weight: bold; color: #777; transition: 0.3s; }
@@ -68,11 +81,11 @@
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-    .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .card { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
 
     label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
     .dms-inputs { display: flex; gap: 5px; }
-    .dms-inputs input { width: 33%; text-align: center; }
+    .dms-inputs input { width: 33%; text-align: center; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
     
     button { 
         width: 100%; padding: 12px; border: none; border-radius: 6px; 
@@ -81,12 +94,13 @@
     button:hover { background: #219150; transform: translateY(-2px); }
 
     .result-box { 
-        background: #f8f9fa; border-left: 6px solid var(--accent); padding: 20px; 
+        background: rgba(0,0,0,0.03); border-left: 6px solid var(--accent); padding: 20px; 
         font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.5;
+        color: var(--text-color);
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; background: white; color: black; }
     th { background: var(--secondary); color: white; padding: 10px; border: 1px solid #ddd; }
-    td { border: 1px solid #ddd; padding: 8px; text-align: center; background: white; }
+    td { border: 1px solid #ddd; padding: 8px; text-align: center; }
 
     canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
     
@@ -103,7 +117,7 @@
 <div id="sbHistory" class="sidebar">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3 style="margin:0;">📜 Sejarah</h3>
-        <button onclick="toggleSidebar()" style="width:auto; padding:5px; background:none; color:black; font-size:20px;">×</button>
+        <button onclick="toggleSidebar()" style="width:auto; padding:5px; background:none; color:inherit; font-size:20px; cursor:pointer;">×</button>
     </div>
     <hr>
     <div id="historyList"><p style="font-size:0.8em; color:gray;">Tiada rekod.</p></div>
@@ -116,26 +130,27 @@
         <input type="text" id="login-user" placeholder="Username">
         <input type="password" id="login-pass" placeholder="Password">
         <button onclick="handleLogin()">Masuk</button>
-        <div class="auth-toggle" onclick="toggleAuth()">Belum ada akaun? Daftar Sini</div>
+        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Daftar Sini</div>
     </div>
     <div class="auth-card" id="register-form" style="display:none;">
         <h2 style="color:var(--accent);">DAFTAR AKAUN</h2>
         <input type="text" id="reg-user" placeholder="Pilih Username">
         <input type="password" id="reg-pass" placeholder="Pilih Password">
         <button onclick="handleRegister()" style="background:var(--secondary);">Cipta Akaun</button>
-        <div class="auth-toggle" onclick="toggleAuth()">Sudah ada akaun? Log Masuk</div>
+        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Log Masuk Sini</div>
     </div>
 </div>
 
 <div id="calculator-section" class="container" style="display: none;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3 id="welcome-msg">Selamat Datang</h3>
-        <div style="display:flex; gap:10px;">
-            <button style="width:auto; padding:5px 15px; background:var(--primary)" onclick="toggleSidebar()">📜 Sejarah</button>
-            <button style="width:auto; padding:5px 15px; background:var(--danger)" onclick="logout()">Log Keluar</button>
+        <div style="display:flex; gap:8px;">
+            <button style="width:auto; padding:5px 12px; background:var(--secondary)" onclick="toggleDarkMode()">🌓 Mode</button>
+            <button style="width:auto; padding:5px 12px; background:var(--primary)" onclick="toggleSidebar()">📜 Sejarah</button>
+            <button style="width:auto; padding:5px 12px; background:var(--danger)" onclick="logout()">Keluar</button>
         </div>
     </div>
-    <h2 style="text-align:center">Geo-Curve Pro v9.5</h2>
+    <h2 style="text-align:center">Geo-Curve Pro v9.6</h2>
     
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Lengkung & Setting Out</button>
@@ -146,19 +161,18 @@
         <div class="grid">
             <div class="card">
                 <h3>Input Parameter</h3>
-                <label>Nama Rekod (History)</label>
+                <label>Nama Rekod</label>
                 <input type="text" id="rec_name" placeholder="Cth: Simpang A" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;">
-                <div class="input-group"><label>Chainage IP</label><input type="number" id="IP_chain" step="0.001"></div>
-                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" step="0.001"></div>
-                <div class="input-group">
-                    <label>Sudut Pesongan Δ (D M S)</label>
-                    <div class="dms-inputs">
-                        <input type="number" id="d_deg" placeholder="°">
-                        <input type="number" id="d_min" placeholder="'">
-                        <input type="number" id="d_sec" placeholder='"'>
-                    </div>
+                <label>Chainage IP</label><input type="number" id="IP_chain" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
+                <label>Jejari R (m)</label><input type="number" id="R" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
+                <label>Sudut Pesongan Δ (D M S)</label>
+                <div class="dms-inputs">
+                    <input type="number" id="d_deg" placeholder="°">
+                    <input type="number" id="d_min" placeholder="'">
+                    <input type="number" id="d_sec" placeholder='"'>
                 </div>
-                <div class="input-group"><label>Interval Chord (m)</label><input type="number" id="interval" value="20"></div>
+                <br>
+                <label>Interval Chord (m)</label><input type="number" id="interval" value="20" style="width:100%; padding:8px; margin-bottom:15px;">
                 <button onclick="kiraSemua()">PROSES & SIMPAN</button>
             </div>
             <div class="card">
@@ -185,8 +199,8 @@
     <div id="inverseTab" class="tab-content">
         <div class="card" style="max-width: 600px; margin: auto;">
             <h3 style="text-align:center;">Inverse Detail Calculator</h3>
-            <label>Jejari R (m)</label><input type="number" id="invR" step="0.001">
-            <label>Chord c (m)</label><input type="number" id="invC" step="0.001">
+            <label>Jejari R (m)</label><input type="number" id="invR" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
+            <label>Chord c (m)</label><input type="number" id="invC" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
             <label>Sudut Δ (D M S)</label>
             <div class="dms-inputs">
                 <input type="number" id="inv_d_deg" placeholder="°"><input type="number" id="inv_d_min" placeholder="'"><input type="number" id="inv_d_sec" placeholder='"'>
@@ -203,37 +217,44 @@
 </div>
 
 <script>
-/* --- SIDEBAR & HISTORY ENGINE --- */
+/* --- DARK MODE & SIDEBAR --- */
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('geoDark', document.body.classList.contains('dark-mode'));
+}
+if(localStorage.getItem('geoDark') === 'true') document.body.classList.add('dark-mode');
+
 function toggleSidebar() {
     document.getElementById('sbHistory').classList.toggle('active');
     document.getElementById('sbOverlay').classList.toggle('active');
 }
 
+/* --- HISTORY ENGINE --- */
 function saveToHistory(data) {
-    let history = JSON.parse(localStorage.getItem('geoHistoryV95')) || [];
+    let history = JSON.parse(localStorage.getItem('geoHistoryV96')) || [];
     history.unshift({ ...data, time: new Date().toLocaleString('ms-MY') });
     if(history.length > 20) history.pop();
-    localStorage.setItem('geoHistoryV95', JSON.stringify(history));
+    localStorage.setItem('geoHistoryV96', JSON.stringify(history));
     renderHistory();
 }
 
 function renderHistory() {
-    let history = JSON.parse(localStorage.getItem('geoHistoryV95')) || [];
+    let history = JSON.parse(localStorage.getItem('geoHistoryV96')) || [];
     let hDiv = document.getElementById("historyList");
     if(history.length === 0) { hDiv.innerHTML = '<p style="color:gray;">Tiada rekod.</p>'; return; }
     hDiv.innerHTML = history.map((it, idx) => `
         <div class="history-item">
             <strong>${it.name || 'Projek'}</strong><br><small>${it.time}</small>
-            <div style="margin-top:5px;">
-                <button onclick="loadHistory(${idx})" style="width:auto; padding:2px 10px; background:var(--warning); font-size:0.7em;">Load</button>
-                <button onclick="delHistory(${idx})" style="width:auto; padding:2px 10px; background:var(--danger); font-size:0.7em;">X</button>
+            <div style="margin-top:5px; display:flex; gap:5px;">
+                <button onclick="loadHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--warning); font-size:0.7em;">Load</button>
+                <button onclick="delHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--danger); font-size:0.7em;">X</button>
             </div>
         </div>
     `).join('');
 }
 
 function loadHistory(i) {
-    let it = JSON.parse(localStorage.getItem('geoHistoryV95'))[i];
+    let it = JSON.parse(localStorage.getItem('geoHistoryV96'))[i];
     document.getElementById('rec_name').value = it.name;
     document.getElementById('IP_chain').value = it.ip;
     document.getElementById('R').value = it.r;
@@ -246,11 +267,11 @@ function loadHistory(i) {
 }
 
 function delHistory(i) {
-    let h = JSON.parse(localStorage.getItem('geoHistoryV95'));
-    h.splice(i, 1); localStorage.setItem('geoHistoryV95', JSON.stringify(h)); renderHistory();
+    let h = JSON.parse(localStorage.getItem('geoHistoryV96'));
+    h.splice(i, 1); localStorage.setItem('geoHistoryV96', JSON.stringify(h)); renderHistory();
 }
 
-function clearHistory() { if(confirm("Padam semua?")) { localStorage.removeItem('geoHistoryV95'); renderHistory(); } }
+function clearHistory() { if(confirm("Padam semua?")) { localStorage.removeItem('geoHistoryV96'); renderHistory(); } }
 
 /* --- ASAL v6.2 LOGIC --- */
 function toggleAuth() {
@@ -265,7 +286,7 @@ function handleLogin() {
     if((u === "admin1" && p === "123456") || (users[u] === p)) {
         document.getElementById('auth-container').style.display = "none";
         document.getElementById('calculator-section').style.display = "block";
-        document.getElementById('welcome-msg').innerText = "🔑 Pengguna: " + u;
+        document.getElementById('welcome-msg').innerText = "🔑 User: " + u;
         renderHistory();
     } else alert("Gagal log masuk!");
 }
@@ -314,7 +335,7 @@ function kiraSemua(shouldSave = true) {
     let interval = parseFloat(document.getElementById("interval").value);
     let delta = dmsToDecimal(d,m,s);
 
-    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Isi lengkap!");
+    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila isi lengkap!");
     if(shouldSave) saveToHistory({name:n, ip:IP, r:R, d, m, s, int:interval});
 
     let rad = delta * Math.PI / 180;
@@ -348,9 +369,9 @@ function kiraSemua(shouldSave = true) {
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("GEOMATIK REPORT", 105, 15, {align: "center"});
+    doc.text("GEOMATIK REPORT - v9.6", 105, 15, {align: "center"});
     doc.autoTable({ html: '#settingOutTable', startY: 30 });
-    doc.save("Report.pdf");
+    doc.save("Report_GeoCurve.pdf");
 }
 </script>
 </body>
