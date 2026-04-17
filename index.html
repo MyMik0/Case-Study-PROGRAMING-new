@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v9.7</title>
+<title>Geo-Curve Pro v9.7 - Full Sidebar & Auto-Hide</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -21,6 +21,7 @@
         --card-bg: white;
     }
 
+    /* DARK MODE */
     body.dark-mode {
         --primary: #ecf0f1;
         --secondary: #bdc3c7;
@@ -39,7 +40,7 @@
         transition: 0.3s;
     }
 
-    /* SIDEBAR */
+    /* SIDEBAR STYLE */
     .sidebar {
         position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
         background: var(--card-bg); color: var(--text-color);
@@ -58,7 +59,7 @@
         border: 1px solid #ddd; font-size: 0.85em;
     }
 
-    /* INTERFACE v6.2 STYLE */
+    /* INTERFACE v6.2 LAYOUT */
     .container { 
         max-width: 1100px; margin: auto; background: var(--overlay); 
         padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);
@@ -103,6 +104,7 @@
 
     canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
     
+    /* Tombol Bawah */
     .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
     .btn-pdf { background: #3498db; }
     .btn-apk { background: var(--warning); text-decoration: none; text-align: center; display: block; padding: 12px; border-radius: 6px; color: white; font-weight: bold; }
@@ -115,12 +117,12 @@
 <div id="sbOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 <div id="sbHistory" class="sidebar">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0;">📜 Sejarah</h3>
+        <h3 style="margin:0;">📜 Sejarah Kiraan</h3>
         <button onclick="toggleSidebar()" style="width:auto; padding:5px; background:none; color:inherit; font-size:20px; cursor:pointer;">×</button>
     </div>
     <hr>
-    <div id="historyList"><p style="font-size:0.8em; color:gray;">Tiada rekod.</p></div>
-    <button onclick="clearHistory()" style="background:var(--danger); margin-top:20px; font-size:0.7em;">Padam Semua</button>
+    <div id="historyList"><p style="font-size:0.8em; color:gray;">Tiada rekod disimpan.</p></div>
+    <button onclick="clearHistory()" style="background:var(--danger); margin-top:20px; font-size:0.7em;">PADAM SEMUA</button>
 </div>
 
 <div id="auth-container">
@@ -129,14 +131,14 @@
         <input type="text" id="login-user" placeholder="Username">
         <input type="password" id="login-pass" placeholder="Password">
         <button onclick="handleLogin()">Masuk</button>
-        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Daftar Sini</div>
+        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Daftar Akaun Baru</div>
     </div>
     <div class="auth-card" id="register-form" style="display:none;">
-        <h2 style="color:var(--accent);">DAFTAR AKAUN</h2>
+        <h2 style="color:var(--accent);">DAFTAR</h2>
         <input type="text" id="reg-user" placeholder="Pilih Username">
         <input type="password" id="reg-pass" placeholder="Pilih Password">
         <button onclick="handleRegister()" style="background:var(--secondary);">Cipta Akaun</button>
-        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Log Masuk Sini</div>
+        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Sudah ada akaun? Log Masuk</div>
     </div>
 </div>
 
@@ -144,7 +146,7 @@
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3 id="welcome-msg">Selamat Datang</h3>
         <div style="display:flex; gap:8px;">
-            <button style="width:auto; padding:5px 12px; background:var(--secondary)" onclick="toggleDarkMode()">🌓 Mode</button>
+            <button style="width:auto; padding:5px 12px; background:var(--secondary)" onclick="toggleDarkMode()">🌓 Tema</button>
             <button style="width:auto; padding:5px 12px; background:var(--primary)" onclick="toggleSidebar()">📜 Sejarah</button>
             <button style="width:auto; padding:5px 12px; background:var(--danger)" onclick="logout()">Keluar</button>
         </div>
@@ -153,7 +155,7 @@
     
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Lengkung & Setting Out</button>
-        <button class="tab-btn" onclick="openTab(event, 'inverseTab')">Kiraan Songsang (Detail)</button>
+        <button class="tab-btn" onclick="openTab(event, 'inverseTab')">Inverse Detail</button>
     </div>
 
     <div id="forwardTab" class="tab-content active">
@@ -172,7 +174,7 @@
                 </div>
                 <br>
                 <label>Interval Chord (m)</label><input type="number" id="interval" value="20" style="width:100%; padding:8px; margin-bottom:15px;">
-                <button onclick="kiraSemua()">PROSES & SIMPAN</button>
+                <button onclick="kiraSemua()">KIRA & SIMPAN</button>
             </div>
             <div class="card">
                 <h3>Grafik Visual</h3>
@@ -182,7 +184,7 @@
 
         <div class="card">
             <h3>Hasil Pengiraan Geometri</h3>
-            <div id="result" class="result-box">Sila buat pengiraan.</div>
+            <div id="result" class="result-box">Tiada pengiraan dibuat.</div>
         </div>
 
         <div class="card" style="overflow-x: auto;">
@@ -216,17 +218,19 @@
 </div>
 
 <script>
-/* --- 1. AUTO-HIDE DOWNLOAD LOGIC --- */
+/* --- 1. FUNGSI AUTO-HIDE (WEB VS APP) --- */
 function checkDisplayMode() {
+    // Detect standalone mode (App)
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
                          || window.navigator.standalone 
                          || document.referrer.includes('android-app://');
+    
+    // Jika dibuka sebagai App, sorokkan butang muat turun
     if (isStandalone) {
-        const area = document.getElementById('downloadArea');
-        if(area) area.style.display = 'none';
+        document.getElementById('downloadArea').style.setProperty('display', 'none', 'important');
     }
 }
-window.addEventListener('DOMContentLoaded', checkDisplayMode);
+window.addEventListener('load', checkDisplayMode);
 
 /* --- 2. THEME & SIDEBAR --- */
 function toggleDarkMode() {
@@ -240,7 +244,7 @@ function toggleSidebar() {
     document.getElementById('sbOverlay').classList.toggle('active');
 }
 
-/* --- 3. HISTORY SYSTEM --- */
+/* --- 3. HISTORY ENGINE --- */
 function saveToHistory(data) {
     let history = JSON.parse(localStorage.getItem('geoHistoryV97')) || [];
     history.unshift({ ...data, time: new Date().toLocaleString('ms-MY') });
@@ -255,9 +259,9 @@ function renderHistory() {
     if(history.length === 0) { hDiv.innerHTML = '<p style="color:gray;">Tiada rekod.</p>'; return; }
     hDiv.innerHTML = history.map((it, idx) => `
         <div class="history-item">
-            <strong>${it.name || 'Projek'}</strong><br><small>${it.time}</small>
+            <strong>${it.name || 'Projek Tanpa Nama'}</strong><br><small>${it.time}</small>
             <div style="margin-top:5px; display:flex; gap:5px;">
-                <button onclick="loadHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--warning); font-size:0.7em;">Load</button>
+                <button onclick="loadHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--warning); font-size:0.7em;">Buka</button>
                 <button onclick="delHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--danger); font-size:0.7em;">X</button>
             </div>
         </div>
@@ -274,7 +278,7 @@ function loadHistory(i) {
     document.getElementById('d_sec').value = it.s;
     document.getElementById('interval').value = it.int;
     toggleSidebar();
-    kiraSemua(false);
+    kiraSemua(false); // Kira tapi jangan simpan duplicate
 }
 
 function delHistory(i) {
@@ -282,34 +286,37 @@ function delHistory(i) {
     h.splice(i, 1); localStorage.setItem('geoHistoryV97', JSON.stringify(h)); renderHistory();
 }
 
-function clearHistory() { if(confirm("Padam semua sejarah?")) { localStorage.removeItem('geoHistoryV97'); renderHistory(); } }
+function clearHistory() { if(confirm("Hapus semua sejarah?")) { localStorage.removeItem('geoHistoryV97'); renderHistory(); } }
 
-/* --- 4. AUTH ENGINE --- */
+/* --- 4. AUTH --- */
 function toggleAuth() {
     const loginF = document.getElementById('login-form'); const regF = document.getElementById('register-form');
     loginF.style.display = (loginF.style.display === "none") ? "block" : "none";
     regF.style.display = (regF.style.display === "none") ? "block" : "none";
 }
+
 function handleLogin() {
     const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value;
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
     if((u === "admin1" && p === "123456") || (users[u] === p)) {
         document.getElementById('auth-container').style.display = "none";
         document.getElementById('calculator-section').style.display = "block";
-        document.getElementById('welcome-msg').innerText = "🔑 User: " + u;
+        document.getElementById('welcome-msg').innerText = "🔑 Pengguna: " + u;
         renderHistory();
-    } else alert("Username atau Password salah!");
+    } else alert("Log masuk gagal!");
 }
+
 function handleRegister() {
     const u = document.getElementById('reg-user').value; const p = document.getElementById('reg-pass').value;
-    if(!u || !p) return alert("Sila isi!");
+    if(!u || !p) return alert("Sila isi maklumat!");
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
     users[u] = p; localStorage.setItem('geoUsers', JSON.stringify(users));
-    alert("Pendaftaran Berjaya!"); toggleAuth();
+    alert("Daftar berjaya!"); toggleAuth();
 }
+
 function logout() { location.reload(); }
 
-/* --- 5. MATH & CORE CALCULATION --- */
+/* --- 5. MATH LOGIC --- */
 const fix = (n) => Math.round(n * 1000) / 1000;
 function dmsToDecimal(d, m, s) { return (parseFloat(d)||0) + ((parseFloat(m)||0)/60) + ((parseFloat(s)||0)/3600); }
 function decimalToDMS(dd) {
@@ -317,6 +324,7 @@ function decimalToDMS(dd) {
     if(s >= 60) { m++; s = 0; } if(m >= 60) { d++; m = 0; }
     return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
 }
+
 function openTab(evt, tabName) {
     let content = document.getElementsByClassName("tab-content"); for (let i = 0; i < content.length; i++) content[i].classList.remove("active");
     let links = document.getElementsByClassName("tab-btn"); for (let i = 0; i < links.length; i++) links[i].classList.remove("active");
@@ -328,11 +336,11 @@ function inverseDetailCalc() {
     let c = parseFloat(document.getElementById("invC").value);
     let d = dmsToDecimal(document.getElementById("inv_d_deg").value, document.getElementById("inv_d_min").value, document.getElementById("inv_d_sec").value);
     let res = document.getElementById("invResult"); res.style.display = "block";
-    let output = "DETAIL SONGSANG:\n================\n";
+    let output = "HASIL INVERSE:\n================\n";
     if (isNaN(R) && !isNaN(c) && d > 0) output += `Jejari R = ${(c / (2 * Math.sin((d * Math.PI / 180) / 2))).toFixed(3)} m`;
     else if (!isNaN(R) && isNaN(c) && d > 0) output += `Chord c = ${(2 * R * Math.sin((d * Math.PI / 180) / 2)).toFixed(3)} m`;
     else if (!isNaN(R) && !isNaN(c)) output += `Sudut Δ = ${decimalToDMS((2 * Math.asin(c / (2 * R))) * 180 / Math.PI)}`;
-    else output += "Sila isi 2 kotak sahaja.";
+    else output += "Sila masukkan 2 parameter.";
     res.innerText = output;
 }
 
@@ -344,7 +352,7 @@ function kiraSemua(shouldSave = true) {
     let interval = parseFloat(document.getElementById("interval").value);
     let delta = dmsToDecimal(d,m,s);
 
-    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila lengkapkan parameter!");
+    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila isi parameter dengan lengkap!");
     if(shouldSave) saveToHistory({name:n, ip:IP, r:R, d, m, s, int:interval});
 
     let rad = delta * Math.PI / 180;
@@ -378,9 +386,9 @@ function kiraSemua(shouldSave = true) {
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("GEOMATIK REPORT - Geo-Curve Pro", 105, 15, {align: "center"});
+    doc.text("LAPORAN GEO-CURVE PRO v9.7", 105, 15, {align: "center"});
     doc.autoTable({ html: '#settingOutTable', startY: 30 });
-    doc.save("Laporan_Kiraan.pdf");
+    doc.save("Laporan_Geomatik.pdf");
 }
 </script>
 </body>
