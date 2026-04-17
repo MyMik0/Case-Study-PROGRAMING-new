@@ -3,339 +3,376 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v9.2 (Engine v9.7)</title>
+<title>Geo-Curve Pro v9.6 - Full Features</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
 <style>
     :root {
-        --primary: #1e272e;
-        --secondary: #485460;
-        --accent: #05c46b;
-        --danger: #ff3f34;
-        --warning: #ffc048;
-        --bg-body: #f1f2f6;
-        --card-bg: #ffffff;
-        --text-main: #1e272e;
+        --primary: #2c3e50;
+        --secondary: #34495e;
+        --accent: #27ae60;
+        --danger: #e74c3c;
+        --warning: #f39c12;
+        --light: #ecf0f1;
+        --overlay: rgba(255, 255, 255, 0.96);
+        --text-color: #2c3e50;
+        --card-bg: white;
     }
 
+    /* DARK MODE STYLES */
     body.dark-mode {
-        --bg-body: #1e272e;
-        --card-bg: #2f3542;
-        --text-main: #f1f2f6;
-        --primary: #ffffff;
+        --primary: #ecf0f1;
+        --secondary: #bdc3c7;
+        --accent: #2ecc71;
+        --overlay: rgba(30, 39, 46, 0.96);
+        --text-color: #ecf0f1;
+        --card-bg: #2c3e50;
     }
 
     body { 
-        font-family: 'Poppins', 'Segoe UI', sans-serif; 
-        margin: 0; padding: 0;
-        background-color: var(--bg-body);
-        color: var(--text-main);
+        font-family: 'Segoe UI', Arial, sans-serif; 
+        margin: 0; padding: 20px; 
+        color: var(--text-color);
+        background: url('209301.jpg') no-repeat center center fixed;
+        background-size: cover;
         transition: 0.3s;
     }
 
-    /* V9.2 MODERN HEADER */
-    header {
-        background: var(--card-bg);
-        padding: 15px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        position: sticky; top: 0; z-index: 1000;
+    /* SIDEBAR CSS */
+    .sidebar {
+        position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
+        background: var(--card-bg); color: var(--text-color);
+        box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+        transition: 0.3s; z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto;
+    }
+    .sidebar.active { left: 0; }
+    .sidebar-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.4); display: none; z-index: 9999;
+    }
+    .sidebar-overlay.active { display: block; }
+    
+    .history-item {
+        background: rgba(0,0,0,0.05); padding: 10px; border-radius: 5px; margin-bottom: 8px;
+        border: 1px solid #ddd; font-size: 0.85em;
     }
 
-    .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-
-    /* V9.2 CARD STYLE */
-    .card {
-        background: var(--card-bg);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        border: none;
+    /* KEKALKAN INTERFACE v6.2 */
+    .container { 
+        max-width: 1100px; margin: auto; background: var(--overlay); 
+        padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        backdrop-filter: blur(8px);
     }
 
-    .grid-v92 { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
-    @media (max-width: 768px) { .grid-v92 { grid-template-columns: 1fr; } }
-
-    /* V9.2 TABS */
-    .tabs { display: flex; background: rgba(0,0,0,0.05); border-radius: 8px; padding: 5px; margin-bottom: 20px; }
-    .tab-btn { 
-        flex: 1; padding: 10px; border: none; background: none; 
-        cursor: pointer; font-weight: 600; border-radius: 6px; transition: 0.3s;
-        color: var(--secondary);
+    #auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+    .auth-card { 
+        background: var(--overlay); padding: 40px; border-radius: 15px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px;
     }
-    .tab-btn.active { background: var(--accent); color: white; box-shadow: 0 4px 10px rgba(5, 196, 107, 0.3); }
+    .auth-card input { margin-bottom: 10px; width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
 
-    .tab-content { display: none; animation: slideUp 0.4s ease; }
+    .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
+    .tab-btn { padding: 12px 25px; border: none; background: none; cursor: pointer; font-weight: bold; color: #777; transition: 0.3s; }
+    .tab-btn.active { color: var(--accent); border-bottom: 4px solid var(--accent); }
+    .tab-content { display: none; animation: fadeIn 0.4s; }
     .tab-content.active { display: block; }
 
-    /* INPUTS */
-    label { font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; display: block; opacity: 0.8; }
-    input { 
-        width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
-        border: 2px solid rgba(0,0,0,0.05); background: rgba(0,0,0,0.02);
-        box-sizing: border-box; font-size: 1rem; color: var(--text-main);
-    }
-    input:focus { border-color: var(--accent); outline: none; background: white; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
 
-    .dms-group { display: flex; gap: 8px; margin-bottom: 15px; }
-
+    label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
+    .dms-inputs { display: flex; gap: 5px; }
+    .dms-inputs input { width: 33%; text-align: center; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    
     button { 
-        background: var(--accent); color: white; border: none; padding: 14px;
-        border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer;
-        transition: 0.3s; box-shadow: 0 4px 12px rgba(5, 196, 107, 0.2);
+        width: 100%; padding: 12px; border: none; border-radius: 6px; 
+        color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; 
     }
-    button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(5, 196, 107, 0.3); }
+    button:hover { background: #219150; transform: translateY(-2px); }
 
-    /* V9.2 RESULT & TABLE */
-    .res-display {
-        background: var(--primary); color: var(--accent);
-        padding: 20px; border-radius: 10px; font-family: 'Monaco', monospace;
-        font-size: 0.9rem; line-height: 1.6; margin-top: 15px;
+    .result-box { 
+        background: rgba(0,0,0,0.03); border-left: 6px solid var(--accent); padding: 20px; 
+        font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.5;
+        color: var(--text-color);
     }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; background: white; color: black; }
+    th { background: var(--secondary); color: white; padding: 10px; border: 1px solid #ddd; }
+    td { border: 1px solid #ddd; padding: 8px; text-align: center; }
 
-    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-    th { padding: 12px; text-align: center; opacity: 0.7; font-size: 0.8rem; text-transform: uppercase; }
-    td { background: rgba(0,0,0,0.03); padding: 12px; text-align: center; font-size: 0.9rem; }
-    td:first-child { border-radius: 8px 0 0 8px; font-weight: bold; }
-    td:last-child { border-radius: 0 8px 8px 0; }
+    canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
+    
+    .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .btn-pdf { background: #3498db; }
+    .btn-apk { background: var(--warning); text-decoration: none; text-align: center; display: block; padding: 12px; border-radius: 6px; color: white; font-weight: bold; }
 
-    /* SIDEBAR */
-    .sidebar {
-        position: fixed; right: -320px; top: 0; width: 320px; height: 100%;
-        background: var(--card-bg); z-index: 2000; transition: 0.4s cubic-bezier(0.1, 0.7, 1.0, 0.1);
-        padding: 25px; box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-    }
-    .sidebar.active { right: 0; }
-    .overlay { 
-        position: fixed; inset: 0; background: rgba(0,0,0,0.4); 
-        display: none; z-index: 1500; backdrop-filter: blur(3px);
-    }
-    .overlay.active { display: block; }
-
-    canvas { width: 100%; background: #fdfdfd; border-radius: 8px; }
-
-    @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    /* AUTO HIDE AREA */
-    .download-section { margin-top: 20px; display: grid; gap: 10px; }
-    .btn-alt { background: var(--secondary); }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
 
-<header>
-    <div style="font-weight: 800; font-size: 1.2rem;">GEO-CURVE <span style="color:var(--accent)">v9.2</span></div>
-    <div style="display:flex; gap:10px;">
-        <button onclick="toggleDarkMode()" style="width:40px; padding:8px;">🌓</button>
-        <button onclick="toggleSidebar()" style="width:auto; padding:8px 15px; background:var(--primary)">📜 Sejarah</button>
+<div id="sbOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<div id="sbHistory" class="sidebar">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">📜 Sejarah</h3>
+        <button onclick="toggleSidebar()" style="width:auto; padding:5px; background:none; color:inherit; font-size:20px; cursor:pointer;">×</button>
     </div>
-</header>
-
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-<div class="sidebar" id="sidebar">
-    <h3>Sejarah Projek</h3>
-    <div id="historyList"></div>
-    <button onclick="clearHistory()" style="background:var(--danger); margin-top:20px;">Padam Semua</button>
+    <hr>
+    <div id="historyList"><p style="font-size:0.8em; color:gray;">Tiada rekod.</p></div>
+    <button onclick="clearHistory()" style="background:var(--danger); margin-top:20px; font-size:0.7em;">Padam Semua</button>
 </div>
 
-<div class="container" id="auth-area">
-    <div class="card" style="max-width:400px; margin: 50px auto; text-align:center;">
-        <h2 id="auth-title">Log Masuk</h2>
-        <input type="text" id="u" placeholder="Username">
-        <input type="password" id="p" placeholder="Password">
-        <button onclick="auth()">Masuk Sekarang</button>
-        <p style="font-size:0.8rem; margin-top:15px; cursor:pointer;" onclick="toggleAuthMode()">Buka Akaun Baru?</p>
+<div id="auth-container">
+    <div class="auth-card" id="login-form">
+        <h2 style="color:var(--primary);">LOG MASUK</h2>
+        <input type="text" id="login-user" placeholder="Username">
+        <input type="password" id="login-pass" placeholder="Password">
+        <button onclick="handleLogin()">Masuk</button>
+        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Daftar Sini</div>
+    </div>
+    <div class="auth-card" id="register-form" style="display:none;">
+        <h2 style="color:var(--accent);">DAFTAR AKAUN</h2>
+        <input type="text" id="reg-user" placeholder="Pilih Username">
+        <input type="password" id="reg-pass" placeholder="Pilih Password">
+        <button onclick="handleRegister()" style="background:var(--secondary);">Cipta Akaun</button>
+        <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Log Masuk Sini</div>
     </div>
 </div>
 
-<div class="container" id="main-area" style="display:none;">
+<div id="calculator-section" class="container" style="display: none;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 id="welcome-msg">Selamat Datang</h3>
+        <div style="display:flex; gap:8px;">
+            <button style="width:auto; padding:5px 12px; background:var(--secondary)" onclick="toggleDarkMode()">🌓 Mode</button>
+            <button style="width:auto; padding:5px 12px; background:var(--primary)" onclick="toggleSidebar()">📜 Sejarah</button>
+            <button style="width:auto; padding:5px 12px; background:var(--danger)" onclick="logout()">Keluar</button>
+        </div>
+    </div>
+    <h2 style="text-align:center">Geo-Curve Pro v9.6</h2>
+    
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab(event, 'tab1')">Forward Curve</button>
-        <button class="tab-btn" onclick="switchTab(event, 'tab2')">Inverse Calc</button>
+        <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Lengkung & Setting Out</button>
+        <button class="tab-btn" onclick="openTab(event, 'inverseTab')">Kiraan Songsang (Detail)</button>
     </div>
 
-    <div id="tab1" class="tab-content active">
-        <div class="grid-v92">
+    <div id="forwardTab" class="tab-content active">
+        <div class="grid">
             <div class="card">
-                <label>NAMA REKOD</label>
-                <input type="text" id="rec_name" placeholder="Cth: Simpang Ampat">
-                <label>CHAINAGE IP</label>
-                <input type="number" id="IP_chain" step="0.001">
-                <label>JEJARI R (m)</label>
-                <input type="number" id="R" step="0.001">
-                <label>SUDUT PESONGAN (D M S)</label>
-                <div class="dms-group">
-                    <input type="number" id="d" placeholder="°">
-                    <input type="number" id="m" placeholder="'">
-                    <input type="number" id="s" placeholder='"'>
+                <h3>Input Parameter</h3>
+                <label>Nama Rekod</label>
+                <input type="text" id="rec_name" placeholder="Cth: Simpang A" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;">
+                <label>Chainage IP</label><input type="number" id="IP_chain" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
+                <label>Jejari R (m)</label><input type="number" id="R" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
+                <label>Sudut Pesongan Δ (D M S)</label>
+                <div class="dms-inputs">
+                    <input type="number" id="d_deg" placeholder="°">
+                    <input type="number" id="d_min" placeholder="'">
+                    <input type="number" id="d_sec" placeholder='"'>
                 </div>
-                <label>INTERVAL (m)</label>
-                <input type="number" id="interval" value="20">
-                <button onclick="runCalc()">KIRA & ANALISIS</button>
+                <br>
+                <label>Interval Chord (m)</label><input type="number" id="interval" value="20" style="width:100%; padding:8px; margin-bottom:15px;">
+                <button onclick="kiraSemua()">PROSES & SIMPAN</button>
             </div>
-            
-            <div>
-                <div class="card">
-                    <label>PREVIEW GEOMETRI</label>
-                    <canvas id="canvas" width="400" height="250"></canvas>
-                </div>
-                <div class="card">
-                    <label>RINGKASAN DATA</label>
-                    <div id="res" class="res-display">Sila masukkan data...</div>
-                </div>
+            <div class="card">
+                <h3>Grafik Visual</h3>
+                <canvas id="curveCanvas" width="400" height="300"></canvas>
             </div>
         </div>
 
-        <div class="card" style="overflow-x:auto;">
-            <table id="dataTable">
+        <div class="card">
+            <h3>Hasil Pengiraan Geometri</h3>
+            <div id="result" class="result-box">Sila buat pengiraan.</div>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+            <table id="settingOutTable">
                 <thead>
-                    <tr><th>Pt</th><th>Chainage</th><th>Chord</th><th>Deflect</th><th>Total</th><th>2R Sin δ</th></tr>
+                    <tr><th>Point</th><th>Chainage</th><th>Chord</th><th>α (DMS)</th><th>δ (DMS)</th><th>2R Sin δ</th></tr>
                 </thead>
-                <tbody id="tbody"></tbody>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
     </div>
 
-    <div id="tab2" class="tab-content">
-        <div class="card" style="max-width:500px; margin:auto;">
-            <h3>Inverse Calculator</h3>
-            <label>Jejari R</label><input type="number" id="iR">
-            <label>Chord c</label><input type="number" id="iC">
-            <label>Sudut Δ (DMS)</label>
-            <div class="dms-group">
-                <input type="number" id="id"><input type="number" id="im"><input type="number" id="is">
+    <div id="inverseTab" class="tab-content">
+        <div class="card" style="max-width: 600px; margin: auto;">
+            <h3 style="text-align:center;">Inverse Detail Calculator</h3>
+            <label>Jejari R (m)</label><input type="number" id="invR" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
+            <label>Chord c (m)</label><input type="number" id="invC" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
+            <label>Sudut Δ (D M S)</label>
+            <div class="dms-inputs">
+                <input type="number" id="inv_d_deg" placeholder="°"><input type="number" id="inv_d_min" placeholder="'"><input type="number" id="inv_d_sec" placeholder='"'>
             </div>
-            <button onclick="runInverse()">Kira Inverse</button>
-            <div id="iRes" class="res-display" style="display:none;"></div>
+            <button onclick="inverseDetailCalc()" style="margin-top:15px; background:var(--primary)">KIRA DETAIL SONGSANG</button>
+            <div id="invResult" class="result-box" style="margin-top:15px; display:none;"></div>
         </div>
     </div>
 
-    <div class="download-section" id="dlArea">
-        <button onclick="exportPDF()" class="btn-alt">💾 EXPORT PDF REPORT</button>
-        <a href="#" style="text-decoration:none;"><button style="background:var(--warning); color:black;">📲 DOWNLOAD APK v9.2</button></a>
+    <div class="footer-btns">
+        <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN PDF</button>
+        <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APK</a>
     </div>
 </div>
 
 <script>
-    // Logic v9.7
-    let isReg = false;
-    function toggleAuthMode() {
-        isReg = !isReg;
-        document.getElementById('auth-title').innerText = isReg ? "Daftar Akaun" : "Log Masuk";
-    }
+/* --- DARK MODE & SIDEBAR --- */
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('geoDark', document.body.classList.contains('dark-mode'));
+}
+if(localStorage.getItem('geoDark') === 'true') document.body.classList.add('dark-mode');
 
-    function auth() {
-        const user = document.getElementById('u').value;
-        const pass = document.getElementById('p').value;
-        if(user === "admin1" && pass === "123456" || localStorage.getItem(user) === pass) {
-            document.getElementById('auth-area').style.display = 'none';
-            document.getElementById('main-area').style.display = 'block';
-            renderHistory();
-        } else if(isReg) {
-            localStorage.setItem(user, pass);
-            alert("Akaun dicipta!"); toggleAuthMode();
-        } else { alert("Gagal!"); }
-    }
+function toggleSidebar() {
+    document.getElementById('sbHistory').classList.toggle('active');
+    document.getElementById('sbOverlay').classList.toggle('active');
+}
 
-    function switchTab(e, id) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        e.currentTarget.classList.add('active');
-    }
+/* --- HISTORY ENGINE --- */
+function saveToHistory(data) {
+    let history = JSON.parse(localStorage.getItem('geoHistoryV96')) || [];
+    history.unshift({ ...data, time: new Date().toLocaleString('ms-MY') });
+    if(history.length > 20) history.pop();
+    localStorage.setItem('geoHistoryV96', JSON.stringify(history));
+    renderHistory();
+}
 
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('active');
-        document.getElementById('overlay').classList.toggle('active');
-    }
+function renderHistory() {
+    let history = JSON.parse(localStorage.getItem('geoHistoryV96')) || [];
+    let hDiv = document.getElementById("historyList");
+    if(history.length === 0) { hDiv.innerHTML = '<p style="color:gray;">Tiada rekod.</p>'; return; }
+    hDiv.innerHTML = history.map((it, idx) => `
+        <div class="history-item">
+            <strong>${it.name || 'Projek'}</strong><br><small>${it.time}</small>
+            <div style="margin-top:5px; display:flex; gap:5px;">
+                <button onclick="loadHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--warning); font-size:0.7em;">Load</button>
+                <button onclick="delHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--danger); font-size:0.7em;">X</button>
+            </div>
+        </div>
+    `).join('');
+}
 
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-    }
+function loadHistory(i) {
+    let it = JSON.parse(localStorage.getItem('geoHistoryV96'))[i];
+    document.getElementById('rec_name').value = it.name;
+    document.getElementById('IP_chain').value = it.ip;
+    document.getElementById('R').value = it.r;
+    document.getElementById('d_deg').value = it.d;
+    document.getElementById('d_min').value = it.m;
+    document.getElementById('d_sec').value = it.s;
+    document.getElementById('interval').value = it.int;
+    toggleSidebar();
+    kiraSemua(false);
+}
 
-    const toDec = (d,m,s) => parseFloat(d||0) + (parseFloat(m||0)/60) + (parseFloat(s||0)/3600);
-    const toDMS = (dd) => {
-        let d = Math.floor(dd + 1e-9), mv = (dd-d)*60, m = Math.floor(mv+1e-9), s = Math.round((mv-m)*60);
-        if(s>=60){m++;s=0} if(m>=60){d++;m=0}
-        return `${d}°${m}'${s}"`;
-    }
+function delHistory(i) {
+    let h = JSON.parse(localStorage.getItem('geoHistoryV96'));
+    h.splice(i, 1); localStorage.setItem('geoHistoryV96', JSON.stringify(h)); renderHistory();
+}
 
-    function runCalc() {
-        let ip = parseFloat(document.getElementById('IP_chain').value);
-        let r = parseFloat(document.getElementById('R').value);
-        let delta = toDec(document.getElementById('d').value, document.getElementById('m').value, document.getElementById('s').value);
-        let interval = parseFloat(document.getElementById('interval').value);
+function clearHistory() { if(confirm("Padam semua?")) { localStorage.removeItem('geoHistoryV96'); renderHistory(); } }
 
-        if(!ip || !r || !delta) return alert("Data tidak lengkap!");
+/* --- ASAL v6.2 LOGIC --- */
+function toggleAuth() {
+    const loginF = document.getElementById('login-form'); const regF = document.getElementById('register-form');
+    loginF.style.display = (loginF.style.display === "none") ? "block" : "none";
+    regF.style.display = (regF.style.display === "none") ? "block" : "none";
+}
 
-        let rad = delta * Math.PI / 180;
-        let t = r * Math.tan(rad/2);
-        let l = (Math.PI * r * delta) / 180;
-        let t1 = ip - t, t2 = t1 + l;
-
-        document.getElementById('res').innerHTML = `T1: ${t1.toFixed(3)} m<br>T2: ${t2.toFixed(3)} m<br>L: ${l.toFixed(3)} m<br>T: ${t.toFixed(3)} m`;
-
-        let body = document.getElementById('tbody'); body.innerHTML = "";
-        let curr = t1, totalA = 0;
-
-        const row = (p, ch, c, a, ta, lc) => {
-            body.innerHTML += `<tr><td>${p}</td><td>${ch.toFixed(3)}</td><td>${c?c.toFixed(3):'-'}</td><td>${a?toDMS(a):'-'}</td><td>${ta?toDMS(ta):'-'}</td><td>${lc.toFixed(3)}</td></tr>`;
-        }
-
-        row("T1", t1, 0, 0, 0, 0);
-        let next = Math.ceil(t1/interval)*interval; if(next <= t1) next += interval;
-        while(next < t2) {
-            let c = next - curr; let a = (1718.9 * c / r) / 60; totalA += a;
-            row("P", next, c, a, totalA, 2*r*Math.sin(totalA*Math.PI/180));
-            curr = next; next += interval;
-        }
-        let fc = t2 - curr; let fa = (1718.9 * fc / r) / 60; totalA += fa;
-        row("T2", t2, fc, fa, totalA, 2*r*Math.sin(totalA*Math.PI/180));
-
-        // Canvas
-        let ctx = document.getElementById('canvas').getContext('2d');
-        ctx.clearRect(0,0,400,250); ctx.strokeStyle = "#05c46b"; ctx.lineWidth = 5;
-        ctx.beginPath(); ctx.arc(200, 220, 140, Math.PI+0.5, Math.PI+0.5+(rad*0.6)); ctx.stroke();
-
-        saveHistory(document.getElementById('rec_name').value || "Tanpa Nama", ip, r);
-    }
-
-    function saveHistory(n, ip, r) {
-        let h = JSON.parse(localStorage.getItem('geoH')) || [];
-        h.unshift({n, ip, r, d: new Date().toLocaleTimeString()});
-        localStorage.setItem('geoH', JSON.stringify(h.slice(0,10)));
+function handleLogin() {
+    const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value;
+    let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
+    if((u === "admin1" && p === "123456") || (users[u] === p)) {
+        document.getElementById('auth-container').style.display = "none";
+        document.getElementById('calculator-section').style.display = "block";
+        document.getElementById('welcome-msg').innerText = "🔑 User: " + u;
         renderHistory();
-    }
+    } else alert("Gagal log masuk!");
+}
 
-    function renderHistory() {
-        let h = JSON.parse(localStorage.getItem('geoH')) || [];
-        document.getElementById('historyList').innerHTML = h.map(i => `<div style="padding:10px; border-bottom:1px solid #ddd; font-size:0.8rem;"><b>${i.n}</b><br>IP: ${i.ip} | R: ${i.r}</div>`).join('');
-    }
+function handleRegister() {
+    const u = document.getElementById('reg-user').value; const p = document.getElementById('reg-pass').value;
+    let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
+    users[u] = p; localStorage.setItem('geoUsers', JSON.stringify(users));
+    alert("Daftar Berjaya!"); toggleAuth();
+}
 
-    function runInverse() {
-        let r = parseFloat(document.getElementById('iR').value);
-        let c = parseFloat(document.getElementById('iC').value);
-        let d = toDec(document.getElementById('id').value, document.getElementById('im').value, document.getElementById('is').value);
-        let res = document.getElementById('iRes'); res.style.display = "block";
-        if(!isNaN(r) && !isNaN(c)) res.innerText = "Sudut Δ: " + toDMS((2 * Math.asin(c / (2 * r))) * 180 / Math.PI);
-        else if(!isNaN(c) && d > 0) res.innerText = "Jejari R: " + (c / (2 * Math.sin((d * Math.PI / 180) / 2))).toFixed(3);
-        else res.innerText = "Sila isi 2 info.";
-    }
+function logout() { location.reload(); }
 
-    async function exportPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text("LAPORAN GEO-CURVE PRO v9.2", 15, 15);
-        doc.autoTable({ html: '#dataTable', startY: 25 });
-        doc.save("Report_v92.pdf");
-    }
+const fix = (n) => Math.round(n * 1000) / 1000;
+function dmsToDecimal(d, m, s) { return (parseFloat(d)||0) + ((parseFloat(m)||0)/60) + ((parseFloat(s)||0)/3600); }
+function decimalToDMS(dd) {
+    let d = Math.floor(dd + 1e-9); let m_val = (dd - d) * 60; let m = Math.floor(m_val + 1e-9); let s = Math.round((m_val - m) * 60);
+    if(s >= 60) { m++; s = 0; } if(m >= 60) { d++; m = 0; }
+    return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
+}
 
-    if(window.matchMedia('(display-mode: standalone)').matches) document.getElementById('dlArea').style.display='none';
+function openTab(evt, tabName) {
+    let content = document.getElementsByClassName("tab-content"); for (let i = 0; i < content.length; i++) content[i].classList.remove("active");
+    let links = document.getElementsByClassName("tab-btn"); for (let i = 0; i < links.length; i++) links[i].classList.remove("active");
+    document.getElementById(tabName).classList.add("active"); evt.currentTarget.classList.add("active");
+}
+
+function inverseDetailCalc() {
+    let R = parseFloat(document.getElementById("invR").value);
+    let c = parseFloat(document.getElementById("invC").value);
+    let d = dmsToDecimal(document.getElementById("inv_d_deg").value, document.getElementById("inv_d_min").value, document.getElementById("inv_d_sec").value);
+    let res = document.getElementById("invResult"); res.style.display = "block";
+    let output = "DETAIL SONGSANG:\n================\n";
+    if (isNaN(R) && !isNaN(c) && d > 0) output += `Jejari R = ${(c / (2 * Math.sin((d * Math.PI / 180) / 2))).toFixed(3)} m`;
+    else if (!isNaN(R) && isNaN(c) && d > 0) output += `Chord c = ${(2 * R * Math.sin((d * Math.PI / 180) / 2)).toFixed(3)} m`;
+    else if (!isNaN(R) && !isNaN(c)) output += `Sudut Δ = ${decimalToDMS((2 * Math.asin(c / (2 * R))) * 180 / Math.PI)}`;
+    else output += "Isi 2 nilai sahaja.";
+    res.innerText = output;
+}
+
+function kiraSemua(shouldSave = true) {
+    let n = document.getElementById('rec_name').value;
+    let IP = parseFloat(document.getElementById("IP_chain").value);
+    let R = parseFloat(document.getElementById("R").value);
+    let d = document.getElementById("d_deg").value, m = document.getElementById("d_min").value, s = document.getElementById("d_sec").value;
+    let interval = parseFloat(document.getElementById("interval").value);
+    let delta = dmsToDecimal(d,m,s);
+
+    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila isi lengkap!");
+    if(shouldSave) saveToHistory({name:n, ip:IP, r:R, d, m, s, int:interval});
+
+    let rad = delta * Math.PI / 180;
+    let T = fix(R * Math.tan(rad / 2));
+    let L = fix((Math.PI * R * delta) / 180);
+    let T1 = fix(IP - T), T2 = fix(T1 + L);
+
+    document.getElementById("result").innerText = `T1 = ${T1.toFixed(3)} | T2 = ${T2.toFixed(3)}\nL = ${L.toFixed(3)} | T = ${T.toFixed(3)}`;
+
+    let tb = document.getElementById("tableBody"); tb.innerHTML = "";
+    let curr = T1, cumA = 0;
+    const addR = (pt, ch, c, a, d, lc) => {
+        tb.innerHTML += `<tr><td>${pt}</td><td>${ch.toFixed(3)}</td><td>${c||"-"}</td><td>${a?decimalToDMS(a):"-"}</td><td>${d?decimalToDMS(d):"-"}</td><td>${lc.toFixed(3)}</td></tr>`;
+    };
+
+    addR("T1", T1, 0, 0, 0, 0);
+    let next = Math.ceil(T1 / interval) * interval; if(next <= T1) next += interval;
+    while(next < T2) {
+        let c = fix(next - curr); let a = (1718.9 * c / R) / 60; cumA += a;
+        addR("P", next, c, a, cumA, 2 * R * Math.sin(cumA * Math.PI / 180));
+        curr = next; next += interval;
+    }
+    let fc = fix(T2 - curr), fa = (1718.9 * fc / R) / 60; cumA += fa;
+    addR("T2", T2, fc, fa, cumA, 2 * R * Math.sin(cumA * Math.PI / 180));
+
+    let ctx = document.getElementById("curveCanvas").getContext("2d");
+    ctx.clearRect(0,0,400,300); ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(200, 260, 150, Math.PI+0.4, Math.PI+0.4+(rad*0.5)); ctx.stroke();
+}
+
+async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text("GEOMATIK REPORT - v9.6", 105, 15, {align: "center"});
+    doc.autoTable({ html: '#settingOutTable', startY: 30 });
+    doc.save("Report_GeoCurve.pdf");
+}
 </script>
 </body>
 </html>
