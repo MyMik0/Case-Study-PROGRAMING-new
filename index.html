@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v8.5 - Full Edition</title>
+<title>Geo-Curve Pro v9.7 - Minimalist Edition</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -21,7 +21,6 @@
         --card-bg: white;
     }
 
-    /* DARK MODE */
     body.dark-mode {
         --primary: #ecf0f1;
         --secondary: #bdc3c7;
@@ -74,7 +73,7 @@
 
     label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
     .dms-inputs { display: flex; gap: 5px; }
-    .dms-inputs input { width: 33%; text-align: center; }
+    .dms-inputs input { width: 33%; text-align: center; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
     
     button { 
         width: 100%; padding: 12px; border: none; border-radius: 6px; 
@@ -132,7 +131,7 @@
         <h3 id="welcome-msg">Selamat Datang</h3>
         <button style="width:auto; padding:5px 15px; background:var(--danger)" onclick="logout()">Log Keluar</button>
     </div>
-    <h2 style="text-align:center">Geo-Curve Pro v8.5</h2>
+    <h2 style="text-align:center">Geo-Curve Pro v9.7</h2>
     
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Lengkung & Setting Out</button>
@@ -144,18 +143,17 @@
             <div class="card">
                 <h3>Input Parameter</h3>
                 <label>Nama Rekod</label>
-                <input type="text" id="rec_name" placeholder="Cth: Simpang A" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc;">
-                <div class="input-group"><label>Chainage IP</label><input type="number" id="IP_chain" step="0.001"></div>
-                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" step="0.001"></div>
-                <div class="input-group">
-                    <label>Sudut Pesongan Δ (D M S)</label>
-                    <div class="dms-inputs">
-                        <input type="number" id="d_deg" placeholder="°">
-                        <input type="number" id="d_min" placeholder="'">
-                        <input type="number" id="d_sec" placeholder='"'>
-                    </div>
+                <input type="text" id="rec_name" placeholder="Cth: Simpang A" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; box-sizing: border-box;">
+                <label>Chainage IP</label><input type="number" id="IP_chain" step="0.001" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; box-sizing: border-box;">
+                <label>Jejari R (m)</label><input type="number" id="R" step="0.001" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; box-sizing: border-box;">
+                <label>Sudut Pesongan Δ (D M S)</label>
+                <div class="dms-inputs">
+                    <input type="number" id="d_deg" placeholder="°">
+                    <input type="number" id="d_min" placeholder="'">
+                    <input type="number" id="d_sec" placeholder='"'>
                 </div>
-                <div class="input-group"><label>Interval Chord (m)</label><input type="number" id="interval" value="20"></div>
+                <br>
+                <label>Interval Chord (m)</label><input type="number" id="interval" value="20" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; box-sizing: border-box;">
                 <button onclick="kiraSemua()" style="margin-top:10px;">PROSES & SIMPAN</button>
             </div>
             
@@ -193,8 +191,8 @@
         <div class="card" style="max-width: 600px; margin: auto;">
             <h3 style="text-align:center;">Inverse Detail Calculator</h3>
             <p style="font-size: 0.8em; color: #666; text-align: center;">Isi 2 kotak untuk cari kotak yang kosong.</p>
-            <label>Jejari R (m)</label><input type="number" id="invR" step="0.001">
-            <label>Chord c (m)</label><input type="number" id="invC" step="0.001">
+            <label>Jejari R (m)</label><input type="number" id="invR" step="0.001" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; box-sizing: border-box;">
+            <label>Chord c (m)</label><input type="number" id="invC" step="0.001" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; box-sizing: border-box;">
             <label>Sudut Δ (D M S)</label>
             <div class="dms-inputs">
                 <input type="number" id="inv_d_deg" placeholder="°"><input type="number" id="inv_d_min" placeholder="'"><input type="number" id="inv_d_sec" placeholder='"'>
@@ -204,14 +202,23 @@
         </div>
     </div>
 
-    <div class="footer-btns">
+    <div class="footer-btns" id="downloadArea">
         <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN PDF</button>
         <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APK</a>
     </div>
 </div>
 
 <script>
-/* --- THEME & HISTORY --- */
+/* --- 1. AUTO-HIDE FEATURE (v9.7) --- */
+function checkDisplayMode() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || document.referrer.includes('android-app://');
+    if (isStandalone) {
+        document.getElementById('downloadArea').style.display = 'none';
+    }
+}
+window.addEventListener('load', checkDisplayMode);
+
+/* --- 2. THEME & HISTORY (v8.5 Style) --- */
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('geoDark', document.body.classList.contains('dark-mode'));
@@ -219,16 +226,16 @@ function toggleDarkMode() {
 if(localStorage.getItem('geoDark') === 'true') document.body.classList.add('dark-mode');
 
 function saveToHistory(data) {
-    let history = JSON.parse(localStorage.getItem('geoHistoryV85')) || [];
+    let history = JSON.parse(localStorage.getItem('geoHistoryV97')) || [];
     const entry = { ...data, time: new Date().toLocaleString('ms-MY') };
     history.unshift(entry);
     if(history.length > 10) history.pop();
-    localStorage.setItem('geoHistoryV85', JSON.stringify(history));
+    localStorage.setItem('geoHistoryV97', JSON.stringify(history));
     renderHistory();
 }
 
 function renderHistory() {
-    let history = JSON.parse(localStorage.getItem('geoHistoryV85')) || [];
+    let history = JSON.parse(localStorage.getItem('geoHistoryV97')) || [];
     let hDiv = document.getElementById("historyList");
     if(history.length === 0) { hDiv.innerHTML = '<p style="font-size:0.8em; color:gray;">Tiada rekod.</p>'; return; }
     hDiv.innerHTML = history.map((it, idx) => `
@@ -243,7 +250,7 @@ function renderHistory() {
 }
 
 function loadHistory(i) {
-    let it = JSON.parse(localStorage.getItem('geoHistoryV85'))[i];
+    let it = JSON.parse(localStorage.getItem('geoHistoryV97'))[i];
     document.getElementById('rec_name').value = it.name;
     document.getElementById('IP_chain').value = it.ip;
     document.getElementById('R').value = it.r;
@@ -255,13 +262,13 @@ function loadHistory(i) {
 }
 
 function delHistory(i) {
-    let h = JSON.parse(localStorage.getItem('geoHistoryV85'));
-    h.splice(i, 1); localStorage.setItem('geoHistoryV85', JSON.stringify(h)); renderHistory();
+    let h = JSON.parse(localStorage.getItem('geoHistoryV97'));
+    h.splice(i, 1); localStorage.setItem('geoHistoryV97', JSON.stringify(h)); renderHistory();
 }
 
-function clearHistory() { if(confirm("Padam semua?")) { localStorage.removeItem('geoHistoryV85'); renderHistory(); } }
+function clearHistory() { if(confirm("Padam semua sejarah?")) { localStorage.removeItem('geoHistoryV97'); renderHistory(); } }
 
-/* --- AUTH --- */
+/* --- 3. AUTH (v9.7 Security) --- */
 function toggleAuth() {
     const l = document.getElementById('login-form'); const r = document.getElementById('register-form');
     l.style.display = (l.style.display === "none") ? "block" : "none";
@@ -275,17 +282,18 @@ function handleLogin() {
         document.getElementById('calculator-section').style.display = "block";
         document.getElementById('welcome-msg').innerText = "Pengguna: " + u;
         renderHistory();
-    } else alert("Gagal!");
+    } else alert("Log masuk gagal!");
 }
 function handleRegister() {
     const u = document.getElementById('reg-user').value; const p = document.getElementById('reg-pass').value;
+    if(!u || !p) return alert("Sila isi maklumat!");
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
     users[u] = p; localStorage.setItem('geoUsers', JSON.stringify(users));
-    alert("Daftar Berjaya!"); toggleAuth();
+    alert("Daftar berjaya!"); toggleAuth();
 }
 function logout() { location.reload(); }
 
-/* --- MATH ENGINE --- */
+/* --- 4. MATH ENGINE --- */
 const fix = (n) => Math.round(n * 1000) / 1000;
 function dmsToDecimal(d, m, s) { return (parseFloat(d)||0) + ((parseFloat(m)||0)/60) + ((parseFloat(s)||0)/3600); }
 function decimalToDMS(dd) {
@@ -299,7 +307,7 @@ function openTab(e, n) {
     document.getElementById(n).classList.add("active"); e.currentTarget.classList.add("active");
 }
 
-/* --- CALCULATORS --- */
+/* --- 5. CALCULATORS --- */
 function inverseDetailCalc() {
     let R = document.getElementById("invR").value ? parseFloat(document.getElementById("invR").value) : NaN;
     let c = document.getElementById("invC").value ? parseFloat(document.getElementById("invC").value) : NaN;
@@ -307,7 +315,7 @@ function inverseDetailCalc() {
     
     let res = document.getElementById("invResult");
     res.style.display = "block";
-    let out = "DETAIL SONGSANG:\n================\n";
+    let out = "HASIL INVERSE:\n================\n";
 
     if (isNaN(R) && !isNaN(c) && d > 0) {
         let r = c / (2 * Math.sin((d * Math.PI / 180) / 2));
@@ -315,11 +323,10 @@ function inverseDetailCalc() {
     } else if (!isNaN(R) && isNaN(c) && d > 0) {
         let ch = 2 * R * Math.sin((d * Math.PI / 180) / 2);
         out += `Mencari c:\nHasil c = ${ch.toFixed(3)} m`;
-    } else if (!isNaN(R) && !isNaN(c) && d === 0) {
+    } else if (!isNaN(R) && !isNaN(c)) {
         let ratio = c / (2 * R);
-        if(ratio > 1) out += "Ralat: Chord > Diameter!";
-        else out += `Mencari Δ:\nHasil Δ = ${decimalToDMS((2 * Math.asin(ratio)) * 180 / Math.PI)}`;
-    } else out += "Isi 2 kotak sahaja.";
+        out += `Mencari Δ:\nHasil Δ = ${decimalToDMS((2 * Math.asin(ratio)) * 180 / Math.PI)}`;
+    } else out += "Sila masukkan 2 maklumat.";
     res.innerText = out;
 }
 
@@ -341,7 +348,7 @@ function kiraSemua(shouldSave = true) {
     let L = fix((Math.PI * R * delta) / 180);
     let T1 = fix(IP - T); let T2 = fix(T1 + L);
 
-    document.getElementById("result").innerText = `Jejari(R)=${R}m | Δ=${decimalToDMS(delta)}\nT1=${T1.toFixed(3)} | T2=${T2.toFixed(3)}\nL=${L.toFixed(3)} | T=${T.toFixed(3)}`;
+    document.getElementById("result").innerText = `T1 = ${T1.toFixed(3)} | T2 = ${T2.toFixed(3)}\nL = ${L.toFixed(3)} | T = ${T.toFixed(3)}`;
 
     let tb = document.getElementById("tableBody"); tb.innerHTML = "";
     let curr = T1; let cumA = 0;
@@ -367,7 +374,7 @@ function kiraSemua(shouldSave = true) {
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("GEO-CURVE REPORT v8.5", 105, 15, {align: "center"});
+    doc.text("GEO-CURVE REPORT v9.7", 105, 15, {align: "center"});
     doc.autoTable({ html: '#settingOutTable', startY: 30 });
     doc.save("Laporan_Geomatik.pdf");
 }
