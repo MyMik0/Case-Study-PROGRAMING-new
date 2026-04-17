@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v7.0 - Premium Edition</title>
+<title>Geo-Curve Pro v7.0 - User System & Detail Inverse</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -17,27 +17,27 @@
         --warning: #f39c12;
         --light: #ecf0f1;
         --overlay: rgba(255, 255, 255, 0.96);
-        --text: #2c3e50;
-        --card-bg: #ffffff;
+        --text-color: #2c3e50;
+        --card-bg: white;
     }
 
-    /* DARK MODE STYLES */
+    /* DARK MODE OVERRIDE (Feature No. 6) */
     body.dark-mode {
         --primary: #ecf0f1;
         --secondary: #bdc3c7;
         --accent: #2ecc71;
-        --overlay: rgba(30, 39, 46, 0.98);
-        --text: #ffffff;
-        --card-bg: #2f3640;
+        --overlay: rgba(30, 39, 46, 0.96);
+        --text-color: #ecf0f1;
+        --card-bg: #2c3e50;
     }
 
     body { 
         font-family: 'Segoe UI', Arial, sans-serif; 
         margin: 0; padding: 20px; 
-        color: var(--text);
+        color: var(--text-color);
         background: url('209301.jpg') no-repeat center center fixed;
         background-size: cover;
-        transition: background 0.3s ease;
+        transition: 0.3s;
     }
 
     .container { 
@@ -46,13 +46,11 @@
         backdrop-filter: blur(8px);
     }
 
-    /* Theme Toggle Button */
-    .theme-switch {
-        position: fixed; top: 20px; right: 20px;
-        z-index: 1001; background: var(--secondary);
-        color: white; border: none; padding: 10px 15px;
-        border-radius: 50px; cursor: pointer; font-weight: bold;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    /* Floating Toggle Button */
+    .theme-toggle {
+        position: fixed; top: 10px; right: 10px; z-index: 9999;
+        padding: 8px 15px; border-radius: 20px; border: none;
+        background: var(--primary); color: var(--light); cursor: pointer;
     }
 
     /* Auth Section */
@@ -73,14 +71,12 @@
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-    .card { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; color: var(--text); }
+    .card { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
 
     label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
     .dms-inputs { display: flex; gap: 5px; }
     .dms-inputs input { width: 33%; text-align: center; }
     
-    input { background: #fff; color: #000; border: 1px solid #ccc; padding: 8px; border-radius: 4px; }
-
     button { 
         width: 100%; padding: 12px; border: none; border-radius: 6px; 
         color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; 
@@ -89,13 +85,13 @@
 
     .result-box { 
         background: rgba(0,0,0,0.05); border-left: 6px solid var(--accent); padding: 20px; 
-        font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.5; color: var(--text);
+        font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.5;
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; background: white; color: #000; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; }
     th { background: var(--secondary); color: white; padding: 10px; border: 1px solid #ddd; }
-    td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    td { border: 1px solid #ddd; padding: 8px; text-align: center; background: white; color: black; }
 
-    canvas { background: #fff; border: 2px solid var(--secondary); border-radius: 8px; width: 100%; transition: 0.3s; }
+    canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; width: 100%; transition: 0.3s; }
     
     .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
     .btn-pdf { background: #3498db; }
@@ -106,7 +102,7 @@
 </head>
 <body>
 
-<button class="theme-switch" onclick="toggleTheme()" id="themeBtn">🌙 Tema Gelap</button>
+<button class="theme-toggle" onclick="toggleDarkMode()">🌓 Mode</button>
 
 <div id="auth-container">
     <div class="auth-card" id="login-form">
@@ -142,21 +138,21 @@
         <div class="grid">
             <div class="card">
                 <h3>Input Parameter</h3>
-                <div class="input-group"><label>Chainage IP</label><input type="number" id="IP_chain" step="0.001" oninput="saveInputs()"></div>
-                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" step="0.001" oninput="saveInputs()"></div>
+                <div class="input-group"><label>Chainage IP</label><input type="number" id="IP_chain" step="0.001" placeholder="Cth: 2060.500" oninput="autoSave()"></div>
+                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" step="0.001" placeholder="Cth: 600" oninput="autoSave()"></div>
                 <div class="input-group">
                     <label>Sudut Pesongan Δ (D M S)</label>
                     <div class="dms-inputs">
-                        <input type="number" id="d_deg" placeholder="°" oninput="saveInputs()">
-                        <input type="number" id="d_min" placeholder="'" oninput="saveInputs()">
-                        <input type="number" id="d_sec" placeholder='"' oninput="saveInputs()">
+                        <input type="number" id="d_deg" placeholder="°" oninput="autoSave()">
+                        <input type="number" id="d_min" placeholder="'" oninput="autoSave()">
+                        <input type="number" id="d_sec" placeholder='"' oninput="autoSave()">
                     </div>
                 </div>
-                <div class="input-group"><label>Interval Chord (m)</label><input type="number" id="interval" value="20" oninput="saveInputs()"></div>
-                <button onclick="kiraSemua()" style="margin-top:10px;">PROSES KIRAAN</button>
+                <div class="input-group"><label>Interval Chord (m)</label><input type="number" id="interval" value="20" oninput="autoSave()"></div>
+                <button onclick="kiraSemua()">PROSES KIRAAN</button>
             </div>
             <div class="card">
-                <h3>Grafik Visual Interaktif</h3>
+                <h3>Grafik Visual (Interaktif)</h3>
                 <canvas id="curveCanvas" width="400" height="300"></canvas>
             </div>
         </div>
@@ -179,7 +175,7 @@
     <div id="inverseTab" class="tab-content">
         <div class="card" style="max-width: 600px; margin: auto;">
             <h3 style="text-align:center;">Inverse Detail Calculator</h3>
-            <p style="font-size: 0.8em; color: #666; text-align: center;">Isi 2 nilai untuk mencari nilai ke-3.</p>
+            <p style="font-size: 0.8em; color: #666; text-align: center;">Isi 2 nilai untuk mencari nilai ke-3 yang kosong.</p>
             
             <div class="input-group"><label>Jejari R (m)</label><input type="number" id="invR" step="0.001"></div>
             <div class="input-group"><label>Chord c (m)</label><input type="number" id="invC" step="0.001"></div>
@@ -191,7 +187,7 @@
                     <input type="number" id="inv_d_sec" placeholder='"'>
                 </div>
             </div>
-            <button onclick="inverseDetailCalc()" style="background:var(--primary); margin-top:10px;">KIRA DETAIL SONGSANG</button>
+            <button onclick="inverseDetailCalc()" style="background:var(--primary)">KIRA DETAIL SONGSANG</button>
             <div id="invResult" class="result-box" style="margin-top:15px; display:none;"></div>
         </div>
     </div>
@@ -203,51 +199,47 @@
 </div>
 
 <script>
-/* --- FEATURE 1: AUTO-SAVE --- */
-function saveInputs() {
+/* --- FEATURE 6: DARK MODE --- */
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+}
+if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+
+/* --- FEATURE 1: AUTO SAVE --- */
+function autoSave() {
     const data = {
         ip: document.getElementById('IP_chain').value,
         r: document.getElementById('R').value,
         d: document.getElementById('d_deg').value,
         m: document.getElementById('d_min').value,
         s: document.getElementById('d_sec').value,
-        interval: document.getElementById('interval').value
+        int: document.getElementById('interval').value
     };
-    localStorage.setItem('geoSavedInputs', JSON.stringify(data));
+    localStorage.setItem('savedGeoData', JSON.stringify(data));
 }
 
-function loadInputs() {
-    const saved = JSON.parse(localStorage.getItem('geoSavedInputs'));
+function loadAutoSave() {
+    const saved = JSON.parse(localStorage.getItem('savedGeoData'));
     if(saved) {
-        document.getElementById('IP_chain').value = saved.ip || "";
-        document.getElementById('R').value = saved.r || "";
-        document.getElementById('d_deg').value = saved.d || "";
-        document.getElementById('d_min').value = saved.m || "";
-        document.getElementById('d_sec').value = saved.s || "";
-        document.getElementById('interval').value = saved.interval || "20";
+        document.getElementById('IP_chain').value = saved.ip;
+        document.getElementById('R').value = saved.r;
+        document.getElementById('d_deg').value = saved.d;
+        document.getElementById('d_min').value = saved.m;
+        document.getElementById('d_sec').value = saved.s;
+        document.getElementById('interval').value = saved.int;
     }
 }
 
-/* --- FEATURE 6: DARK MODE --- */
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem('geoTheme', isDark ? 'dark' : 'light');
-    document.getElementById('themeBtn').innerText = isDark ? "☀️ Tema Terang" : "🌙 Tema Gelap";
-}
-
-// Cek tema simpanan semasa load
-if(localStorage.getItem('geoTheme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    document.getElementById('themeBtn').innerText = "☀️ Tema Terang";
-}
-
-/* --- SYSTEM AUTH --- */
+/* --- SYSTEM AUTHENTICATION --- */
 function toggleAuth() {
     const loginF = document.getElementById('login-form');
     const regF = document.getElementById('register-form');
-    loginF.style.display = loginF.style.display === "none" ? "block" : "none";
-    regF.style.display = regF.style.display === "none" ? "block" : "none";
+    if(loginF.style.display === "none") {
+        loginF.style.display = "block"; regF.style.display = "none";
+    } else {
+        loginF.style.display = "none"; regF.style.display = "block";
+    }
 }
 
 function handleRegister() {
@@ -269,7 +261,7 @@ function handleLogin() {
         document.getElementById('auth-container').style.display = "none";
         document.getElementById('calculator-section').style.display = "block";
         document.getElementById('welcome-msg').innerText = "Pengguna: " + u;
-        loadInputs(); // Load data bila login berjaya
+        loadAutoSave();
     } else alert("Gagal log masuk!");
 }
 
@@ -297,40 +289,15 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");
 }
 
-/* --- FEATURE 4: INTERACTIVE CANVAS --- */
-function drawInteractiveCurve(deltaRad) {
-    const canvas = document.getElementById("curveCanvas");
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0,0,400,300);
-    
-    // Style Jalan
-    ctx.strokeStyle = "#2c3e50"; ctx.lineWidth = 15; ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.moveTo(50, 250);
-    ctx.quadraticCurveTo(200, 50, 350, 250);
-    ctx.stroke();
-
-    // Garisan Tengah Kuning
-    ctx.strokeStyle = "#f1c40f"; ctx.lineWidth = 2; ctx.setLineDash([10, 10]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Penanda Titik
-    ctx.fillStyle = "#e74c3c";
-    ctx.beginPath(); ctx.arc(50, 250, 6, 0, Math.PI*2); ctx.fill(); // T1
-    ctx.beginPath(); ctx.arc(350, 250, 6, 0, Math.PI*2); ctx.fill(); // T2
-    
-    ctx.fillStyle = "#27ae60";
-    ctx.font = "bold 12px Arial";
-    ctx.fillText("T1", 40, 270);
-    ctx.fillText("T2", 340, 270);
-}
-
-/* --- ENGINES --- */
+/* --- DETAILED INVERSE ENGINE --- */
 function inverseDetailCalc() {
     let R = parseFloat(document.getElementById("invR").value);
     let c = parseFloat(document.getElementById("invC").value);
-    let d = dmsToDecimal(document.getElementById("inv_d_deg").value, document.getElementById("inv_d_min").value, document.getElementById("inv_d_sec").value);
+    let d = dmsToDecimal(
+        parseFloat(document.getElementById("inv_d_deg").value) || 0,
+        parseFloat(document.getElementById("inv_d_min").value) || 0,
+        parseFloat(document.getElementById("inv_d_sec").value) || 0
+    );
     let res = document.getElementById("invResult");
     res.style.display = "block";
     let output = "DETAIL KIRAAN SONGSANG:\n========================\n";
@@ -338,28 +305,33 @@ function inverseDetailCalc() {
     if (isNaN(R) && !isNaN(c) && d > 0) {
         let deltaRad = (d * Math.PI / 180) / 2;
         let calcR = c / (2 * Math.sin(deltaRad));
-        output += `Mencari R: c / (2 * sin(Δ/2))\nHASIL R = ${calcR.toFixed(3)} m`;
+        output += `Mencari Jejari (R):\nR = ${calcR.toFixed(3)} m`;
     } else if (!isNaN(R) && isNaN(c) && d > 0) {
         let deltaRad = (d * Math.PI / 180) / 2;
         let calcC = 2 * R * Math.sin(deltaRad);
-        output += `Mencari c: 2 * R * sin(Δ/2)\nHASIL c = ${calcC.toFixed(3)} m`;
+        output += `Mencari Chord (c):\nc = ${calcC.toFixed(3)} m`;
     } else if (!isNaN(R) && !isNaN(c) && d === 0) {
         let ratio = c / (2 * R);
         let deltaDeg = (2 * Math.asin(ratio)) * 180 / Math.PI;
-        output += `Mencari Δ: 2 * asin(c / 2R)\nHASIL Δ = ${decimalToDMS(deltaDeg)}`;
+        output += `Mencari Δ:\nΔ = ${decimalToDMS(deltaDeg)}`;
     } else {
-        output += "Ralat: Isi 2 parameter.";
+        output += "Ralat: Pastikan 2 nilai diisi lengkap.";
     }
     res.innerText = output;
 }
 
+/* --- FORWARD ENGINE + INTERACTIVE CANVAS (Feature No. 4) --- */
 function kiraSemua() {
     let IP = parseFloat(document.getElementById("IP_chain").value);
     let R = parseFloat(document.getElementById("R").value);
     let interval = parseFloat(document.getElementById("interval").value);
-    let delta = dmsToDecimal(document.getElementById("d_deg").value, document.getElementById("d_min").value, document.getElementById("d_sec").value);
+    let delta = dmsToDecimal(
+        parseFloat(document.getElementById("d_deg").value) || 0,
+        parseFloat(document.getElementById("d_min").value) || 0,
+        parseFloat(document.getElementById("d_sec").value) || 0
+    );
 
-    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila isi data lengkap!");
+    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Isi maklumat!");
 
     let radDelta = delta * Math.PI / 180;
     let T = fix(R * Math.tan(radDelta / 2));
@@ -367,40 +339,64 @@ function kiraSemua() {
     let T1 = fix(IP - T);
     let T2 = fix(T1 + L);
 
-    document.getElementById("result").innerHTML = `T1 = ${T1.toFixed(3)} | T2 = ${T2.toFixed(3)}\nL = ${L.toFixed(3)} | T = ${T.toFixed(3)}`;
+    document.getElementById("result").innerHTML = 
+        `Jejari (R) = ${R}m | Δ = ${decimalToDMS(delta)}\nT1 = ${T1.toFixed(3)} | T2 = ${T2.toFixed(3)}\nL = ${L.toFixed(3)} | T = ${T.toFixed(3)}`;
 
-    let tb = document.getElementById("tableBody"); tb.innerHTML = "";
-    let curr = T1; let cumA = 0;
+    let tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+    let currentChain = T1;
+    let cumAngle = 0;
     
     function addRow(pt, ch, c, a, d, lc) {
-        tb.innerHTML += `<tr><td>${pt}</td><td>${ch.toFixed(3)}</td><td>${c||"-"}</td><td>${a?decimalToDMS(a):"-"}</td><td>${d?decimalToDMS(d):"-"}</td><td>${lc.toFixed(3)}</td></tr>`;
+        tableBody.innerHTML += `<tr><td>${pt}</td><td>${ch.toFixed(3)}</td><td>${c||"-"}</td><td>${a?decimalToDMS(a):"-"}</td><td>${d?decimalToDMS(d):"-"}</td><td>${lc.toFixed(3)}</td></tr>`;
     }
 
     addRow("T1", T1, 0, 0, 0, 0);
-    let next = Math.ceil(T1 / interval) * interval;
-    if(next <= T1) next += interval;
+    let nextStn = Math.ceil(T1 / interval) * interval;
+    if(nextStn <= T1) nextStn += interval;
 
-    while(next < T2) {
-        let c = fix(next - curr);
-        let a = (1718.9 * c / R) / 60;
-        cumA += a;
-        addRow("P", next, c, a, cumA, 2 * R * Math.sin(cumA * Math.PI / 180));
-        curr = next; next += interval;
+    while(nextStn < T2) {
+        let chord = fix(nextStn - currentChain);
+        let alpha = (1718.9 * chord / R) / 60;
+        cumAngle += alpha;
+        addRow("P", nextStn, chord, alpha, cumAngle, 2 * R * Math.sin(cumAngle * Math.PI / 180));
+        currentChain = nextStn;
+        nextStn += interval;
     }
-    let fc = fix(T2 - curr);
-    let fa = (1718.9 * fc / R) / 60;
-    cumA += fa;
-    addRow("T2", T2, fc, fa, cumA, 2 * R * Math.sin(cumA * Math.PI / 180));
+    let finalC = fix(T2 - currentChain);
+    let finalA = (1718.9 * finalC / R) / 60;
+    cumAngle += finalA;
+    addRow("T2", T2, finalC, finalA, cumAngle, 2 * R * Math.sin(cumAngle * Math.PI / 180));
 
-    drawInteractiveCurve(radDelta);
+    // Interactive Canvas Draw
+    let canvas = document.getElementById("curveCanvas");
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0,400,300);
+    
+    // Lukis Jalan
+    ctx.strokeStyle = "#34495e"; ctx.lineWidth = 20; ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(50, 250);
+    ctx.quadraticCurveTo(200, 50, 350, 250);
+    ctx.stroke();
+
+    // Markings
+    ctx.strokeStyle = "#f1c40f"; ctx.lineWidth = 2; ctx.setLineDash([10, 10]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Points
+    ctx.fillStyle = "red";
+    ctx.beginPath(); ctx.arc(50, 250, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(350, 250, 5, 0, Math.PI*2); ctx.fill();
 }
 
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     doc.setFont("helvetica", "bold");
-    doc.text("LAPORAN PENGIRAAN GEOMATIK V7.0", 105, 15, {align: "center"});
-    doc.autoTable({ html: '#settingOutTable', startY: 30 });
+    doc.text("LAPORAN PENGIRAAN GEOMATIK", 105, 15, {align: "center"});
+    doc.autoTable({ html: '#settingOutTable', startY: 45 });
     doc.save("Laporan_GeoCurve_v7.pdf");
 }
 </script>
