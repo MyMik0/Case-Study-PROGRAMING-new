@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v9.6 - Full Features</title>
+<title>Geo-Curve Pro v9.7</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -21,7 +21,6 @@
         --card-bg: white;
     }
 
-    /* DARK MODE STYLES */
     body.dark-mode {
         --primary: #ecf0f1;
         --secondary: #bdc3c7;
@@ -40,7 +39,7 @@
         transition: 0.3s;
     }
 
-    /* SIDEBAR CSS */
+    /* SIDEBAR */
     .sidebar {
         position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
         background: var(--card-bg); color: var(--text-color);
@@ -59,7 +58,7 @@
         border: 1px solid #ddd; font-size: 0.85em;
     }
 
-    /* KEKALKAN INTERFACE v6.2 */
+    /* INTERFACE v6.2 STYLE */
     .container { 
         max-width: 1100px; margin: auto; background: var(--overlay); 
         padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);
@@ -76,8 +75,8 @@
     .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
     .tab-btn { padding: 12px 25px; border: none; background: none; cursor: pointer; font-weight: bold; color: #777; transition: 0.3s; }
     .tab-btn.active { color: var(--accent); border-bottom: 4px solid var(--accent); }
-    .tab-content { display: none; animation: fadeIn 0.4s; }
-    .tab-content.active { display: block; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.4s; }
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
@@ -150,7 +149,7 @@
             <button style="width:auto; padding:5px 12px; background:var(--danger)" onclick="logout()">Keluar</button>
         </div>
     </div>
-    <h2 style="text-align:center">Geo-Curve Pro v9.6</h2>
+    <h2 style="text-align:center">Geo-Curve Pro v9.7</h2>
     
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Lengkung & Setting Out</button>
@@ -210,14 +209,26 @@
         </div>
     </div>
 
-    <div class="footer-btns">
+    <div class="footer-btns" id="downloadArea">
         <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN PDF</button>
         <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APK</a>
     </div>
 </div>
 
 <script>
-/* --- DARK MODE & SIDEBAR --- */
+/* --- 1. AUTO-HIDE DOWNLOAD LOGIC --- */
+function checkDisplayMode() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+                         || window.navigator.standalone 
+                         || document.referrer.includes('android-app://');
+    if (isStandalone) {
+        const area = document.getElementById('downloadArea');
+        if(area) area.style.display = 'none';
+    }
+}
+window.addEventListener('DOMContentLoaded', checkDisplayMode);
+
+/* --- 2. THEME & SIDEBAR --- */
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('geoDark', document.body.classList.contains('dark-mode'));
@@ -229,17 +240,17 @@ function toggleSidebar() {
     document.getElementById('sbOverlay').classList.toggle('active');
 }
 
-/* --- HISTORY ENGINE --- */
+/* --- 3. HISTORY SYSTEM --- */
 function saveToHistory(data) {
-    let history = JSON.parse(localStorage.getItem('geoHistoryV96')) || [];
+    let history = JSON.parse(localStorage.getItem('geoHistoryV97')) || [];
     history.unshift({ ...data, time: new Date().toLocaleString('ms-MY') });
     if(history.length > 20) history.pop();
-    localStorage.setItem('geoHistoryV96', JSON.stringify(history));
+    localStorage.setItem('geoHistoryV97', JSON.stringify(history));
     renderHistory();
 }
 
 function renderHistory() {
-    let history = JSON.parse(localStorage.getItem('geoHistoryV96')) || [];
+    let history = JSON.parse(localStorage.getItem('geoHistoryV97')) || [];
     let hDiv = document.getElementById("historyList");
     if(history.length === 0) { hDiv.innerHTML = '<p style="color:gray;">Tiada rekod.</p>'; return; }
     hDiv.innerHTML = history.map((it, idx) => `
@@ -254,7 +265,7 @@ function renderHistory() {
 }
 
 function loadHistory(i) {
-    let it = JSON.parse(localStorage.getItem('geoHistoryV96'))[i];
+    let it = JSON.parse(localStorage.getItem('geoHistoryV97'))[i];
     document.getElementById('rec_name').value = it.name;
     document.getElementById('IP_chain').value = it.ip;
     document.getElementById('R').value = it.r;
@@ -267,19 +278,18 @@ function loadHistory(i) {
 }
 
 function delHistory(i) {
-    let h = JSON.parse(localStorage.getItem('geoHistoryV96'));
-    h.splice(i, 1); localStorage.setItem('geoHistoryV96', JSON.stringify(h)); renderHistory();
+    let h = JSON.parse(localStorage.getItem('geoHistoryV97'));
+    h.splice(i, 1); localStorage.setItem('geoHistoryV97', JSON.stringify(h)); renderHistory();
 }
 
-function clearHistory() { if(confirm("Padam semua?")) { localStorage.removeItem('geoHistoryV96'); renderHistory(); } }
+function clearHistory() { if(confirm("Padam semua sejarah?")) { localStorage.removeItem('geoHistoryV97'); renderHistory(); } }
 
-/* --- ASAL v6.2 LOGIC --- */
+/* --- 4. AUTH ENGINE --- */
 function toggleAuth() {
     const loginF = document.getElementById('login-form'); const regF = document.getElementById('register-form');
     loginF.style.display = (loginF.style.display === "none") ? "block" : "none";
     regF.style.display = (regF.style.display === "none") ? "block" : "none";
 }
-
 function handleLogin() {
     const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value;
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
@@ -288,18 +298,18 @@ function handleLogin() {
         document.getElementById('calculator-section').style.display = "block";
         document.getElementById('welcome-msg').innerText = "🔑 User: " + u;
         renderHistory();
-    } else alert("Gagal log masuk!");
+    } else alert("Username atau Password salah!");
 }
-
 function handleRegister() {
     const u = document.getElementById('reg-user').value; const p = document.getElementById('reg-pass').value;
+    if(!u || !p) return alert("Sila isi!");
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
     users[u] = p; localStorage.setItem('geoUsers', JSON.stringify(users));
-    alert("Daftar Berjaya!"); toggleAuth();
+    alert("Pendaftaran Berjaya!"); toggleAuth();
 }
-
 function logout() { location.reload(); }
 
+/* --- 5. MATH & CORE CALCULATION --- */
 const fix = (n) => Math.round(n * 1000) / 1000;
 function dmsToDecimal(d, m, s) { return (parseFloat(d)||0) + ((parseFloat(m)||0)/60) + ((parseFloat(s)||0)/3600); }
 function decimalToDMS(dd) {
@@ -307,7 +317,6 @@ function decimalToDMS(dd) {
     if(s >= 60) { m++; s = 0; } if(m >= 60) { d++; m = 0; }
     return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
 }
-
 function openTab(evt, tabName) {
     let content = document.getElementsByClassName("tab-content"); for (let i = 0; i < content.length; i++) content[i].classList.remove("active");
     let links = document.getElementsByClassName("tab-btn"); for (let i = 0; i < links.length; i++) links[i].classList.remove("active");
@@ -323,7 +332,7 @@ function inverseDetailCalc() {
     if (isNaN(R) && !isNaN(c) && d > 0) output += `Jejari R = ${(c / (2 * Math.sin((d * Math.PI / 180) / 2))).toFixed(3)} m`;
     else if (!isNaN(R) && isNaN(c) && d > 0) output += `Chord c = ${(2 * R * Math.sin((d * Math.PI / 180) / 2)).toFixed(3)} m`;
     else if (!isNaN(R) && !isNaN(c)) output += `Sudut Δ = ${decimalToDMS((2 * Math.asin(c / (2 * R))) * 180 / Math.PI)}`;
-    else output += "Isi 2 nilai sahaja.";
+    else output += "Sila isi 2 kotak sahaja.";
     res.innerText = output;
 }
 
@@ -335,7 +344,7 @@ function kiraSemua(shouldSave = true) {
     let interval = parseFloat(document.getElementById("interval").value);
     let delta = dmsToDecimal(d,m,s);
 
-    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila isi lengkap!");
+    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila lengkapkan parameter!");
     if(shouldSave) saveToHistory({name:n, ip:IP, r:R, d, m, s, int:interval});
 
     let rad = delta * Math.PI / 180;
@@ -369,9 +378,9 @@ function kiraSemua(shouldSave = true) {
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("GEOMATIK REPORT - v9.6", 105, 15, {align: "center"});
+    doc.text("GEOMATIK REPORT - Geo-Curve Pro", 105, 15, {align: "center"});
     doc.autoTable({ html: '#settingOutTable', startY: 30 });
-    doc.save("Report_GeoCurve.pdf");
+    doc.save("Laporan_Kiraan.pdf");
 }
 </script>
 </body>
