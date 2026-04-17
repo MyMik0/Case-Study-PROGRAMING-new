@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v5 - Full System with APK</title>
+<title>Geo-Curve Pro v5 - Full Professional System</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -23,7 +23,7 @@
         font-family: 'Segoe UI', Arial, sans-serif; 
         margin: 0; padding: 20px; 
         color: var(--primary);
-        background: url('209301.jpg') no-repeat center center fixed;
+        background: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=2070') no-repeat center center fixed;
         background-size: cover;
     }
 
@@ -101,8 +101,14 @@
         <div class="grid">
             <div class="card">
                 <h3>Input Parameter</h3>
-                <div class="input-group"><label>Chainage IP (Intersection Point)</label><input type="number" id="IP_chain" placeholder="Cth: 2060.500"></div>
-                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" placeholder="Cth: 600"></div>
+                <div class="input-group">
+                    <label>Chainage IP (Intersection Point)</label>
+                    <input type="number" id="IP_chain" placeholder="Cth: 2060.500">
+                </div>
+                <div class="input-group">
+                    <label>Jejari R (m)</label>
+                    <input type="number" id="R" placeholder="Cth: 600">
+                </div>
                 <div class="input-group">
                     <label>Sudut Pesongan Δ (D M S)</label>
                     <div class="dms-inputs">
@@ -111,9 +117,13 @@
                         <input type="number" id="d_sec" placeholder='"'>
                     </div>
                 </div>
-                <div class="input-group"><label>Interval Chord (m)</label><input type="number" id="interval" value="20"></div>
+                <div class="input-group">
+                    <label>Interval Chord (m)</label>
+                    <input type="number" id="interval" value="20">
+                </div>
                 <button onclick="kiraSemua()">PROSES KIRAAN LENGKAP</button>
             </div>
+
             <div class="card">
                 <h3>Grafik Visual</h3>
                 <canvas id="curveCanvas" width="400" height="300"></canvas>
@@ -150,7 +160,7 @@
             <h3>Inverse Calculator</h3>
             <div class="input-group"><label>Jejari R</label><input type="number" id="invR"></div>
             <div class="input-group"><label>Chord c</label><input type="number" id="invC"></div>
-            <div class="input-group"><label>Sudut Δ (Deg Min Sec)</label>
+            <div class="input-group"><label>Sudut Δ (D M S)</label>
                 <div class="dms-inputs">
                     <input type="number" id="inv_d_deg"><input type="number" id="inv_d_min"><input type="number" id="inv_d_sec">
                 </div>
@@ -161,7 +171,7 @@
     </div>
 
     <div class="footer-btns">
-        <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN LAPORAN (PDF)</button>
+        <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN LAPORAN LENGKAP (PDF)</button>
         <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APP (.APK)</a>
         <button style="background:var(--danger)" onclick="location.reload()">LOG KELUAR</button>
     </div>
@@ -172,6 +182,7 @@
 const fix = (n) => Math.round(n * 1000) / 1000;
 
 function dmsToDecimal(d, m, s) { return (d || 0) + ((m || 0)/60) + ((s || 0)/3600); }
+
 function decimalToDMS(dd) {
     let d = Math.floor(dd + 1e-9);
     let m_val = (dd - d) * 60;
@@ -198,6 +209,7 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");
 }
 
+/* PENGIRAAN UTAMA */
 function kiraSemua() {
     let IP = parseFloat(document.getElementById("IP_chain").value);
     let R = parseFloat(document.getElementById("R").value);
@@ -217,12 +229,11 @@ function kiraSemua() {
     let T2 = fix(T1 + L);
 
     document.getElementById("result").innerHTML = 
-        `HASIL KIRAAN GEOMETRI:\n` +
-        `Tangent (T) = ${T.toFixed(3)} m | Panjang (L) = ${L.toFixed(3)} m\n` +
+        `Jejari (R) = ${R} m | Sudut Δ = ${decimalToDMS(delta)}\n` +
+        `Tangent (T) = ${T.toFixed(3)} m | Panjang Lengkung (L) = ${L.toFixed(3)} m\n` +
         `--------------------------------------------------\n` +
-        `HASIL KIRAAN CHAINAGE:\n` +
-        `T1 (Mula Lengkung) = ${T1.toFixed(3)}\n` +
-        `T2 (Hujung Lengkung) = ${T1.toFixed(3)} + ${L.toFixed(3)} = ${T2.toFixed(3)}`;
+        `Chainage T1 (Mula) = IP - T = ${IP.toFixed(3)} - ${T.toFixed(3)} = ${T1.toFixed(3)}\n` +
+        `Chainage T2 (Hujung) = T1 + L = ${T1.toFixed(3)} + ${L.toFixed(3)} = ${T2.toFixed(3)}`;
 
     let tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
@@ -261,7 +272,7 @@ function kiraSemua() {
         </tr>`;
     }
 
-    // Canvas Draw
+    // Drawing Visual
     let canvas = document.getElementById("curveCanvas");
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0,0,400,300);
@@ -271,6 +282,40 @@ function kiraSemua() {
     ctx.stroke();
 }
 
+/* PDF EXPORT TERMASUK PENGIRAAN */
+async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+    
+    doc.setFontSize(16); doc.setFont("helvetica", "bold");
+    doc.text("LAPORAN PENGIRAAN LENGKUNG GEOMATIK", 105, 15, {align: "center"});
+    
+    // Masukkan teks dari kotak pengiraan
+    let pengiraanTeks = document.getElementById("result").innerText;
+    doc.setFontSize(10); doc.setFont("courier", "normal");
+    let splitText = doc.splitTextToSize(pengiraanTeks, 180);
+    doc.text(splitText, 15, 25);
+    
+    // Masukkan Jadual
+    doc.autoTable({ 
+        html: '#settingOutTable', 
+        startY: 60, 
+        theme: 'grid',
+        headStyles: {fillColor: [44, 62, 80]},
+        styles: {fontSize: 8}
+    });
+    
+    // Masukkan Canvas Grafik
+    let canvas = document.getElementById("curveCanvas");
+    let finalY = doc.lastAutoTable.finalY;
+    if (finalY < 230) {
+        doc.addImage(canvas.toDataURL("image/png"), 'PNG', 15, finalY + 10, 60, 45);
+    }
+    
+    doc.save("Laporan_Lengkap_Geomatik.pdf");
+}
+
+/* INVERSE CALC */
 function inverseCalc() {
     let R = parseFloat(document.getElementById("invR").value);
     let c = parseFloat(document.getElementById("invC").value);
@@ -288,14 +333,6 @@ function inverseCalc() {
         let dd = 2 * Math.asin(c / (2 * R)) * 180 / Math.PI;
         res.innerText = "NILAI SUDUT (Δ) = " + decimalToDMS(dd);
     }
-}
-
-async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('l', 'mm', 'a4');
-    doc.text("LAPORAN PENGIRAAN LENGKUNG GEOMATIK", 148, 15, {align:"center"});
-    doc.autoTable({ html: '#settingOutTable', startY: 25, theme: 'grid' });
-    doc.save("Laporan_Lengkung.pdf");
 }
 </script>
 </body>
