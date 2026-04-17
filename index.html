@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v5 - Full Professional System</title>
+<title>Geo-Curve Pro v5 - Full System with APK</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -33,14 +33,12 @@
         backdrop-filter: blur(8px);
     }
 
-    /* Login Section */
     #login-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
     .login-card { 
         background: var(--overlay); padding: 40px; border-radius: 15px; 
         box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px;
     }
 
-    /* Tabs & Cards */
     .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
     .tab-btn { padding: 12px 25px; border: none; background: none; cursor: pointer; font-weight: bold; color: #777; transition: 0.3s; }
     .tab-btn.active { color: var(--accent); border-bottom: 4px solid var(--accent); }
@@ -50,9 +48,7 @@
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
-    .fasa-tag { background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; margin-bottom: 10px; display: inline-block; }
 
-    /* Inputs & Buttons */
     .input-group { margin-bottom: 15px; }
     label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
     .dms-inputs { display: flex; gap: 5px; }
@@ -65,7 +61,6 @@
     }
     button:hover { background: #219150; transform: translateY(-2px); }
 
-    /* Result Box & Table */
     .result-box { 
         background: #f8f9fa; border-left: 6px solid var(--accent); padding: 20px; 
         font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; 
@@ -105,15 +100,9 @@
     <div id="forwardTab" class="tab-content active">
         <div class="grid">
             <div class="card">
-                <span class="fasa-tag">FASA 1 & 2: INPUT</span>
-                <div class="input-group">
-                    <label>Chainage IP (Intersection Point)</label>
-                    <input type="number" id="IP_chain" placeholder="Cth: 2060.500">
-                </div>
-                <div class="input-group">
-                    <label>Jejari R (m)</label>
-                    <input type="number" id="R" placeholder="Cth: 600">
-                </div>
+                <h3>Input Parameter</h3>
+                <div class="input-group"><label>Chainage IP (Intersection Point)</label><input type="number" id="IP_chain" placeholder="Cth: 2060.500"></div>
+                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" placeholder="Cth: 600"></div>
                 <div class="input-group">
                     <label>Sudut Pesongan Δ (D M S)</label>
                     <div class="dms-inputs">
@@ -122,13 +111,9 @@
                         <input type="number" id="d_sec" placeholder='"'>
                     </div>
                 </div>
-                <div class="input-group">
-                    <label>Interval Chord (m)</label>
-                    <input type="number" id="interval" value="20">
-                </div>
-                <button onclick="kiraSemua()">PROSES 3 FASA SEKARANG</button>
+                <div class="input-group"><label>Interval Chord (m)</label><input type="number" id="interval" value="20"></div>
+                <button onclick="kiraSemua()">PROSES KIRAAN LENGKAP</button>
             </div>
-
             <div class="card">
                 <h3>Grafik Visual</h3>
                 <canvas id="curveCanvas" width="400" height="300"></canvas>
@@ -136,12 +121,12 @@
         </div>
 
         <div class="card">
-            <span class="fasa-tag">HASIL KIRAAN FASA 1 & 2</span>
+            <h3>Hasil Pengiraan Geometri & Chainage</h3>
             <div id="result" class="result-box">Sila masukkan data di atas.</div>
         </div>
 
         <div class="card" style="overflow-x: auto;">
-            <span class="fasa-tag">FASA 3: JADUAL SETTING OUT</span>
+            <h3>Jadual Setting Out Profesional</h3>
             <table id="settingOutTable">
                 <thead>
                     <tr>
@@ -163,14 +148,11 @@
     <div id="inverseTab" class="tab-content">
         <div class="card" style="max-width: 600px; margin: auto;">
             <h3>Inverse Calculator</h3>
-            <p style="text-align: center; font-size: 0.8em; color: #666;">Isi 2 kotak, tinggalkan 1 kosong untuk dicari.</p>
             <div class="input-group"><label>Jejari R</label><input type="number" id="invR"></div>
             <div class="input-group"><label>Chord c</label><input type="number" id="invC"></div>
             <div class="input-group"><label>Sudut Δ (Deg Min Sec)</label>
                 <div class="dms-inputs">
-                    <input type="number" id="inv_d_deg">
-                    <input type="number" id="inv_d_min">
-                    <input type="number" id="inv_d_sec">
+                    <input type="number" id="inv_d_deg"><input type="number" id="inv_d_min"><input type="number" id="inv_d_sec">
                 </div>
             </div>
             <button onclick="inverseCalc()" style="background:var(--primary)">KIRA SONGSANG</button>
@@ -179,18 +161,17 @@
     </div>
 
     <div class="footer-btns">
-        <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN LAPORAN LENGKAP (PDF)</button>
+        <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN LAPORAN (PDF)</button>
         <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APP (.APK)</a>
         <button style="background:var(--danger)" onclick="location.reload()">LOG KELUAR</button>
     </div>
 </div>
 
 <script>
-/* UTILITIES - DENGAN PEMBETULAN FLOATING POINT */
+/* UTILITIES */
 const fix = (n) => Math.round(n * 1000) / 1000;
 
 function dmsToDecimal(d, m, s) { return (d || 0) + ((m || 0)/60) + ((s || 0)/3600); }
-
 function decimalToDMS(dd) {
     let d = Math.floor(dd + 1e-9);
     let m_val = (dd - d) * 60;
@@ -217,7 +198,6 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");
 }
 
-/* PENGIRAAN LENGKUNG & JADUAL */
 function kiraSemua() {
     let IP = parseFloat(document.getElementById("IP_chain").value);
     let R = parseFloat(document.getElementById("R").value);
@@ -230,30 +210,26 @@ function kiraSemua() {
 
     if(isNaN(IP) || isNaN(R) || delta <= 0) { alert("Data tidak lengkap!"); return; }
 
-    // FASA 1: Geometri
     let radDelta = delta * Math.PI / 180;
     let T = fix(R * Math.tan(radDelta / 2));
     let L = fix((Math.PI * R * delta) / 180);
-
-    // FASA 2: Chainage (Fix logik matematik anda)
     let T1 = fix(IP - T);
-    let T2 = fix(T1 + L); // Ini akan menghasilkan 2235.505
+    let T2 = fix(T1 + L);
 
     document.getElementById("result").innerHTML = 
-        `Jejari (R) = ${R} m | Δ = ${decimalToDMS(delta)}\n` +
-        `Tangent (T) = ${T.toFixed(3)} m | Panjang Lengkung (L) = ${L.toFixed(3)} m\n` +
+        `HASIL KIRAAN GEOMETRI:\n` +
+        `Tangent (T) = ${T.toFixed(3)} m | Panjang (L) = ${L.toFixed(3)} m\n` +
         `--------------------------------------------------\n` +
-        `Chainage T1 (Mula) = IP - T = ${IP.toFixed(3)} - ${T.toFixed(3)} = ${T1.toFixed(3)}\n` +
-        `Chainage T2 (Hujung) = T1 + L = ${T1.toFixed(3)} + ${L.toFixed(3)} = ${T2.toFixed(3)}`;
+        `HASIL KIRAAN CHAINAGE:\n` +
+        `T1 (Mula Lengkung) = ${T1.toFixed(3)}\n` +
+        `T2 (Hujung Lengkung) = ${T1.toFixed(3)} + ${L.toFixed(3)} = ${T2.toFixed(3)}`;
 
-    // FASA 3: Jadual
     let tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
     let currentChain = T1;
-    let cumulativeAngle = 0;
-    let labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let pIdx = 0;
-
+    let cumAngle = 0;
+    
+    // T1 Row
     addRow("T1", T1, 0, 0, 0, 0);
 
     let nextStn = Math.ceil(T1 / interval) * interval;
@@ -262,32 +238,39 @@ function kiraSemua() {
     while(nextStn < T2) {
         let chord = fix(nextStn - currentChain);
         let alpha = (1718.9 * chord / R) / 60;
-        cumulativeAngle += alpha;
-        addRow(labels[pIdx++] || "P", nextStn, chord, alpha, cumulativeAngle, 2 * R * Math.sin(cumulativeAngle * Math.PI / 180));
+        cumAngle += alpha;
+        addRow("P", nextStn, chord, alpha, cumAngle, 2 * R * Math.sin(cumAngle * Math.PI / 180));
         currentChain = nextStn;
         nextStn += interval;
     }
 
-    let finalChord = fix(T2 - currentChain);
-    let finalAlpha = (1718.9 * finalChord / R) / 60;
-    cumulativeAngle += finalAlpha;
-    addRow("T2", T2, finalChord, finalAlpha, cumulativeAngle, 2 * R * Math.sin(cumulativeAngle * Math.PI / 180));
+    // T2 Row
+    let finalC = fix(T2 - currentChain);
+    let finalAlpha = (1718.9 * finalC / R) / 60;
+    cumAngle += finalAlpha;
+    addRow("T2", T2, finalC, finalAlpha, cumAngle, 2 * R * Math.sin(cumAngle * Math.PI / 180));
 
     function addRow(pt, ch, c, a, d, lc) {
-        tableBody.innerHTML += `<tr><td>${pt}</td><td>${ch.toFixed(3)}</td><td>${c===0?"-":c.toFixed(3)}</td><td>${a===0?"-":decimalToDMS(a)}</td><td>${d===0?"-":decimalToDMS(d)}</td><td>${lc.toFixed(3)}</td></tr>`;
+        tableBody.innerHTML += `<tr>
+            <td>${pt}</td>
+            <td>${ch.toFixed(3)}</td>
+            <td>${c===0 ? "-" : c.toFixed(3)}</td>
+            <td>${a===0 ? "-" : decimalToDMS(a)}</td>
+            <td>${d===0 ? "-" : decimalToDMS(d)}</td>
+            <td>${lc.toFixed(3)}</td>
+        </tr>`;
     }
 
-    // Drawing
+    // Canvas Draw
     let canvas = document.getElementById("curveCanvas");
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0,0,400,300);
     ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 4;
     ctx.beginPath();
-    ctx.arc(200, 260, 180, Math.PI + 0.4, Math.PI + 0.4 + (radDelta * 0.5));
+    ctx.arc(200, 260, 150, Math.PI + 0.4, Math.PI + 0.4 + (radDelta * 0.5));
     ctx.stroke();
 }
 
-/* INVERSE CALC */
 function inverseCalc() {
     let R = parseFloat(document.getElementById("invR").value);
     let c = parseFloat(document.getElementById("invC").value);
@@ -295,24 +278,24 @@ function inverseCalc() {
     let res = document.getElementById("invResult");
     res.style.display = "block";
 
-    if(isNaN(R) && c && d) { R = c / (2 * Math.sin((d * Math.PI / 180) / 2)); res.innerText = "NILAI JEJARI (R) = " + R.toFixed(3) + " m"; }
-    else if(R && isNaN(c) && d) { c = 2 * R * Math.sin((d * Math.PI / 180) / 2); res.innerText = "NILAI CHORD (c) = " + c.toFixed(3) + " m"; }
-    else if(R && c && !d) { let dd = 2 * Math.asin(c / (2 * R)) * 180 / Math.PI; res.innerText = "NILAI SUDUT (Δ) = " + decimalToDMS(dd); }
+    if(isNaN(R) && c && d) {
+        let calcR = c / (2 * Math.sin((d * Math.PI / 180) / 2));
+        res.innerText = "NILAI JEJARI (R) = " + calcR.toFixed(3) + " m";
+    } else if(R && isNaN(c) && d) {
+        let calcC = 2 * R * Math.sin((d * Math.PI / 180) / 2);
+        res.innerText = "NILAI CHORD (c) = " + calcC.toFixed(3) + " m";
+    } else if(R && c && !d) {
+        let dd = 2 * Math.asin(c / (2 * R)) * 180 / Math.PI;
+        res.innerText = "NILAI SUDUT (Δ) = " + decimalToDMS(dd);
+    }
 }
 
-/* PDF EXPORT */
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('l', 'mm', 'a4'); 
-    doc.setFontSize(18); doc.text("LAPORAN PENGIRAAN LENGKUNG GEOMATIK", 148, 20, {align: "center"});
-    doc.setFontSize(10); doc.setFont("courier"); doc.text(document.getElementById("result").innerText, 15, 35);
-    
-    doc.autoTable({ html: '#settingOutTable', startY: 60, theme: 'grid', headStyles: {fillColor:[44, 62, 80]} });
-    
-    let canvas = document.getElementById("curveCanvas");
-    doc.addImage(canvas.toDataURL("image/png"), 'PNG', 15, doc.lastAutoTable.finalY + 10, 80, 60);
-    
-    doc.save("Laporan_Lengkap_Geomatik.pdf");
+    const doc = new jsPDF('l', 'mm', 'a4');
+    doc.text("LAPORAN PENGIRAAN LENGKUNG GEOMATIK", 148, 15, {align:"center"});
+    doc.autoTable({ html: '#settingOutTable', startY: 25, theme: 'grid' });
+    doc.save("Laporan_Lengkung.pdf");
 }
 </script>
 </body>
