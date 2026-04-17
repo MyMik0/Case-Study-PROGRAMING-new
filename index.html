@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v9.7 - Full Sidebar & Auto-Hide</title>
+<title>Geo-Curve Pro v6.2 (Engine v9.7)</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -21,7 +21,6 @@
         --card-bg: white;
     }
 
-    /* DARK MODE */
     body.dark-mode {
         --primary: #ecf0f1;
         --secondary: #bdc3c7;
@@ -33,14 +32,14 @@
 
     body { 
         font-family: 'Segoe UI', Arial, sans-serif; 
-        margin: 0; padding: 20px; 
+        margin: 0; padding: 15px; 
         color: var(--text-color);
         background: url('209301.jpg') no-repeat center center fixed;
         background-size: cover;
         transition: 0.3s;
     }
 
-    /* SIDEBAR STYLE */
+    /* SIDEBAR v6.2 STYLE */
     .sidebar {
         position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
         background: var(--card-bg); color: var(--text-color);
@@ -53,63 +52,61 @@
         background: rgba(0,0,0,0.4); display: none; z-index: 9999;
     }
     .sidebar-overlay.active { display: block; }
-    
-    .history-item {
-        background: rgba(0,0,0,0.05); padding: 10px; border-radius: 5px; margin-bottom: 8px;
-        border: 1px solid #ddd; font-size: 0.85em;
-    }
 
-    /* INTERFACE v6.2 LAYOUT */
+    /* CONTAINER v6.2 */
     .container { 
         max-width: 1100px; margin: auto; background: var(--overlay); 
-        padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        padding: 25px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         backdrop-filter: blur(8px);
     }
 
     #auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
     .auth-card { 
-        background: var(--overlay); padding: 40px; border-radius: 15px; 
+        background: var(--card-bg); padding: 40px; border-radius: 15px; 
         box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px;
     }
     .auth-card input { margin-bottom: 10px; width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
 
-    .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
-    .tab-btn { padding: 12px 25px; border: none; background: none; cursor: pointer; font-weight: bold; color: #777; transition: 0.3s; }
-    .tab-btn.active { color: var(--accent); border-bottom: 4px solid var(--accent); }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.4s; }
+    /* GRID v6.2 STYLE (Input Kiri, Grafik Kanan) */
+    .grid-v62 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
+    @media (max-width: 768px) { .grid-v62 { grid-template-columns: 1fr; } }
 
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-    .card { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
-
-    label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
-    .dms-inputs { display: flex; gap: 5px; }
-    .dms-inputs input { width: 33%; text-align: center; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    .card { background: var(--card-bg); border-radius: 8px; padding: 18px; border: 1px solid rgba(0,0,0,0.1); }
     
-    button { 
-        width: 100%; padding: 12px; border: none; border-radius: 6px; 
-        color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; 
-    }
-    button:hover { background: #219150; transform: translateY(-2px); }
+    .tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid #ddd; }
+    .tab-btn { padding: 10px 20px; border: none; background: none; cursor: pointer; font-weight: bold; color: #777; }
+    .tab-btn.active { color: var(--accent); border-bottom: 3px solid var(--accent); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-    .result-box { 
-        background: rgba(0,0,0,0.03); border-left: 6px solid var(--accent); padding: 20px; 
-        font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.5;
-        color: var(--text-color);
+    label { display: block; font-weight: bold; font-size: 0.8em; margin-bottom: 4px; color: var(--secondary); }
+    input[type="number"], input[type="text"] { 
+        width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; 
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; background: white; color: black; }
-    th { background: var(--secondary); color: white; padding: 10px; border: 1px solid #ddd; }
+    .dms-inputs { display: flex; gap: 4px; }
+    .dms-inputs input { text-align: center; }
+
+    button { 
+        width: 100%; padding: 12px; border: none; border-radius: 5px; 
+        color: white; background: var(--accent); cursor: pointer; font-weight: bold;
+    }
+
+    /* RESULT BOX v6.2 (Terminal Style) */
+    .result-v62 { 
+        background: #222; color: #00ff00; padding: 15px; border-radius: 5px;
+        font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.4;
+        margin-top: 15px; white-space: pre-wrap; border-left: 5px solid var(--accent);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85em; background: white; color: black; }
+    th { background: #34495e; color: white; padding: 10px; border: 1px solid #ddd; }
     td { border: 1px solid #ddd; padding: 8px; text-align: center; }
 
-    canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
-    
-    /* Tombol Bawah */
+    canvas { background: #fff; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
+
     .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
     .btn-pdf { background: #3498db; }
-    .btn-apk { background: var(--warning); text-decoration: none; text-align: center; display: block; padding: 12px; border-radius: 6px; color: white; font-weight: bold; }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .btn-apk { background: var(--warning); text-decoration: none; color: white; text-align: center; padding: 12px; border-radius: 6px; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -118,23 +115,23 @@
 <div id="sbHistory" class="sidebar">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3 style="margin:0;">📜 Sejarah Kiraan</h3>
-        <button onclick="toggleSidebar()" style="width:auto; padding:5px; background:none; color:inherit; font-size:20px; cursor:pointer;">×</button>
+        <button onclick="toggleSidebar()" style="background:none; color:inherit; border:none; font-size:24px; cursor:pointer;">&times;</button>
     </div>
     <hr>
-    <div id="historyList"><p style="font-size:0.8em; color:gray;">Tiada rekod disimpan.</p></div>
-    <button onclick="clearHistory()" style="background:var(--danger); margin-top:20px; font-size:0.7em;">PADAM SEMUA</button>
+    <div id="historyList"></div>
+    <button onclick="clearHistory()" style="background:var(--danger); margin-top:20px; padding:8px;">HAPUS SEMUA</button>
 </div>
 
 <div id="auth-container">
     <div class="auth-card" id="login-form">
-        <h2 style="color:var(--primary);">LOG MASUK</h2>
+        <h2 style="color:var(--primary); margin-top:0;">LOG MASUK</h2>
         <input type="text" id="login-user" placeholder="Username">
         <input type="password" id="login-pass" placeholder="Password">
         <button onclick="handleLogin()">Masuk</button>
         <div onclick="toggleAuth()" style="margin-top:15px; font-size:0.85em; cursor:pointer; text-decoration:underline;">Daftar Akaun Baru</div>
     </div>
     <div class="auth-card" id="register-form" style="display:none;">
-        <h2 style="color:var(--accent);">DAFTAR</h2>
+        <h2 style="color:var(--accent); margin-top:0;">DAFTAR</h2>
         <input type="text" id="reg-user" placeholder="Pilih Username">
         <input type="password" id="reg-pass" placeholder="Pilih Password">
         <button onclick="handleRegister()" style="background:var(--secondary);">Cipta Akaun</button>
@@ -143,51 +140,51 @@
 </div>
 
 <div id="calculator-section" class="container" style="display: none;">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 id="welcome-msg">Selamat Datang</h3>
-        <div style="display:flex; gap:8px;">
-            <button style="width:auto; padding:5px 12px; background:var(--secondary)" onclick="toggleDarkMode()">🌓 Tema</button>
-            <button style="width:auto; padding:5px 12px; background:var(--primary)" onclick="toggleSidebar()">📜 Sejarah</button>
-            <button style="width:auto; padding:5px 12px; background:var(--danger)" onclick="logout()">Keluar</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid rgba(0,0,0,0.1); padding-bottom:10px;">
+        <div id="welcome-msg" style="font-weight:bold; font-size:0.9em;">🔑 Pengguna</div>
+        <div style="display:flex; gap:5px;">
+            <button style="width:auto; padding:5px 10px; font-size:0.8em; background:var(--secondary)" onclick="toggleDarkMode()">🌓</button>
+            <button style="width:auto; padding:5px 10px; font-size:0.8em; background:var(--primary)" onclick="toggleSidebar()">📜 Sejarah</button>
+            <button style="width:auto; padding:5px 10px; font-size:0.8em; background:var(--danger)" onclick="logout()">X</button>
         </div>
     </div>
-    <h2 style="text-align:center">Geo-Curve Pro v9.7</h2>
-    
+
+    <h2 style="text-align:center; margin-top:0; color:var(--primary);">Geo-Curve Pro v6.2</h2>
+
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Lengkung & Setting Out</button>
         <button class="tab-btn" onclick="openTab(event, 'inverseTab')">Inverse Detail</button>
     </div>
 
     <div id="forwardTab" class="tab-content active">
-        <div class="grid">
+        <div class="grid-v62">
             <div class="card">
-                <h3>Input Parameter</h3>
                 <label>Nama Rekod</label>
-                <input type="text" id="rec_name" placeholder="Cth: Simpang A" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;">
-                <label>Chainage IP</label><input type="number" id="IP_chain" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
-                <label>Jejari R (m)</label><input type="number" id="R" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
-                <label>Sudut Pesongan Δ (D M S)</label>
+                <input type="text" id="rec_name" placeholder="Cth: Projek Jalan A">
+                <label>Chainage IP (m)</label>
+                <input type="number" id="IP_chain" step="0.001">
+                <label>Jejari R (m)</label>
+                <input type="number" id="R" step="0.001">
+                <label>Sudut Pesongan Δ (DMS)</label>
                 <div class="dms-inputs">
-                    <input type="number" id="d_deg" placeholder="°">
-                    <input type="number" id="d_min" placeholder="'">
-                    <input type="number" id="d_sec" placeholder='"'>
+                    <input type="number" id="d_deg" placeholder="D">
+                    <input type="number" id="d_min" placeholder="M">
+                    <input type="number" id="d_sec" placeholder="S">
                 </div>
                 <br>
-                <label>Interval Chord (m)</label><input type="number" id="interval" value="20" style="width:100%; padding:8px; margin-bottom:15px;">
-                <button onclick="kiraSemua()">KIRA & SIMPAN</button>
+                <label>Interval Chord (m)</label>
+                <input type="number" id="interval" value="20">
+                <button onclick="kiraSemua()">PROSES KIRAAN</button>
             </div>
+
             <div class="card">
-                <h3>Grafik Visual</h3>
-                <canvas id="curveCanvas" width="400" height="300"></canvas>
+                <label style="text-align:center;">VISUALISASI LENGKUNG</label>
+                <canvas id="curveCanvas" width="400" height="280"></canvas>
+                <div id="result" class="result-v62">Menunggu input...</div>
             </div>
         </div>
 
-        <div class="card">
-            <h3>Hasil Pengiraan Geometri</h3>
-            <div id="result" class="result-box">Tiada pengiraan dibuat.</div>
-        </div>
-
-        <div class="card" style="overflow-x: auto;">
+        <div class="card" style="overflow-x: auto; margin-top:20px;">
             <table id="settingOutTable">
                 <thead>
                     <tr><th>Point</th><th>Chainage</th><th>Chord</th><th>α (DMS)</th><th>δ (DMS)</th><th>2R Sin δ</th></tr>
@@ -198,41 +195,35 @@
     </div>
 
     <div id="inverseTab" class="tab-content">
-        <div class="card" style="max-width: 600px; margin: auto;">
-            <h3 style="text-align:center;">Inverse Detail Calculator</h3>
-            <label>Jejari R (m)</label><input type="number" id="invR" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
-            <label>Chord c (m)</label><input type="number" id="invC" step="0.001" style="width:100%; padding:8px; margin-bottom:10px;">
-            <label>Sudut Δ (D M S)</label>
+        <div class="card" style="max-width: 600px; margin: 20px auto;">
+            <h3 style="text-align:center; margin-top:0;">Inverse Detail Calculator</h3>
+            <label>Jejari R (m)</label><input type="number" id="invR" step="0.001">
+            <label>Chord c (m)</label><input type="number" id="invC" step="0.001">
+            <label>Sudut Δ (DMS)</label>
             <div class="dms-inputs">
-                <input type="number" id="inv_d_deg" placeholder="°"><input type="number" id="inv_d_min" placeholder="'"><input type="number" id="inv_d_sec" placeholder='"'>
+                <input type="number" id="inv_d_deg" placeholder="D">
+                <input type="number" id="inv_d_min" placeholder="M">
+                <input type="number" id="inv_d_sec" placeholder="S">
             </div>
-            <button onclick="inverseDetailCalc()" style="margin-top:15px; background:var(--primary)">KIRA DETAIL SONGSANG</button>
-            <div id="invResult" class="result-box" style="margin-top:15px; display:none;"></div>
+            <button onclick="inverseDetailCalc()" style="margin-top:20px; background:var(--primary)">KIRA DETAIL SONGSANG</button>
+            <div id="invResult" class="result-v62" style="display:none;"></div>
         </div>
     </div>
 
     <div class="footer-btns" id="downloadArea">
-        <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN PDF</button>
+        <button class="btn-pdf" onclick="downloadPDF()">💾 SIMPAN LAPORAN PDF</button>
         <a href="app-geomatik.apk" download class="btn-apk">📲 MUAT TURUN APK</a>
     </div>
 </div>
 
 <script>
-/* --- 1. FUNGSI AUTO-HIDE (WEB VS APP) --- */
+/* SEMUA LOGIC v9.7 KEKAL DI SINI */
 function checkDisplayMode() {
-    // Detect standalone mode (App)
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
-                         || window.navigator.standalone 
-                         || document.referrer.includes('android-app://');
-    
-    // Jika dibuka sebagai App, sorokkan butang muat turun
-    if (isStandalone) {
-        document.getElementById('downloadArea').style.setProperty('display', 'none', 'important');
-    }
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || document.referrer.includes('android-app://');
+    if (isStandalone) { document.getElementById('downloadArea').style.display = 'none'; }
 }
 window.addEventListener('load', checkDisplayMode);
 
-/* --- 2. THEME & SIDEBAR --- */
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('geoDark', document.body.classList.contains('dark-mode'));
@@ -244,7 +235,6 @@ function toggleSidebar() {
     document.getElementById('sbOverlay').classList.toggle('active');
 }
 
-/* --- 3. HISTORY ENGINE --- */
 function saveToHistory(data) {
     let history = JSON.parse(localStorage.getItem('geoHistoryV97')) || [];
     history.unshift({ ...data, time: new Date().toLocaleString('ms-MY') });
@@ -256,13 +246,13 @@ function saveToHistory(data) {
 function renderHistory() {
     let history = JSON.parse(localStorage.getItem('geoHistoryV97')) || [];
     let hDiv = document.getElementById("historyList");
-    if(history.length === 0) { hDiv.innerHTML = '<p style="color:gray;">Tiada rekod.</p>'; return; }
+    if(history.length === 0) { hDiv.innerHTML = '<p style="color:gray; font-size:0.8em;">Tiada rekod.</p>'; return; }
     hDiv.innerHTML = history.map((it, idx) => `
-        <div class="history-item">
-            <strong>${it.name || 'Projek Tanpa Nama'}</strong><br><small>${it.time}</small>
+        <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:5px; margin-bottom:8px; border:1px solid #ddd; font-size:0.8em;">
+            <strong>${it.name || 'N/A'}</strong><br><small>${it.time}</small>
             <div style="margin-top:5px; display:flex; gap:5px;">
-                <button onclick="loadHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--warning); font-size:0.7em;">Buka</button>
-                <button onclick="delHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--danger); font-size:0.7em;">X</button>
+                <button onclick="loadHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--warning); font-size:0.8em;">Buka</button>
+                <button onclick="delHistory(${idx})" style="width:auto; padding:2px 8px; background:var(--danger); font-size:0.8em;">X</button>
             </div>
         </div>
     `).join('');
@@ -277,8 +267,7 @@ function loadHistory(i) {
     document.getElementById('d_min').value = it.m;
     document.getElementById('d_sec').value = it.s;
     document.getElementById('interval').value = it.int;
-    toggleSidebar();
-    kiraSemua(false); // Kira tapi jangan simpan duplicate
+    toggleSidebar(); kiraSemua(false);
 }
 
 function delHistory(i) {
@@ -286,41 +275,39 @@ function delHistory(i) {
     h.splice(i, 1); localStorage.setItem('geoHistoryV97', JSON.stringify(h)); renderHistory();
 }
 
-function clearHistory() { if(confirm("Hapus semua sejarah?")) { localStorage.removeItem('geoHistoryV97'); renderHistory(); } }
+function clearHistory() { if(confirm("Hapus semua?")) { localStorage.removeItem('geoHistoryV97'); renderHistory(); } }
 
-/* --- 4. AUTH --- */
 function toggleAuth() {
-    const loginF = document.getElementById('login-form'); const regF = document.getElementById('register-form');
-    loginF.style.display = (loginF.style.display === "none") ? "block" : "none";
-    regF.style.display = (regF.style.display === "none") ? "block" : "none";
+    const l = document.getElementById('login-form'), r = document.getElementById('register-form');
+    l.style.display = (l.style.display === "none") ? "block" : "none";
+    r.style.display = (r.style.display === "none") ? "block" : "none";
 }
 
 function handleLogin() {
-    const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value;
+    const u = document.getElementById('login-user').value, p = document.getElementById('login-pass').value;
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
     if((u === "admin1" && p === "123456") || (users[u] === p)) {
         document.getElementById('auth-container').style.display = "none";
         document.getElementById('calculator-section').style.display = "block";
         document.getElementById('welcome-msg').innerText = "🔑 Pengguna: " + u;
         renderHistory();
-    } else alert("Log masuk gagal!");
+    } else alert("Gagal!");
 }
 
 function handleRegister() {
-    const u = document.getElementById('reg-user').value; const p = document.getElementById('reg-pass').value;
-    if(!u || !p) return alert("Sila isi maklumat!");
+    const u = document.getElementById('reg-user').value, p = document.getElementById('reg-pass').value;
+    if(!u || !p) return alert("Isi maklumat!");
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
     users[u] = p; localStorage.setItem('geoUsers', JSON.stringify(users));
-    alert("Daftar berjaya!"); toggleAuth();
+    alert("Berjaya!"); toggleAuth();
 }
 
 function logout() { location.reload(); }
 
-/* --- 5. MATH LOGIC --- */
 const fix = (n) => Math.round(n * 1000) / 1000;
 function dmsToDecimal(d, m, s) { return (parseFloat(d)||0) + ((parseFloat(m)||0)/60) + ((parseFloat(s)||0)/3600); }
 function decimalToDMS(dd) {
-    let d = Math.floor(dd + 1e-9); let m_val = (dd - d) * 60; let m = Math.floor(m_val + 1e-9); let s = Math.round((m_val - m) * 60);
+    let d = Math.floor(dd + 1e-9), mv = (dd - d) * 60, m = Math.floor(mv + 1e-9), s = Math.round((mv - m) * 60);
     if(s >= 60) { m++; s = 0; } if(m >= 60) { d++; m = 0; }
     return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
 }
@@ -332,42 +319,30 @@ function openTab(evt, tabName) {
 }
 
 function inverseDetailCalc() {
-    let R = parseFloat(document.getElementById("invR").value);
-    let c = parseFloat(document.getElementById("invC").value);
+    let R = parseFloat(document.getElementById("invR").value), c = parseFloat(document.getElementById("invC").value);
     let d = dmsToDecimal(document.getElementById("inv_d_deg").value, document.getElementById("inv_d_min").value, document.getElementById("inv_d_sec").value);
     let res = document.getElementById("invResult"); res.style.display = "block";
     let output = "HASIL INVERSE:\n================\n";
     if (isNaN(R) && !isNaN(c) && d > 0) output += `Jejari R = ${(c / (2 * Math.sin((d * Math.PI / 180) / 2))).toFixed(3)} m`;
     else if (!isNaN(R) && isNaN(c) && d > 0) output += `Chord c = ${(2 * R * Math.sin((d * Math.PI / 180) / 2)).toFixed(3)} m`;
     else if (!isNaN(R) && !isNaN(c)) output += `Sudut Δ = ${decimalToDMS((2 * Math.asin(c / (2 * R))) * 180 / Math.PI)}`;
-    else output += "Sila masukkan 2 parameter.";
+    else output += "Masukkan 2 parameter.";
     res.innerText = output;
 }
 
 function kiraSemua(shouldSave = true) {
-    let n = document.getElementById('rec_name').value;
-    let IP = parseFloat(document.getElementById("IP_chain").value);
-    let R = parseFloat(document.getElementById("R").value);
-    let d = document.getElementById("d_deg").value, m = document.getElementById("d_min").value, s = document.getElementById("d_sec").value;
-    let interval = parseFloat(document.getElementById("interval").value);
+    let n = document.getElementById('rec_name').value, IP = parseFloat(document.getElementById("IP_chain").value), R = parseFloat(document.getElementById("R").value);
+    let d = document.getElementById("d_deg").value, m = document.getElementById("d_min").value, s = document.getElementById("d_sec").value, interval = parseFloat(document.getElementById("interval").value);
     let delta = dmsToDecimal(d,m,s);
-
-    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Sila isi parameter dengan lengkap!");
+    if(isNaN(IP) || isNaN(R) || delta <= 0) return alert("Lengkapkan parameter!");
     if(shouldSave) saveToHistory({name:n, ip:IP, r:R, d, m, s, int:interval});
-
-    let rad = delta * Math.PI / 180;
-    let T = fix(R * Math.tan(rad / 2));
-    let L = fix((Math.PI * R * delta) / 180);
-    let T1 = fix(IP - T), T2 = fix(T1 + L);
-
-    document.getElementById("result").innerText = `T1 = ${T1.toFixed(3)} | T2 = ${T2.toFixed(3)}\nL = ${L.toFixed(3)} | T = ${T.toFixed(3)}`;
-
+    let rad = delta * Math.PI / 180, T = fix(R * Math.tan(rad / 2)), L = fix((Math.PI * R * delta) / 180), T1 = fix(IP - T), T2 = fix(T1 + L);
+    document.getElementById("result").innerText = `>>> GEOMETRI LENGKUNG <<<\nTANGENT (T) : ${T.toFixed(3)} m\nLENGTH (L)  : ${L.toFixed(3)} m\nT1 (START)  : ${T1.toFixed(3)}\nT2 (END)    : ${T2.toFixed(3)}`;
     let tb = document.getElementById("tableBody"); tb.innerHTML = "";
     let curr = T1, cumA = 0;
     const addR = (pt, ch, c, a, d, lc) => {
         tb.innerHTML += `<tr><td>${pt}</td><td>${ch.toFixed(3)}</td><td>${c||"-"}</td><td>${a?decimalToDMS(a):"-"}</td><td>${d?decimalToDMS(d):"-"}</td><td>${lc.toFixed(3)}</td></tr>`;
     };
-
     addR("T1", T1, 0, 0, 0, 0);
     let next = Math.ceil(T1 / interval) * interval; if(next <= T1) next += interval;
     while(next < T2) {
@@ -377,7 +352,6 @@ function kiraSemua(shouldSave = true) {
     }
     let fc = fix(T2 - curr), fa = (1718.9 * fc / R) / 60; cumA += fa;
     addR("T2", T2, fc, fa, cumA, 2 * R * Math.sin(cumA * Math.PI / 180));
-
     let ctx = document.getElementById("curveCanvas").getContext("2d");
     ctx.clearRect(0,0,400,300); ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 4;
     ctx.beginPath(); ctx.arc(200, 260, 150, Math.PI+0.4, Math.PI+0.4+(rad*0.5)); ctx.stroke();
@@ -386,9 +360,9 @@ function kiraSemua(shouldSave = true) {
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("LAPORAN GEO-CURVE PRO v9.7", 105, 15, {align: "center"});
+    doc.text("LAPORAN GEO-CURVE PRO v6.2", 105, 15, {align: "center"});
     doc.autoTable({ html: '#settingOutTable', startY: 30 });
-    doc.save("Laporan_Geomatik.pdf");
+    doc.save("Laporan_GeoCurve.pdf");
 }
 </script>
 </body>
