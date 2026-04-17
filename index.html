@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v6.1 - Enhanced Inverse System</title>
+<title>Geo-Curve Pro v6.2 - User System & Detail Inverse</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -23,6 +23,7 @@
         font-family: 'Segoe UI', Arial, sans-serif; 
         margin: 0; padding: 20px; 
         color: var(--primary);
+        /* Gantikan 209301.jpg dengan URL gambar anda jika perlu */
         background: url('209301.jpg') no-repeat center center fixed;
         background-size: cover;
     }
@@ -35,7 +36,10 @@
 
     /* Auth Section */
     #auth-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
-    .auth-card { background: var(--overlay); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px; }
+    .auth-card { 
+        background: var(--overlay); padding: 40px; border-radius: 15px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px;
+    }
     .auth-card input { margin-bottom: 10px; width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
     .auth-toggle { margin-top: 15px; font-size: 0.85em; cursor: pointer; color: var(--secondary); text-decoration: underline; }
 
@@ -50,25 +54,26 @@
     @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
 
-    .input-group { margin-bottom: 15px; }
     label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
-    input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-    
     .dms-inputs { display: flex; gap: 5px; }
     .dms-inputs input { width: 33%; text-align: center; }
     
-    button { width: 100%; padding: 12px; border: none; border-radius: 6px; color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; }
+    button { 
+        width: 100%; padding: 12px; border: none; border-radius: 6px; 
+        color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.3s; 
+    }
     button:hover { background: #219150; transform: translateY(-2px); }
 
     .result-box { 
-        background: #f0f4f8; border-left: 6px solid var(--primary); padding: 20px; 
-        font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.6;
+        background: #f8f9fa; border-left: 6px solid var(--accent); padding: 20px; 
+        font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.5;
     }
-
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; }
     th { background: var(--secondary); color: white; padding: 10px; border: 1px solid #ddd; }
     td { border: 1px solid #ddd; padding: 8px; text-align: center; background: white; }
 
+    canvas { background: #fff; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
+    
     .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
     .btn-pdf { background: #3498db; }
     .btn-apk { background: var(--warning); text-decoration: none; text-align: center; display: block; padding: 12px; border-radius: 6px; color: white; font-weight: bold; }
@@ -86,6 +91,7 @@
         <button onclick="handleLogin()">Masuk</button>
         <div class="auth-toggle" onclick="toggleAuth()">Belum ada akaun? Daftar Sini</div>
     </div>
+
     <div class="auth-card" id="register-form" style="display:none;">
         <h2 style="color:var(--accent);">DAFTAR AKAUN</h2>
         <input type="text" id="reg-user" placeholder="Pilih Username">
@@ -97,40 +103,45 @@
 
 <div id="calculator-section" class="container" style="display: none;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span id="welcome-user" style="font-weight:bold; color:var(--accent)"></span>
-        <button style="width:auto; padding:5px 15px; background:var(--danger)" onclick="location.reload()">Log Keluar</button>
+        <h3 id="welcome-msg">Selamat Datang</h3>
+        <button style="width:auto; padding:5px 15px; background:var(--danger)" onclick="logout()">Log Keluar</button>
     </div>
-    <h2 style="text-align:center">GEO-CURVE PRO V6.1</h2>
-
+    <h2 style="text-align:center">Geo-Curve Pro v6.2</h2>
+    
     <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Setting Out</button>
+        <button class="tab-btn active" onclick="openTab(event, 'forwardTab')">Lengkung & Setting Out</button>
         <button class="tab-btn" onclick="openTab(event, 'inverseTab')">Kiraan Songsang (Detail)</button>
     </div>
 
     <div id="forwardTab" class="tab-content active">
         <div class="grid">
             <div class="card">
-                <h3>Input Data</h3>
-                <div class="input-group"><label>Chainage IP</label><input type="number" id="IP_chain" step="0.001"></div>
-                <div class="input-group"><label>Jejari R</label><input type="number" id="R" step="0.001"></div>
+                <h3>Input Parameter</h3>
+                <div class="input-group"><label>Chainage IP</label><input type="number" id="IP_chain" step="0.001" placeholder="Cth: 2060.500"></div>
+                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" step="0.001" placeholder="Cth: 600"></div>
                 <div class="input-group">
-                    <label>Sudut Δ (D M S)</label>
+                    <label>Sudut Pesongan Δ (D M S)</label>
                     <div class="dms-inputs">
-                        <input type="number" id="d_deg" placeholder="°"><input type="number" id="d_min" placeholder="'"><input type="number" id="d_sec" placeholder='"'>
+                        <input type="number" id="d_deg" placeholder="°">
+                        <input type="number" id="d_min" placeholder="'">
+                        <input type="number" id="d_sec" placeholder='"'>
                     </div>
                 </div>
-                <div class="input-group"><label>Interval (m)</label><input type="number" id="interval" value="20"></div>
-                <button onclick="kiraSemua()">KIRA JADUAL</button>
+                <div class="input-group"><label>Interval Chord (m)</label><input type="number" id="interval" value="20"></div>
+                <button onclick="kiraSemua()">PROSES KIRAAN</button>
             </div>
             <div class="card">
+                <h3>Grafik Visual</h3>
                 <canvas id="curveCanvas" width="400" height="300"></canvas>
             </div>
         </div>
+
         <div class="card">
-            <h3>Hasil Geometri</h3>
-            <div id="result" class="result-box">Sila masukkan data.</div>
+            <h3>Hasil Pengiraan Geometri</h3>
+            <div id="result" class="result-box">Sila buat pengiraan.</div>
         </div>
-        <div class="card" style="overflow-x:auto;">
+
+        <div class="card" style="overflow-x: auto;">
             <table id="settingOutTable">
                 <thead>
                     <tr><th>Point</th><th>Chainage</th><th>Chord</th><th>α (DMS)</th><th>δ (DMS)</th><th>2R Sin δ</th></tr>
@@ -141,18 +152,12 @@
     </div>
 
     <div id="inverseTab" class="tab-content">
-        <div class="card" style="max-width: 700px; margin: auto;">
-            <h3 style="text-align:center; color:var(--primary)">Kiraan Songsang (Inverse)</h3>
-            <p style="font-size:0.8em; color:#666; text-align:center;">Kosongkan nilai yang ingin dicari.</p>
+        <div class="card" style="max-width: 600px; margin: auto;">
+            <h3 style="text-align:center;">Inverse Detail Calculator</h3>
+            <p style="font-size: 0.8em; color: #666; text-align: center;">Isi 2 nilai untuk mencari nilai ke-3 yang kosong.</p>
             
-            <div class="input-group">
-                <label>Jejari R (m)</label>
-                <input type="number" id="invR" placeholder="Masukkan R jika ada">
-            </div>
-            <div class="input-group">
-                <label>Panjang Chord c (m)</label>
-                <input type="number" id="invC" placeholder="Masukkan c jika ada">
-            </div>
+            <div class="input-group"><label>Jejari R (m)</label><input type="number" id="invR" step="0.001"></div>
+            <div class="input-group"><label>Chord c (m)</label><input type="number" id="invC" step="0.001"></div>
             <div class="input-group">
                 <label>Sudut Δ (D M S)</label>
                 <div class="dms-inputs">
@@ -161,9 +166,8 @@
                     <input type="number" id="inv_d_sec" placeholder='"'>
                 </div>
             </div>
-            <button onclick="inverseDetailCalc()" style="background:var(--primary)">JALANKAN KIRAAN DETAIL</button>
-            
-            <div id="invResult" class="result-box" style="margin-top:20px; display:none;"></div>
+            <button onclick="inverseDetailCalc()" style="background:var(--primary)">KIRA DETAIL SONGSANG</button>
+            <div id="invResult" class="result-box" style="margin-top:15px; display:none;"></div>
         </div>
     </div>
 
@@ -174,30 +178,40 @@
 </div>
 
 <script>
-/* --- LOGIN LOGIC --- */
+/* --- SYSTEM AUTHENTICATION --- */
 function toggleAuth() {
-    document.getElementById('login-form').style.display = document.getElementById('login-form').style.display === "none" ? "block" : "none";
-    document.getElementById('register-form').style.display = document.getElementById('register-form').style.display === "none" ? "block" : "none";
+    const loginF = document.getElementById('login-form');
+    const regF = document.getElementById('register-form');
+    if(loginF.style.display === "none") {
+        loginF.style.display = "block"; regF.style.display = "none";
+    } else {
+        loginF.style.display = "none"; regF.style.display = "block";
+    }
 }
+
 function handleRegister() {
     const u = document.getElementById('reg-user').value;
     const p = document.getElementById('reg-pass').value;
-    if(!u || !p) return alert("Isi semua!");
+    if(!u || !p) { alert("Sila isi semua ruangan!"); return; }
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
+    if(users[u]) { alert("Username wujud!"); return; }
     users[u] = p;
     localStorage.setItem('geoUsers', JSON.stringify(users));
-    alert("Berjaya! Sila Log Masuk."); toggleAuth();
+    alert("Daftar berjaya!"); toggleAuth();
 }
+
 function handleLogin() {
     const u = document.getElementById('login-user').value;
     const p = document.getElementById('login-pass').value;
     let users = JSON.parse(localStorage.getItem('geoUsers')) || {};
-    if((u === "admin1" && p === "123456") || (users[u] === p)) {
+    if((u === "admin1" && p === "123456") || (users[u] && users[u] === p)) {
         document.getElementById('auth-container').style.display = "none";
         document.getElementById('calculator-section').style.display = "block";
-        document.getElementById('welcome-user').innerText = "User: " + u;
-    } else alert("Salah!");
+        document.getElementById('welcome-msg').innerText = "Pengguna: " + u;
+    } else alert("Gagal log masuk!");
 }
+
+function logout() { location.reload(); }
 
 /* --- MATH ENGINE --- */
 const fix = (n) => Math.round(n * 1000) / 1000;
@@ -221,60 +235,59 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");
 }
 
-/* --- DETAILED INVERSE CALC --- */
+/* --- DETAILED INVERSE ENGINE --- */
 function inverseDetailCalc() {
     let R = parseFloat(document.getElementById("invR").value);
     let c = parseFloat(document.getElementById("invC").value);
     let d = dmsToDecimal(
-        parseFloat(document.getElementById("inv_d_deg").value),
-        parseFloat(document.getElementById("inv_d_min").value),
-        parseFloat(document.getElementById("inv_d_sec").value)
+        parseFloat(document.getElementById("inv_d_deg").value) || 0,
+        parseFloat(document.getElementById("inv_d_min").value) || 0,
+        parseFloat(document.getElementById("inv_d_sec").value) || 0
     );
     let res = document.getElementById("invResult");
     res.style.display = "block";
     let output = "DETAIL KIRAAN SONGSANG:\n========================\n";
 
-    // Kes 1: Cari R
+    // CARI JEJARI (R)
     if (isNaN(R) && !isNaN(c) && d > 0) {
-        let rad = (d / 2) * Math.PI / 180;
-        let calcR = c / (2 * Math.sin(rad));
-        output += `Mencari Jejari (R):\n`;
-        output += `Formula: R = c / (2 * sin(Δ/2))\n`;
-        output += `Langkah: ${c} / (2 * sin(${d}° / 2))\n`;
-        output += `JAWAPAN R = ${calcR.toFixed(3)} m`;
+        let deltaRad = (d * Math.PI / 180) / 2;
+        let calcR = c / (2 * Math.sin(deltaRad));
+        output += `Mencari Jejari (R):\nFormula: R = c / (2 * sin(Δ/2))\n`;
+        output += `Langkah: ${c} / (2 * sin(${d.toFixed(4)} / 2))\n`;
+        output += `HASIL R = ${calcR.toFixed(3)} m`;
     } 
-    // Kes 2: Cari c
+    // CARI CHORD (c)
     else if (!isNaN(R) && isNaN(c) && d > 0) {
-        let rad = (d / 2) * Math.PI / 180;
-        let calcC = 2 * R * Math.sin(rad);
-        output += `Mencari Chord (c):\n`;
-        output += `Formula: c = 2 * R * sin(Δ/2)\n`;
-        output += `Langkah: 2 * ${R} * sin(${d}° / 2)\n`;
-        output += `JAWAPAN c = ${calcC.toFixed(3)} m`;
+        let deltaRad = (d * Math.PI / 180) / 2;
+        let calcC = 2 * R * Math.sin(deltaRad);
+        output += `Mencari Chord (c):\nFormula: c = 2 * R * sin(Δ/2)\n`;
+        output += `Langkah: 2 * ${R} * sin(${d.toFixed(4)} / 2)\n`;
+        output += `HASIL c = ${calcC.toFixed(3)} m`;
     }
-    // Kes 3: Cari Sudut Delta
-    else if (!isNaN(R) && !isNaN(c) && d <= 0) {
-        let val = c / (2 * R);
-        let angleRad = Math.asin(val);
-        let deltaDeg = (angleRad * 2) * 180 / Math.PI;
-        output += `Mencari Sudut Pesongan (Δ):\n`;
-        output += `Formula: Δ = 2 * asin(c / 2R)\n`;
+    // CARI DELTA (Δ)
+    else if (!isNaN(R) && !isNaN(c) && d === 0) {
+        let ratio = c / (2 * R);
+        let deltaDeg = (2 * Math.asin(ratio)) * 180 / Math.PI;
+        output += `Mencari Sudut Delta (Δ):\nFormula: Δ = 2 * asin(c / 2R)\n`;
         output += `Langkah: 2 * asin(${c} / (2 * ${R}))\n`;
-        output += `JAWAPAN Δ = ${decimalToDMS(deltaDeg)} (${deltaDeg.toFixed(5)}°)`;
+        output += `HASIL Δ = ${decimalToDMS(deltaDeg)} (${deltaDeg.toFixed(5)}°)`;
+    } else {
+        output += "Ralat: Pastikan 2 nilai diisi lengkap.";
     }
-    else {
-        output += "Ralat: Sila masukkan sekurang-kurangnya 2 nilai untuk mencari nilai ke-3.";
-    }
-
     res.innerText = output;
 }
 
-/* --- FORWARD CALC (RETAINED) --- */
+/* --- FORWARD ENGINE --- */
 function kiraSemua() {
     let IP = parseFloat(document.getElementById("IP_chain").value);
     let R = parseFloat(document.getElementById("R").value);
     let interval = parseFloat(document.getElementById("interval").value);
-    let delta = dmsToDecimal(parseFloat(document.getElementById("d_deg").value), parseFloat(document.getElementById("d_min").value), parseFloat(document.getElementById("d_sec").value));
+    let delta = dmsToDecimal(
+        parseFloat(document.getElementById("d_deg").value) || 0,
+        parseFloat(document.getElementById("d_min").value) || 0,
+        parseFloat(document.getElementById("d_sec").value) || 0
+    );
+
     if(isNaN(IP) || isNaN(R) || delta <= 0) return;
 
     let radDelta = delta * Math.PI / 180;
@@ -283,44 +296,70 @@ function kiraSemua() {
     let T1 = fix(IP - T);
     let T2 = fix(T1 + L);
 
-    document.getElementById("result").innerHTML = `T1: ${T1.toFixed(3)} | T2: ${T2.toFixed(3)}\nL: ${L.toFixed(3)} | T: ${T.toFixed(3)}`;
+    document.getElementById("result").innerHTML = 
+        `Jejari (R) = ${R}m | Δ = ${decimalToDMS(delta)}\nT1 = ${T1.toFixed(3)} | T2 = ${T2.toFixed(3)}\nL = ${L.toFixed(3)} | T = ${T.toFixed(3)}`;
 
-    let tb = document.getElementById("tableBody"); tb.innerHTML = "";
-    let curr = T1; let cumA = 0;
+    let tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+    let currentChain = T1;
+    let cumAngle = 0;
     
-    const add = (p, ch, c, a, d, lc) => {
-        tb.innerHTML += `<tr><td>${p}</td><td>${ch.toFixed(3)}</td><td>${c||"-"}</td><td>${a?decimalToDMS(a):"-"}</td><td>${d?decimalToDMS(d):"-"}</td><td>${lc.toFixed(3)}</td></tr>`;
-    };
-
-    add("T1", T1, 0, 0, 0, 0);
-    let next = Math.ceil(T1/interval)*interval; if(next<=T1) next+=interval;
-    while(next < T2) {
-        let c = fix(next - curr);
-        let a = (1718.9 * c / R) / 60;
-        cumA += a;
-        add("P", next, c, a, cumA, 2*R*Math.sin(cumA*Math.PI/180));
-        curr = next; next += interval;
+    function addRow(pt, ch, c, a, d, lc) {
+        tableBody.innerHTML += `<tr><td>${pt}</td><td>${ch.toFixed(3)}</td><td>${c||"-"}</td><td>${a?decimalToDMS(a):"-"}</td><td>${d?decimalToDMS(d):"-"}</td><td>${lc.toFixed(3)}</td></tr>`;
     }
-    let lc = fix(T2 - curr);
-    let la = (1718.9 * lc / R) / 60;
-    cumA += la;
-    add("T2", T2, lc, la, cumA, 2*R*Math.sin(cumA*Math.PI/180));
+
+    addRow("T1", T1, 0, 0, 0, 0);
+    let nextStn = Math.ceil(T1 / interval) * interval;
+    if(nextStn <= T1) nextStn += interval;
+
+    while(nextStn < T2) {
+        let chord = fix(nextStn - currentChain);
+        let alpha = (1718.9 * chord / R) / 60;
+        cumAngle += alpha;
+        addRow("P", nextStn, chord, alpha, cumAngle, 2 * R * Math.sin(cumAngle * Math.PI / 180));
+        currentChain = nextStn;
+        nextStn += interval;
+    }
+    let finalC = fix(T2 - currentChain);
+    let finalA = (1718.9 * finalC / R) / 60;
+    cumAngle += finalA;
+    addRow("T2", T2, finalC, finalA, cumAngle, 2 * R * Math.sin(cumAngle * Math.PI / 180));
+
+    let canvas = document.getElementById("curveCanvas");
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0,400,300);
+    ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(200, 260, 150, Math.PI + 0.4, Math.PI + 0.4 + (radDelta * 0.5)); ctx.stroke();
 }
 
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text("LAPORAN GEOMATIK", 10, 10);
-    doc.autoTable({ html: '#settingOutTable', startY: 20 });
-    // Masukkan info inverse jika ada
-    let inv = document.getElementById("invResult").innerText;
-    if(inv) {
+    const doc = new jsPDF('p', 'mm', 'a4');
+    doc.setFont("helvetica", "bold");
+    doc.text("LAPORAN PENGIRAAN GEOMATIK", 105, 15, {align: "center"});
+    
+    doc.setFontSize(10);
+    doc.setFont("courier", "normal");
+    let info = document.getElementById("result").innerText;
+    doc.text(doc.splitTextToSize(info, 180), 15, 25);
+    
+    doc.autoTable({ 
+        html: '#settingOutTable', 
+        startY: 45,
+        theme: 'grid',
+        headStyles: {fillColor: [44, 62, 80]}
+    });
+
+    let invInfo = document.getElementById("invResult").innerText;
+    if(invInfo && invInfo.length > 30) {
         doc.addPage();
-        doc.text("KIRAAN SONGSANG DETAIL:", 10, 20);
-        doc.setFontSize(10);
-        doc.text(inv, 10, 30);
+        doc.setFont("helvetica", "bold");
+        doc.text("DETAIL KIRAAN SONGSANG", 15, 20);
+        doc.setFont("courier", "normal");
+        doc.text(doc.splitTextToSize(invInfo, 180), 15, 30);
     }
-    doc.save("Laporan.pdf");
+    
+    doc.save("Laporan_GeoCurve_Pro.pdf");
 }
 </script>
 </body>
