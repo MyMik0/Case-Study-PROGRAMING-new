@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geo-Curve Pro v4 - Workflow 3 Fasa</title>
+<title>Geo-Curve Pro v5 - Sistem 3 Fasa + Inverse</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -11,134 +11,157 @@
 <style>
     :root {
         --primary: #2c3e50;
+        --secondary: #34495e;
         --accent: #27ae60;
+        --danger: #e74c3c;
         --warning: #f39c12;
-        --overlay: rgba(255, 255, 255, 0.96);
+        --light: #ecf0f1;
     }
 
     body { 
-        font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; 
-        background: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=2070') no-repeat center center fixed;
-        background-size: cover;
+        font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; 
+        background: #f4f7f6; color: var(--primary);
     }
 
-    .container { max-width: 1100px; margin: auto; background: var(--overlay); padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-    .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid var(--primary); }
+    .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
     
-    h2, h3 { color: var(--primary); text-align: center; margin-top: 0; }
-    .fasa-label { display: inline-block; background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8em; margin-bottom: 10px; }
+    /* Tabs System */
+    .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #ddd; }
+    .tab-btn { padding: 12px 25px; border: none; background: none; cursor: pointer; font-weight: bold; color: #777; transition: 0.3s; font-size: 1em; }
+    .tab-btn.active { color: var(--accent); border-bottom: 4px solid var(--accent); }
+    .tab-content { display: none; animation: fadeIn 0.4s; }
+    .tab-content.active { display: block; }
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    
+    .card { background: #fff; border: 1px solid #eee; border-radius: 10px; padding: 20px; margin-bottom: 20px; border-top: 5px solid var(--primary); }
+    .fasa-label { display: inline-block; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; margin-bottom: 10px; text-transform: uppercase; }
 
     .input-group { margin-bottom: 15px; }
     label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
+    input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     .dms-inputs { display: flex; gap: 5px; }
     .dms-inputs input { width: 33%; text-align: center; }
-    input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     
-    button { width: 100%; padding: 15px; border: none; border-radius: 6px; color: white; background: var(--accent); cursor: pointer; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
-    button:hover { background: #219150; transform: scale(1.02); }
+    button { width: 100%; padding: 15px; border: none; border-radius: 6px; color: white; background: var(--accent); cursor: pointer; font-weight: bold; transition: 0.2s; }
+    button:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    .result-box { background: #f8f9fa; border-left: 6px solid var(--accent); padding: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; margin-top: 10px; }
+    .result-box { background: #f9f9f9; border-left: 5px solid var(--accent); padding: 15px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9em; line-height: 1.5; margin-top: 10px; }
+    
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85em; }
     th { background: var(--primary); color: white; padding: 10px; border: 1px solid #ddd; }
-    td { border: 1px solid #ddd; padding: 8px; text-align: center; background: white; }
+    td { border: 1px solid #ddd; padding: 8px; text-align: center; }
 
     #login-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
-    .login-card { background: var(--overlay); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px; }
+    .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 320px; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
 
 <div id="login-container">
     <div class="login-card">
-        <h2>GEO-CURVE LOGIN</h2>
-        <input type="text" id="user" placeholder="Admin Name">
+        <h2 style="margin-bottom:20px">GEO-CURVE LOGIN</h2>
+        <input type="text" id="user" placeholder="Admin Name" style="margin-bottom:10px">
         <input type="password" id="pass" placeholder="Password">
-        <button onclick="checkLogin()" style="margin-top:10px">Log Masuk</button>
+        <button onclick="checkLogin()" style="margin-top:20px">MASUK SISTEM</button>
     </div>
 </div>
 
 <div id="calculator-section" class="container" style="display: none;">
-    <h2>Sistem Pengiraan Lengkung 3 Fasa</h2>
+    <h2 style="text-align:center; margin-bottom:5px;">Professional Surveying Toolkit</h2>
+    <p style="text-align:center; color:#666; margin-bottom:25px;">Versi 5.0 - Ketepatan Perpuluhan Dikemaskini</p>
 
-    <div class="grid">
-        <div class="card">
-            <span class="fasa-label">Fasa 1 & 2: Input Parameter</span>
-            <div class="input-group">
-                <label>Jejari R (m)</label>
-                <input type="number" id="R" placeholder="Masukkan Jejari">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'mainTab')">Lengkung (3 Fasa)</button>
+        <button class="tab-btn" onclick="openTab(event, 'inverseTab')">Kiraan Songsang (Inverse)</button>
+    </div>
+
+    <div id="mainTab" class="tab-content active">
+        <div class="grid">
+            <div class="card">
+                <span class="fasa-label">Input Utama</span>
+                <div class="input-group"><label>Jejari R (m)</label><input type="number" id="R" step="0.001"></div>
+                <div class="input-group">
+                    <label>Sudut Pesongan Δ (D M S)</label>
+                    <div class="dms-inputs">
+                        <input type="number" id="d_deg" placeholder="°">
+                        <input type="number" id="d_min" placeholder="'">
+                        <input type="number" id="d_sec" placeholder='"'>
+                    </div>
+                </div>
+                <div class="input-group"><label>Chainage IP</label><input type="number" id="IP_chain" step="0.001"></div>
+                <div class="input-group"><label>Interval (m)</label><input type="number" id="interval" value="20"></div>
+                <button onclick="kiraProsesLengkap()">PROSES 3 FASA SEKARANG</button>
             </div>
+
+            <div class="card">
+                <span class="fasa-label">Fasa 1 & 2: Output</span>
+                <div id="resFasa1" class="result-box">Sila masukkan data...</div>
+                <div id="resFasa2" class="result-box" style="border-color: var(--primary); margin-top:15px;">Tunggu pengiraan...</div>
+            </div>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+            <span class="fasa-label">Fasa 3: Jadual Setting Out</span>
+            <table id="settingOutTable">
+                <thead>
+                    <tr>
+                        <th>Point</th>
+                        <th>Chainage (m)</th>
+                        <th>Chord (m)</th>
+                        <th>Tangential Angle (α)</th>
+                        <th>Cumulative Angle (δ)</th>
+                        <th>Chord Length (2RSinδ)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="6">Tiada data untuk dipaparkan</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="display:flex; gap:10px;">
+            <button onclick="downloadPDF()" style="background:var(--secondary)">💾 SIMPAN LAPORAN PDF</button>
+            <button onclick="location.reload()" style="background:var(--danger); width: 150px;">LOGOUT</button>
+        </div>
+    </div>
+
+    <div id="inverseTab" class="tab-content">
+        <div class="card" style="max-width: 600px; margin: auto;">
+            <h3 style="margin-top:0">Inverse Curve Calculator</h3>
+            <p style="font-size: 0.8em; color: #777;">Sila isi 2 nilai untuk mencari nilai ke-3 yang kosong.</p>
+            
+            <div class="input-group"><label>Jejari R (m)</label><input type="number" id="invR"></div>
+            <div class="input-group"><label>Panjang Chord (m)</label><input type="number" id="invC"></div>
             <div class="input-group">
-                <label>Sudut Pesongan Δ (D M S)</label>
+                <label>Sudut Δ (D M S)</label>
                 <div class="dms-inputs">
-                    <input type="number" id="d_deg" placeholder="°">
-                    <input type="number" id="d_min" placeholder="'">
-                    <input type="number" id="d_sec" placeholder='"'>
+                    <input type="number" id="inv_d_deg" placeholder="°">
+                    <input type="number" id="inv_d_min" placeholder="'">
+                    <input type="number" id="inv_d_sec" placeholder='"'>
                 </div>
             </div>
-            <div class="input-group">
-                <label>Chainage IP (Intersection Point)</label>
-                <input type="number" id="IP_chain" placeholder="Cth: 2060.500">
-            </div>
-            <div class="input-group">
-                <label>Interval Chord (m)</label>
-                <input type="number" id="interval" value="20">
-            </div>
-            <button onclick="kiraProsesLengkap()">PROSES 3 FASA</button>
+            <button onclick="inverseCalc()" style="background:var(--primary)">KIRA NILAI SONGSANG</button>
+            
+            <div id="invResult" class="result-box" style="margin-top:20px; display:none; background: #fffbe6; border-color: var(--warning);"></div>
         </div>
-
-        <div class="card">
-            <span class="fasa-label">Visualisasi</span>
-            <canvas id="curveCanvas" width="400" height="250" style="background:white; border-radius:8px;"></canvas>
-            <div id="quick-info" style="margin-top:10px; font-weight:bold; color:var(--accent); text-align:center;"></div>
-        </div>
-    </div>
-
-    <div class="card">
-        <span class="fasa-label">Fasa 1: Kiraan Geometri Lengkung</span>
-        <div id="resFasa1" class="result-box">Menunggu input...</div>
-    </div>
-
-    <div class="card">
-        <span class="fasa-label">Fasa 2: Kiraan Kedudukan (Chainage)</span>
-        <div id="resFasa2" class="result-box">Menunggu input...</div>
-    </div>
-
-    <div class="card" style="overflow-x: auto;">
-        <span class="fasa-label">Fasa 3: Jadual Setting Out Profesional</span>
-        <table id="settingOutTable">
-            <thead>
-                <tr>
-                    <th>Point</th>
-                    <th>Chainage (m)</th>
-                    <th>Chord (m)</th>
-                    <th>Tangential Angle (α)</th>
-                    <th>Cumulative Angle (δ)</th>
-                    <th>Chord Length (2RSinδ)</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr><td colspan="6">Sila jalankan pengiraan</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div style="display:flex; gap:10px; margin-top:20px;">
-        <button onclick="downloadPDF()" style="background:#3498db">📑 JANA PDF REPORT</button>
-        <button onclick="location.reload()" style="background:var(--danger)">Logout</button>
     </div>
 </div>
 
 <script>
+// Utiliti Ketepatan & DMS
+const fix = (n) => Math.round(n * 1000) / 1000;
 function dmsToDecimal(d, m, s) { return (d || 0) + ((m || 0)/60) + ((s || 0)/3600); }
 function decimalToDMS(dd) {
-    let d = Math.floor(dd);
-    let m = Math.floor((dd - d) * 60);
-    let s = Math.round(((dd - d) * 60 - m) * 60);
-    if(s === 60) { m++; s = 0; }
-    if(m === 60) { d++; m = 0; }
+    let d = Math.floor(dd + 1e-9);
+    let m_val = (dd - d) * 60;
+    let m = Math.floor(m_val + 1e-9);
+    let s = Math.round((m_val - m) * 60);
+    if(s >= 60) { m++; s = 0; }
+    if(m >= 60) { d++; m = 0; }
     return `${String(d).padStart(2,'0')}°${String(m).padStart(2,'0')}'${String(s).padStart(2,'0')}"`;
 }
 
@@ -149,97 +172,122 @@ function checkLogin() {
     } else { alert("Akses Ditolak!"); }
 }
 
+function openTab(evt, tabName) {
+    let content = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < content.length; i++) content[i].classList.remove("active");
+    let links = document.getElementsByClassName("tab-btn");
+    for (let i = 0; i < links.length; i++) links[i].classList.remove("active");
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
+
 function kiraProsesLengkap() {
     let R = parseFloat(document.getElementById("R").value);
     let IP = parseFloat(document.getElementById("IP_chain").value);
     let interval = parseFloat(document.getElementById("interval").value);
-    let deg = parseFloat(document.getElementById("d_deg").value) || 0;
-    let min = parseFloat(document.getElementById("d_min").value) || 0;
-    let sec = parseFloat(document.getElementById("d_sec").value) || 0;
-    let delta = dmsToDecimal(deg, min, sec);
+    let delta = dmsToDecimal(
+        parseFloat(document.getElementById("d_deg").value) || 0,
+        parseFloat(document.getElementById("d_min").value) || 0,
+        parseFloat(document.getElementById("d_sec").value) || 0
+    );
 
-    if(isNaN(R) || isNaN(IP) || delta <= 0) { alert("Sila isi semua parameter!"); return; }
+    if(!R || !IP || delta <= 0) { alert("Data tidak lengkap!"); return; }
 
-    // --- FASA 1: GEOMETRI ---
+    // FASA 1
     let radDelta = delta * Math.PI / 180;
-    let T = R * Math.tan(radDelta / 2);
-    let L = (Math.PI * R * delta) / 180;
-    let LC = 2 * R * Math.sin(radDelta / 2);
-    let E = R * ((1 / Math.cos(radDelta / 2)) - 1);
-    let M = R * (1 - Math.cos(radDelta / 2));
+    let T = fix(R * Math.tan(radDelta / 2));
+    let L = fix((Math.PI * R * delta) / 180);
 
     document.getElementById("resFasa1").innerHTML = 
-        `Jejari (R) = ${R.toFixed(3)} m\n` +
-        `Sudut Pesongan (Δ) = ${decimalToDMS(delta)}\n` +
-        `----------------------------------------\n` +
-        `Tangent (T) = R × tan(Δ/2) = ${T.toFixed(3)} m\n` +
-        `Panjang Lengkung (L) = (π × R × Δ) / 180 = ${L.toFixed(3)} m\n` +
-        `Long Chord (LC) = 2 × R × sin(Δ/2) = ${LC.toFixed(3)} m\n` +
-        `External Distance (E) = ${E.toFixed(3)} m | Mid Ordinate (M) = ${M.toFixed(3)} m`;
+        `FASA 1: GEOMETRI LENGKUNG\n` +
+        `Tangent (T) = ${T.toFixed(3)} m\n` +
+        `Panjang (L) = ${L.toFixed(3)} m\n` +
+        `Sudut (Δ)   = ${decimalToDMS(delta)}`;
 
-    // --- FASA 2: CHAINAGE ---
-    let T1 = IP - T;
-    let T2 = T1 + L;
+    // FASA 2 (Pembetulan Chainage)
+    let T1 = fix(IP - T);
+    let T2 = fix(T1 + L);
 
     document.getElementById("resFasa2").innerHTML = 
-        `Chainage IP = ${IP.toFixed(3)}\n` +
-        `Chainage T1 = IP - T = ${IP.toFixed(3)} - ${T.toFixed(3)} = ${T1.toFixed(3)}\n` +
-        `Chainage T2 = T1 + L = ${T1.toFixed(3)} + ${L.toFixed(3)} = ${T2.toFixed(3)}`;
+        `FASA 2: KEDUDUKAN (CHAINAGE)\n` +
+        `T1 (Mula)   = ${T1.toFixed(3)}\n` +
+        `T2 (Hujung) = ${T2.toFixed(3)}\n` +
+        `Formula: ${T1.toFixed(3)} + ${L.toFixed(3)}`;
 
-    // --- FASA 3: JADUAL ---
+    // FASA 3: JADUAL
     let tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
     let currentChain = T1;
-    let cumulativeAngle = 0;
-    let labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let pIdx = 0;
+    let cumulativeAlpha = 0;
 
-    // Row T1
     addRow("T1", T1, 0, 0, 0, 0);
 
-    // Stesen Genap Pertama
     let nextStn = Math.ceil(T1 / interval) * interval;
     if(nextStn <= T1) nextStn += interval;
 
+    let pIdx = 0;
+    let labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     while(nextStn < T2) {
-        let chord = nextStn - currentChain;
-        let alpha = (1718.9 * chord / R) / 60; 
-        cumulativeAngle += alpha;
-        addRow(labels[pIdx++] || "P", nextStn, chord, alpha, cumulativeAngle, 2 * R * Math.sin(cumulativeAngle * Math.PI / 180));
+        let chord = fix(nextStn - currentChain);
+        let alpha = (1718.9 * chord / R) / 60;
+        cumulativeAlpha += alpha;
+        addRow(labels[pIdx++] || "P", nextStn, chord, alpha, cumulativeAlpha, 2 * R * Math.sin(cumulativeAlpha * Math.PI / 180));
         currentChain = nextStn;
         nextStn += interval;
     }
 
-    // Row T2
-    let finalChord = T2 - currentChain;
-    let finalAlpha = (1718.9 * finalChord / R) / 60;
-    cumulativeAngle += finalAlpha;
-    addRow("T2", T2, finalChord, finalAlpha, cumulativeAngle, 2 * R * Math.sin(cumulativeAngle * Math.PI / 180));
+    let lastChord = fix(T2 - currentChain);
+    let lastAlpha = (1718.9 * lastChord / R) / 60;
+    cumulativeAlpha += lastAlpha;
+    addRow("T2", T2, lastChord, lastAlpha, cumulativeAlpha, 2 * R * Math.sin(cumulativeAlpha * Math.PI / 180));
 
     function addRow(pt, ch, c, a, d, lc) {
-        tableBody.innerHTML += `<tr><td>${pt}</td><td>${ch.toFixed(3)}</td><td>${c.toFixed(3)}</td><td>${a==0?"-":decimalToDMS(a)}</td><td>${d==0?"-":decimalToDMS(d)}</td><td>${lc.toFixed(3)}</td></tr>`;
+        tableBody.innerHTML += `<tr>
+            <td><b>${pt}</b></td>
+            <td>${ch.toFixed(3)}</td>
+            <td>${c == 0 ? "-" : c.toFixed(3)}</td>
+            <td>${a == 0 ? "-" : decimalToDMS(a)}</td>
+            <td>${d == 0 ? "-" : decimalToDMS(d)}</td>
+            <td>${lc.toFixed(3)}</td>
+        </tr>`;
     }
-
-    // Canvas Draw
-    let canvas = document.getElementById("curveCanvas");
-    let ctx = canvas.getContext("2d");
-    ctx.clearRect(0,0,400,250);
-    ctx.strokeStyle = "#27ae60"; ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.arc(200, 240, 150, Math.PI + 0.4, Math.PI + 0.4 + (radDelta * 0.6));
-    ctx.stroke();
-    document.getElementById("quick-info").innerText = `L = ${L.toFixed(2)}m | T = ${T.toFixed(2)}m`;
 }
 
-function downloadPDF() {
+function inverseCalc() {
+    let r = parseFloat(document.getElementById("invR").value);
+    let c = parseFloat(document.getElementById("invC").value);
+    let d = dmsToDecimal(
+        parseFloat(document.getElementById("inv_d_deg").value) || 0,
+        parseFloat(document.getElementById("inv_d_min").value) || 0,
+        parseFloat(document.getElementById("inv_d_sec").value) || 0
+    );
+    let res = document.getElementById("invResult");
+    res.style.display = "block";
+
+    if(isNaN(r) && c && d) {
+        let calcR = c / (2 * Math.sin((d * Math.PI / 180) / 2));
+        res.innerText = "HASIL: Jejari (R) = " + calcR.toFixed(3) + " m";
+    } else if(r && isNaN(c) && d) {
+        let calcC = 2 * r * Math.sin((d * Math.PI / 180) / 2);
+        res.innerText = "HASIL: Panjang Chord (c) = " + calcC.toFixed(3) + " m";
+    } else if(r && c && d === 0) {
+        let calcD = 2 * Math.asin(c / (2 * r)) * 180 / Math.PI;
+        res.innerText = "HASIL: Sudut Pesongan (Δ) = " + decimalToDMS(calcD);
+    } else {
+        res.innerText = "Sila isi sekurang-kurangnya DUA ruangan.";
+    }
+}
+
+async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('l', 'mm', 'a4');
-    doc.text("LAPORAN KERJA UKUR LENGKUNG (3 FASA)", 148, 15, {align:"center"});
-    doc.setFontSize(9);
-    doc.text("FASA 1 & 2: GEOMETRI & STESEN", 15, 25);
-    doc.text(document.getElementById("resFasa1").innerText + "\n" + document.getElementById("resFasa2").innerText, 15, 30);
-    doc.autoTable({ html: '#settingOutTable', startY: 75, theme: 'grid', headStyles: {fillColor:[44, 62, 80]} });
-    doc.save("Laporan_3Fasa.pdf");
+    doc.setFontSize(16);
+    doc.text("LAPORAN PENGIRAAN LENGKUNG JALAN", 148, 15, {align:"center"});
+    doc.setFontSize(10);
+    doc.text(document.getElementById("resFasa1").innerText + "\n\n" + document.getElementById("resFasa2").innerText, 15, 30);
+    doc.autoTable({ html: '#settingOutTable', startY: 65, theme: 'grid', headStyles: {fillColor:[44, 62, 80]} });
+    doc.save("Laporan_Lengkung_Geomatik.pdf");
 }
 </script>
 </body>
